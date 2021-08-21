@@ -1,0 +1,1 @@
+<?php echo "pagina no encontrada"; ?>
