@@ -49,50 +49,39 @@
 					</script>';
 			}
 
-			$aaaa = mainModelo::encryption($pass);
+			// $aaaa = mainModelo::encryption($pass);
 
 
 			$dato = [
 				"user" => $user,
-				"pass" => $aaaa
+				"pass" => $pass,
 			];
 
 			$ins = loginModelo::iniciar_sesion_M($dato);
 
 			if($ins -> rowCount() == 1){
 				$datos = $ins -> fetch();
-				if($datos['usu_estado'] == 1){
+				if($datos['estado'] == 1){
 
 					session_start(['name' => 'bot']);
-					$_SESSION['id_bot'] = $datos['id_usu'];
-					$_SESSION['nombre_bot'] = $datos['usu_nombre'];
-					$_SESSION['apellido_bot'] = $datos['usu_apellido'];
-					$_SESSION['usuario_bot'] = $datos['id_usu'];
-					$_SESSION['privilegio_bot'] = $datos['usu_id_neg'];
-					$_SESSION['foto_bot'] = $datos['usu_foto'];
-					$_SESSION['token_bot'] = md5(uniqid(mt_rand(),true));
-					
+					$_SESSION['id'] = $datos['id'];
+					$_SESSION['nombre'] = $datos['nombre'];
+					$_SESSION['apellido'] = $datos['apellidos'];
+					$_SESSION['dni'] = $datos['dni'];
+					$_SESSION['email'] = $datos['correo'];
+					$_SESSION['foto'] = $datos['foto'];
+					$_SESSION['token'] = md5(uniqid(mt_rand(),true));					
 					
 					return header("Location: ".SERVERURL."home/");
 				}else{
 					echo '<script>
-						Swal.fire({
-							title: "No Tienes Permisos",
-							text: "Error",
-							type: "error",
-							confirmButtonText: "Aceptar"
-						});
+						console.log("sfsdf");
 					</script>';
 				}
 				
 			}else{ 
 				echo '<script>
-						Swal.fire({
-							title: "Usuario No Encontrado",
-							text: "Error",
-							type: "error",
-							confirmButtonText: "Aceptar"
-						});
+				console.log("bbbbbbbb");
 					</script>';
 			} 
 

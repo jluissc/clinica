@@ -23,7 +23,10 @@
 			$pagina = explode("/",$_GET['ruta']);
 			require_once "./controladores/loginControlador.php"; 
 			$inst = new loginControlador();
-			if (!isset($_SESSION['token_bot']) || !isset($_SESSION['nombre_bot']) || !isset($_SESSION['privilegio_bot']) || !isset($_SESSION['id_bot']) ) {
+			if (!isset($_SESSION['token']) || 
+            !isset($_SESSION['nombre']) || 
+            !isset($_SESSION['email']) || 
+            !isset($_SESSION['id']) ) {
 				echo $inst -> forzar_cierre_C();
 				exit();
 			}	 	
