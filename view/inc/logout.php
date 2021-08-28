@@ -15,8 +15,8 @@
 		}).then((result) => {
 			if (result.value) {
 				let url =' <?php echo SERVERURL ?>ajax/loginAjax.php ';
-				let token = ' <?php echo $inst -> encryption($_SESSION['token_bot']) ?> ';
-				let usuario = ' <?php echo $inst -> encryption($_SESSION['usuario_bot']) ?> ';
+				let token = ' <?php echo $inst -> encryption($_SESSION['token']) ?> ';
+				let usuario = ' <?php echo $inst -> encryption($_SESSION['nombre']) ?> ';
 
 				let datos = new FormData();
 				datos.append("token" , token);

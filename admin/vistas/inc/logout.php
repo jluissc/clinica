@@ -1,6 +1,6 @@
 <script type="text/javascript">
 	let btn_salir = document.querySelector(".btn-exit-system");
-
+	/*
 	btn_salir.addEventListener("click", function(e){
 		e.preventDefault();
 		Swal.fire({
@@ -15,8 +15,8 @@
 		}).then((result) => {
 			if (result.value) {
 				let url =' <?php echo SERVERURL ?>ajax/loginAjax.php ';
-				let token = ' <?php echo $inst -> encryption($_SESSION['token_bot']) ?> ';
-				let usuario = ' <?php echo $inst -> encryption($_SESSION['usuario_bot']) ?> ';
+				let token = ' <?php echo $inst -> encryption($_SESSION['token']) ?> ';
+				let usuario = ' <?php echo $inst -> encryption($_SESSION['nombre']) ?> ';
 
 				let datos = new FormData();
 				datos.append("token" , token);
@@ -32,5 +32,5 @@
 				});
 			}
 		});
-	});
+	});*/
 </script> 
