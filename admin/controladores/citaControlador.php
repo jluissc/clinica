@@ -12,6 +12,12 @@
             $dni = $_POST['dni'];
 			citaModelo::verificarDni_m($dni);
 		}
+		
+
+		public function verificarFecha() {
+            $fecha = $_POST['fecha'];
+			citaModelo::verificarFecha_m($fecha);
+		}
 
 		public function show_servicio() {
 			$idServ = $_POST['idServ_Edit'];

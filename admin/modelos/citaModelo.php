@@ -8,13 +8,25 @@
 	{
 		
 		protected static function verificarDni_m($dni){
-			$sql = mainModelo::conexion()->prepare("SELECT id FROM user WHERE dni = $dni");
+			$sql = mainModelo::conexion()->prepare("SELECT id, nombre, apellidos FROM user WHERE dni = $dni");
 			$sql -> execute();
             if($sql -> rowCount() > 0){
                 $resutl = $sql->fetch(PDO::FETCH_OBJ);
 				exit(json_encode($resutl));
 			}else{
 				exit(json_encode(0));
+			}
+			$sql = null;
+		}
+
+		protected static function verificarFecha_m($fecha){
+			$sql = mainModelo::conexion()->prepare('SELECT id, fecha, hora FROM citas WHERE fecha = '.$fecha.'');
+			$sql -> execute();
+            if($sql -> rowCount() > 0){
+                $resutl = $sql->fetchAll(PDO::FETCH_OBJ);
+				exit(json_encode($resutl));
+			}else{
+				exit(json_encode($fecha));
 			}
 			$sql = null;
 		}

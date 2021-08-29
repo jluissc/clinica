@@ -1,3 +1,4 @@
+
 <div class="me-1 mb-1 d-inline-block">
                                 <!-- Button trigger for large size modal -->
     <button type="button" class="btn btn-outline-warning" data-bs-toggle="modal"
@@ -19,16 +20,33 @@
                 </div>
                 <div class="modal-body">
                     <div class="modal-body">
+                        <div id="camposRelleno">
+
+                        </div>
                         <label>DNI: </label>
                         <div class="form-group">
                             <input type="number" placeholder="DNI" 
                             class="form-control" id="dni" onchange="validarDni()" max="8">
                         </div>
-                        <label>Password: </label>
+
+                        <label> NOMBRES:</label>
                         <div class="form-group">
-                            <input type="text" placeholder="Descripción"
-                                class="form-control"  id="descrip">
+                            <input type="text" placeholder="Nombres" class="form-control" id="nombre" >
                         </div>
+                        <label>APELLIDOS: </label>
+                        <div class="form-group">
+                            <input type="text" placeholder="Apellidos" class="form-control" id="apellido" >
+                        </div>
+                        <label>FECHA: </label>
+                        <div class="form-group">
+                            <input type="date" placeholder="Fecha" class="form-control" id="fecha" onchange="validarFecha()">
+                        </div>
+                        <!-- <label>HORA </label>
+                        <div class="form-group">
+                            <input type="text" placeholder="Apellidos" class="form-control" id="apellido" >
+                        </div> -->
+
+                        <!-- ********************* -->
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -185,9 +203,8 @@
 
     idUser = 0;
     function validarDni(){
-        console.log('iii');
         dni = document.getElementById('dni').value
-        url = './ajax/citaAjax.php'
+        url = '../ajax/citaAjax.php'
         DATOS = new FormData()
         DATOS.append('dni', dni)
         fetch(url,{
@@ -197,10 +214,68 @@
         .then( r => r.json())
         .then( r => {
             if(r != 0){
+
+                document.getElementById('camposRelleno').innerHTML = ''
+                document.getElementById('nombre').value = r.nombre
+                document.getElementById('apellido').value = r.apellidos
                 idUser = r
+                console.log(idUser);
             }else{
-                
+                div = ` 
+                    <button class="btn btn-success" onclick="guardarUser()" >Salvar Usuario </button>
+                        `
+                document.getElementById('camposRelleno').innerHTML = div
+                document.getElementById('nombre').value = ''
+                document.getElementById('apellido').value = ''
             }
+        })
+    }
+    function apiConsulta(dni){
+
+        url2 = `https://consulta.api-peru.com/api/dni/${dni}`
+        
+        fetch(url2)
+        .then(response => response.json())
+        .then(json => console.log(json))
+        .catch(error => console.log('Authorization failed : ' + error.message));
+    }
+
+    function guardarUser(){
+        nombre = document.getElementById('nombre').value
+        apellido = document.getElementById('apellido').value
+        dni = document.getElementById('dni').value
+        url = '../ajax/citaAjax.php'
+        DATOS = new FormData()
+        DATOS.append('nombre', nombre)
+        DATOS.append('apellido', apellido)
+        DATOS.append('dni', dni)
+        fetch(url,{
+            method : 'post',
+            body : DATOS
+        })
+        .then( r => r.json())
+    }
+
+    function validarFecha(){
+
+        fecha = document.getElementById('fecha').value
+        console.log(fecha);
+        url = '../ajax/citaAjax.php'
+        DATOS = new FormData()
+        DATOS.append('fecha', fecha)
+        fetch(url,{
+            method : 'post',
+            body : DATOS
+        })
+        .then( r => r.json())
+        .then( r => {
+            console.log(r);
+
+            // if(r != 0){
+            //     console.log(idUser);
+            // }else{
+            //     div = `
+            // }
         })
     }
 </script>

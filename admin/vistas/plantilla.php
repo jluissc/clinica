@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?php echo COMPANY; ?></title>
 	<?php include "./vistas/inc/link.php"; ?>
-   
+    
 </head>
 <body > 
     
