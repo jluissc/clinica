@@ -5,7 +5,7 @@
 	require_once '../config/app.php';
 
 	if (isset($_POST['dni']) || isset($_POST['fecha']) || 
-    isset($_POST['idServ_Edit']) || isset($_POST['nombre_e']) || isset($_POST['id_d']) ) {
+    isset($_POST['listaServ']) || isset($_POST['idUser']) || isset($_POST['id_d']) ) {
 		
 		require_once '../controladores/citaControlador.php';
 		$inst = new citaControlador();
@@ -19,17 +19,14 @@
 			echo $inst -> verificarFecha();
 		}
 
-        if (isset($_POST['idServ_Edit'])) {
-			echo $inst -> show_servicio();
+		if (isset($_POST['listaServ'])) {
+			echo $inst -> listaServic();
 		}
 
-        if (isset($_POST['nombre_e'])) {
-			echo $inst -> update_servicio();
+        if (isset($_POST['idUser'])) {
+			echo $inst -> saveCita();
 		}
 
-        if (isset($_POST['id_d'])) {
-			echo $inst -> delete_servicio();
-		}
 
 	} else {
 		session_start(['name' => 'bot']);

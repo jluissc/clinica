@@ -8,7 +8,7 @@
 	{
 		
 		protected static function verificarDni_m($dni){
-			$sql = mainModelo::conexion()->prepare("SELECT id, nombre, apellidos FROM user WHERE dni = $dni");
+			$sql = mainModelo::conexion()->prepare("SELECT id, nombre, apellidos,celular, correo FROM persona WHERE dni = $dni");
 			$sql -> execute();
             if($sql -> rowCount() > 0){
                 $resutl = $sql->fetch(PDO::FETCH_OBJ);
@@ -20,66 +20,56 @@
 		}
 
 		protected static function verificarFecha_m($fecha){
-			$sql = mainModelo::conexion()->prepare('SELECT id, fecha, hora FROM citas WHERE fecha = '.$fecha.'');
+			$sql = mainModelo::conexion()->prepare('SELECT id, fecha, horas_id FROM citas WHERE fecha = "'.$fecha.'"');
 			$sql -> execute();
             if($sql -> rowCount() > 0){
                 $resutl = $sql->fetchAll(PDO::FETCH_OBJ);
 				exit(json_encode($resutl));
 			}else{
-				exit(json_encode($fecha));
+				exit(json_encode(0));
 			}
 			$sql = null;
 		}
 
-		protected static function show_servicio_m($idServ){
-			$sql = mainModelo::conexion()->prepare("SELECT * FROM producto WHERE id = $idServ");
+		protected static function listaServic_m(){
+			$sql = mainModelo::conexion()->prepare("SELECT * FROM servicios");
 			$sql -> execute();
-			$listServs = $sql->fetch(PDO::FETCH_OBJ);
-            if($sql -> rowCount() > 0){
-				exit(json_encode($listServs));
-			}else{
+			$listaDatos = $sql->fetchAll(PDO::FETCH_OBJ);
+			$sql = null;
+			$datos = [
+				'listaServ' => $listaDatos,
+				'listaTipoCit' => citaModelo::listaTipoCita_m(),
+			];
+			exit(json_encode($datos));
+		}
+
+		protected static function listaTipoCita_m(){
+			$sql = mainModelo::conexion()->prepare("SELECT * FROM tipo_cita");
+			$sql -> execute();
+			$listaDatos = $sql->fetchAll(PDO::FETCH_OBJ);
+			$sql = null;
+			return $listaDatos;
+		}
+
+		
+		protected static function saveCita_m($datos){
+			$sql = mainModelo::conexion()->prepare("INSERT INTO citas (`fecha`, `horas_id`, `tiempo`,  `estado`, `paciente_id`, `producto_id`, `tipo_cita_id`) 
+				VALUES (:fecha, :idHora, :tiempo, :estado, :idUser, :idServic, :tipo)");
+			$sql->bindParam(":fecha",$datos['fecha']);
+			$sql->bindParam(":idHora",$datos['idHora']);
+			$sql->bindParam(":tiempo",$datos['tiempo']);
+			$sql->bindParam(":estado",$datos['estado']);
+			$sql->bindParam(":idUser",$datos['idUser']);
+			$sql->bindParam(":idServic",$datos['idServic']);
+			$sql->bindParam(":tipo",$datos['tipo']);
+			$sql -> execute();
+			if($sql -> rowCount() > 0){
 				exit(json_encode(1));
-			}
-			
-		}
-
-		protected static function delete_servicio_m($idServ){
-			$sql = mainModelo::conexion()->prepare("DELETE FROM producto WHERE id=$idServ");
-			$sql -> execute();
-			if($sql -> rowCount() > 0){
-				// servicioModelo::select_servicio_admin_m();
 			}else{
 				exit(json_encode(0));
 			}
 			$sql = null;
 		}
 
-		protected static function insert_servicio_m($datos){
-			$sql = mainModelo::conexion()->prepare("INSERT INTO producto (nombre, descripcion, tipo_id) 
-				VALUES (:nombre, :descripcion, 1)");
-			$sql->bindParam(":nombre",$datos['nombre_r']);
-			$sql->bindParam(":descripcion",$datos['descrip_r']);
-			$sql -> execute();
-			if($sql -> rowCount() > 0){
-				// servicioModelo::select_servicio_admin_m();
-			}else{
-				exit(json_encode(0));
-			}
-			$sql = null;
-		}
-
-		protected static function update_servicio_m($datos){
-			$sql = mainModelo::conexion()->prepare("UPDATE  producto SET nombre =:nombre, descripcion=:descripcion
-				WHERE id = :id");
-			$sql->bindParam(":nombre",$datos['nombre_e']);
-			$sql->bindParam(":descripcion",$datos['descrip_e']);
-			$sql->bindParam(":id",$datos['id']);
-			$sql -> execute();
-			if($sql -> rowCount() > 0){
-				// servicioModelo::select_servicio_admin_m();
-			}else{
-				exit(json_encode(0));
-			}
-			$sql = null;
-		}
+		
 	}

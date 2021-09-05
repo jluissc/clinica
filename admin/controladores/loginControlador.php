@@ -62,26 +62,35 @@
 			if($ins -> rowCount() == 1){
 				$datos = $ins -> fetch();
 				if($datos['estado'] == 1){
-
-					session_start(['name' => 'bot']);
-					$_SESSION['id'] = $datos['id'];
-					$_SESSION['nombre'] = $datos['nombre'];
-					$_SESSION['apellido'] = $datos['apellidos'];
-					$_SESSION['dni'] = $datos['dni'];
-					$_SESSION['email'] = $datos['correo'];
-					$_SESSION['foto'] = $datos['foto'];
-					$_SESSION['token'] = md5(uniqid(mt_rand(),true));					
+					loginModelo::activarSession($datos['id']);
+					// if($logueo -> rowCount() == 1 ){
+						session_start(['name' => 'bot']);
+						$_SESSION['id'] = $datos['id'];
+						$_SESSION['nombre'] = $datos['nombre'];
+						$_SESSION['apellido'] = $datos['apellidos'];
+						$_SESSION['dni'] = $datos['dni'];
+						$_SESSION['email'] = $datos['correo'];
+						$_SESSION['foto'] = $datos['foto'];
+						$_SESSION['tipo'] = $datos['tipo_user_id'];
+						$_SESSION['logueo'] = $datos['logueo'];
+						$_SESSION['token'] = md5(uniqid(mt_rand(),true));					
+						
+						return header("Location: ".SERVERURL."home/");
+					// }else{
+					// 	echo '<script>
+					// 		console.log(" no cambio estado logueo");
+					// 	</script>';
+					// }
 					
-					return header("Location: ".SERVERURL."home/");
 				}else{
 					echo '<script>
-						console.log("sfsdf");
+						console.log("usuario estado inactivo");
 					</script>';
 				}
 				
 			}else{ 
 				echo '<script>
-				console.log("bbbbbbbb");
+				console.log("no se encontro paciente");
 					</script>';
 			} 
 

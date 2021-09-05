@@ -7,6 +7,10 @@
 	} 
 
 	class citaControlador extends citaModelo	{
+
+		public function listaServic() {
+			citaModelo::listaServic_m();
+		}
 		
 		public function verificarDni() {
             $dni = $_POST['dni'];
@@ -19,31 +23,20 @@
 			citaModelo::verificarFecha_m($fecha);
 		}
 
-		public function show_servicio() {
-			$idServ = $_POST['idServ_Edit'];
-			// servicioModelo::show_servicio_m($idServ);
-		}
-
-		public function insert_servicio() {
+		public function saveCita() {
 			$datos = [
-				'nombre_r' => $_POST['nombre_r'],
-				'descrip_r' => $_POST['descrip_r'],
+				'idUser' => $_POST['idUser'],
+				'idServic' => $_POST['idServic'],
+				'idHora' => $_POST['idHora'],
+				'fecha' => $_POST['fechaf'],
+				'tiempo' => 30,
+				'estado' => 1,
+				'tipo' => $_POST['tipoCita'],
+
 			];
-			// servicioModelo::insert_servicio_m($datos);
+			citaModelo::saveCita_m($datos);
 		}
 
-		public function update_servicio() {
-			$datos = [
-				'id' => $_POST['id'],
-				'nombre_e' => $_POST['nombre_e'],
-				'descrip_e' => $_POST['descrip_e'],
-			];
-			// servicioModelo::update_servicio_m($datos);
-		}
-
-		public function delete_servicio() {
-			$idServ = $_POST['id_d'];
-			// servicioModelo::delete_servicio_m($idServ);
-		}
+		
 
 	} 
