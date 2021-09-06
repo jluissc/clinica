@@ -55,6 +55,15 @@
 			configModelo::updateCitaCrud_m($datos);
 		}
 
+		public function updatePermisoUser() {
+			$datos = [
+                'estado' => $_POST['estadoPerm'],
+                'tipo' => $_POST['tipoPerm'],
+                'user_id' => $_POST['user_idPerm'],
+            ];
+			configModelo::updatePermisoUser_m($datos);
+		}
+
 		public function fecha_servicio() {			
 			configModelo::horas_no_disponibles($_POST['fecha']);
 		}

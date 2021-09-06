@@ -5,7 +5,8 @@
 	require_once '../config/app.php';
 
 	if (isset($_POST['dni']) || isset($_POST['fecha']) || 
-    isset($_POST['listaServ']) || isset($_POST['idUser']) || isset($_POST['id_d']) ) {
+    isset($_POST['listaServ']) || isset($_POST['idUser']) ||
+	isset($_POST['id_d']) || isset($_POST['fechaCita'])) {
 		
 		require_once '../controladores/citaControlador.php';
 		$inst = new citaControlador();
@@ -25,6 +26,10 @@
 
         if (isset($_POST['idUser'])) {
 			echo $inst -> saveCita();
+		}
+
+        if (isset($_POST['fechaCita'])) {
+			echo $inst -> buscarFechaCita();
 		}
 
 

@@ -1,5 +1,9 @@
 horasAtencion = []
 citasAtencion = []
+users_permisos = []
+permisos = []
+
+// user_id = 0 /* SELECT USER FOR CHANGE PERMISION */
 fechaSelecionada = ''
 leerHorasAtencion()
 
@@ -15,9 +19,44 @@ function leerHorasAtencion(){
     .then( r => {
         citasAtencion = r.tipoAtencion
         horasAtencion = r.horaAtencion
+        permisos = r.permisos
+        // users_permisos = r.users
         mostrarCrudHoras()
         mostrarCrudCitas()
+        filtrarUsers(r.users)
+        
     })
+}
+users_permisos = []
+function filtrarUsers(users){
+    users.forEach(user => {
+        if(users_permisos.some( userInt => userInt.persona_id == user.persona_id)){
+            const usersInt = users_permisos.map( userInt => {
+                if( userInt.persona_id == user.persona_id ) {
+                    userInt.permisos.push({ 
+                        'idp': user.id, 
+                        'permisos_id': user.permisos_id, 
+                    })
+                    return userInt;
+                } 
+                else return userInt;
+            })
+            users_permisos = [...usersInt];
+        }else{
+            users_permisos.push({
+                'persona_id': user.persona_id, 
+                'nombre': user.nombre, 
+                'correo': user.correo,                     
+                'tipo_user_id': user.tipo_user_id,                     
+                'permisos' : [{ 
+                    'idp': user.id, 
+                    'permisos_id': user.permisos_id, 
+                }]
+            }, 
+            );
+        }
+    }); 
+    mostrarListaColaboradores()
 }
 
 function mostrarCrudHoras(){
@@ -83,6 +122,51 @@ function mostrarCrudCitas(){
 
 }
 
+function mostrarListaColaboradores(){
+    div = ''
+    users_permisos.forEach(user => {
+        div+= `<div class="recent-message d-flex px-4 py-3" onclick="listaPermiso(${user.persona_id})">
+                <div class="avatar avatar-lg">
+                    <img src="assets/images/faces/4.jpg">
+                </div>
+                <div class="name ms-4">
+                    <h5 class="mb-1">${user.nombre}</h5>
+                    <h6 class="text-muted mb-0">${user.correo}</h6>
+                </div>
+            </div>`
+    });
+    document.getElementById('listaColabor').innerHTML = div
+}
+
+function listaPermiso(user_id){
+    user = users_permisos.find( userInt => userInt.persona_id == user_id)
+    div = ''
+    permisos.forEach(permiso => {
+        estado = user.permisos.some( permisoInt => permisoInt.permisos_id == permiso.id) ? 'checked' : ''
+        div += `<li class="list-group-item">
+            <input class="form-check-input me-1" ${estado}  type="checkbox" 
+                id="${permiso.id}" onchange="updatePermisUser(this.id,${user.persona_id})" aria-label="...">
+            ${permiso.nombre}
+        </li>`
+    });
+    document.getElementById('permisosUser').innerHTML = div
+}
+
+function updatePermisUser(idInput, user_id){
+    url = '../ajax/configAjax.php'
+    DATOS = new FormData()
+    DATOS.append('tipoPerm', idInput)
+    DATOS.append('user_idPerm', user_id)
+    fetch(url,{
+        method : 'post',
+        body : DATOS
+    })
+    .then( r => r.json())
+    .then( r => {
+        console.log(r);
+    })
+}
+
 function runCommand(dia,mes, anio){
     dia = ('0' +dia).slice(-2)
     fecha = `${anio}-${monthNumber(mes)}-${dia}`;
@@ -110,14 +194,10 @@ function buscarHorasDisponiblesDia(fecha){
 }
 
 function mostrarHorasAtencion(horasNoAtencion){
-    console.log(horasNoAtencion);
-    console.log(horasAtencion);
     div = ''
     horasAtencion.forEach((hora,index) => {
         if(hora.estado != 0 ){
             atender = horasNoAtencion.some( h => h.horas_id == hora.id) ? '' : 'checked' 
-            console.log(horasNoAtencion.some( h => h.horas_id == hora.id));
-            console.log(hora.id);
             div +=`<li class="list-group-item">
                     <input class="form-check-input me-1" ${atender}  type="checkbox" 
                         id="horaId_${index}" onchange="estadoHora(${hora.id},this.id)" aria-label="...">

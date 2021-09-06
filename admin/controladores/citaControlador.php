@@ -23,6 +23,11 @@
 			citaModelo::verificarFecha_m($fecha);
 		}
 
+		public function buscarFechaCita() {
+            $fecha = $_POST['fechaCita'];
+			citaModelo::buscarFechaCita_m($fecha);
+		}
+
 		public function saveCita() {
 			$datos = [
 				'idUser' => $_POST['idUser'],

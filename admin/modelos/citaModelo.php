@@ -31,6 +31,46 @@
 			$sql = null;
 		}
 
+		protected static function buscarFechaCita_m($fecha){
+			$sql = mainModelo::conexion()->prepare('SELECT * FROM cita_no_atencion WHERE dia =:dia');
+			$sql->bindParam(":dia",$fecha);
+			$sql -> execute();
+            if($sql -> rowCount() > 0){
+                $resutl = $sql->fetchAll(PDO::FETCH_OBJ);
+				$datos = [
+					'citaNoAten' => $resutl,
+					'horaNoAten' => citaModelo::buscarHoraCita_m($fecha),
+					'horaOcupadasCita' => citaModelo::buscarCitaOcupadas_m($fecha),
+				];
+				exit(json_encode($datos));
+			}else{
+				$datos = [
+					'citaNoAten' => 0,
+					'horaNoAten' => citaModelo::buscarHoraCita_m($fecha),
+					'horaOcupadasCita' => citaModelo::buscarCitaOcupadas_m($fecha),
+				];
+				exit(json_encode($datos));
+			}
+			$sql = null;
+		}
+
+		protected static function buscarHoraCita_m($fecha){
+			$sql = mainModelo::conexion()->prepare('SELECT horas_id FROM horas_no_atencion WHERE dia =:dia');
+			$sql->bindParam(":dia",$fecha);
+			$sql -> execute();
+            $resutl = $sql->fetchAll(PDO::FETCH_OBJ);
+			$sql = null;
+			return $resutl;
+		}
+		protected static function buscarCitaOcupadas_m($fecha){
+			$sql = mainModelo::conexion()->prepare('SELECT horas_id FROM citas WHERE fecha =:dia');
+			$sql->bindParam(":dia",$fecha);
+			$sql -> execute();
+            $resutl = $sql->fetchAll(PDO::FETCH_OBJ);
+			$sql = null;
+			return $resutl;
+		}
+
 		protected static function listaServic_m(){
 			$sql = mainModelo::conexion()->prepare("SELECT * FROM servicios");
 			$sql -> execute();

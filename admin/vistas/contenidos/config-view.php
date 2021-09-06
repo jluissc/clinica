@@ -91,75 +91,32 @@
                     
                 </div>
             </div>
+            <hr>
             <!-- segunda columna del primero -->
-            <div class="col-6 col-lg-6 col-md-6 btn btn-success" >
+            <div class="col-6 col-lg-6 col-md-6" >
                 <div class="card">
-                    <div class="card-body px-3 py-4-5">
-                        <div class="row">
-                            <div class="col-md-4">
-                                <div class="stats-icon blue">
-                                    <i class="iconly-boldProfile"></i>
-                                </div>
-                            </div>
-                            <div class="col-md-8">
-                                <h6 class="text-muted font-semibold">Followers</h6>
-                                <h6 class="font-extrabold mb-0">183.000</h6>
+                    <div class="card-header">
+                        <h4>Permisos Colaboradores</h4>
+                    </div>
+                    <div class="row">
+                        <div class="col-6 col-lg-6 col-md-6">
+                            <div class="card-content pb-4" id="listaColabor">
+                            
                             </div>
                         </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-6 col-lg-3 col-md-6">
-                <div class="card">
-                    <div class="card-body px-3 py-4-5">
-                        <div class="row">
-                            <div class="col-md-4">
-                                <div class="stats-icon green">
-                                    <i class="iconly-boldAdd-User"></i>
-                                </div>
-                            </div>
-                            <div class="col-md-8">
-                                <h6 class="text-muted font-semibold">Following</h6>
-                                <h6 class="font-extrabold mb-0">80.000</h6>
-                            </div>
+                        <div class="col-6 col-lg-6 col-md-6">
+                            <h5>Seleccionar los permisos </h5>
+                            <ul class="list-group" id="permisosUser">
+                                
+                            </ul>
                         </div>
+
                     </div>
+                    
+                    
                 </div>
             </div>
-            <div class="col-6 col-lg-3 col-md-6">
-                <div class="card">
-                    <div class="card-body px-3 py-4-5">
-                        <div class="row">
-                            <div class="col-md-4">
-                                <div class="stats-icon red">
-                                    <i class="iconly-boldBookmark"></i>
-                                </div>
-                            </div>
-                            <div class="col-md-8">
-                                <h6 class="text-muted font-semibold">Saved Post</h6>
-                                <h6 class="font-extrabold mb-0">112</h6>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-6 col-lg-3 col-md-6">
-                <div class="card">
-                    <div class="card-body px-3 py-4-5">
-                        <div class="row">
-                            <div class="col-md-4">
-                                <div class="stats-icon red">
-                                    <i class="iconly-boldBookmark"></i>
-                                </div>
-                            </div>
-                            <div class="col-md-8">
-                                <h6 class="text-muted font-semibold">Saved Post</h6>
-                                <h6 class="font-extrabold mb-0">112</h6>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            
         </div>
     </div>
 </section>
@@ -196,12 +153,13 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-light-secondary"
-                    data-bs-dismiss="modal">Cancelar
+                    data-bs-dismiss="modal">Cerrar
                 </button>
-                <button type="button" class="btn btn-primary ml-1"
+                <!-- <button type="button" class="btn btn-primary ml-1"
                     onclick="guardarServicio()">Guardar
-                </button>
+                </button> -->
             </div>
         </div>
     </div>
 </div>
+<script src=" <?php echo SERVERURL ?>vistas/assets/js/config.js"></script>

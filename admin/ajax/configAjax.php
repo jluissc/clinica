@@ -5,7 +5,9 @@
 	require_once '../config/app.php';
 
 	if (isset($_POST['horaAten']) || isset($_POST['estadoH']) || 
-    isset($_POST['fechaCita']) || isset($_POST['fecha']) || isset($_POST['fechaSelec']) || isset($_POST['hora_idHoraC']) || isset($_POST['cita_idCitaC']) ) {
+    isset($_POST['fechaCita']) || isset($_POST['fecha']) || 
+	isset($_POST['fechaSelec']) || isset($_POST['hora_idHoraC']) ||
+	isset($_POST['cita_idCitaC']) || isset($_POST['estadoPerm']) ) {
 		
 		require_once '../controladores/configControlador.php';
 		$inst = new configControlador();
@@ -38,6 +40,10 @@
 
         if (isset($_POST['cita_idCitaC'])) {
 			echo $inst -> updateCitaCrud();
+		}
+		// Para editar los permisos de un usuario
+        if (isset($_POST['estadoPerm'])) {
+			echo $inst -> updatePermisoUser();
 		}
 
 	} else {
