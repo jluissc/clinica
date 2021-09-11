@@ -4,8 +4,13 @@
 if (isset($_POST['usuario_log']) && isset($_POST['clave_log'])) {
 	if ($_POST['usuario_log'] === '' && $_POST['clave_log'] === '' ) {
 		echo '<script>
-		console.log("Credenciales Vacias")
-		</script>';
+		Swal.fire({
+			title: "Error",
+			text: "Campos Vacios",
+			type: "error",
+			confirmButtonText: "Aceptar"
+		});
+	</script>';
 	} else {
 		require_once './controladores/loginControlador.php';
 		$inst = new loginControlador();
@@ -42,17 +47,16 @@ if (isset($_POST['usuario_log']) && isset($_POST['clave_log'])) {
 					<div class="form-check form-check-lg d-flex align-items-end">
 						<input class="form-check-input me-2" type="checkbox" value="" id="flexCheckDefault">
 						<label class="form-check-label text-gray-600" for="flexCheckDefault">
-							Keep me logged in
+							Recordamelo
 						</label>
 					</div>
-					<button class="btn btn-primary btn-block btn-lg shadow-lg mt-5">Log in</button>
 					<button type="submit" class="btn btn-block btn-dark">Iniciar</button>
 				</form>
-				<div class="text-center mt-5 text-lg fs-4">
+				<!-- <div class="text-center mt-5 text-lg fs-4">
 					<p class="text-gray-600">Don't have an account? <a href="auth-register.html" class="font-bold">Sign
 							up</a>.</p>
 					<p><a class="font-bold" href="auth-forgot-password.html">Forgot password?</a>.</p>
-				</div>
+				</div> -->
 			</div>
 		</div>
 		<div class="col-lg-7 d-none d-lg-block">

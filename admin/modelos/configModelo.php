@@ -169,17 +169,29 @@
 		}
 
 		protected static function horas_no_disponibles($fecha){
-			$sql = mainModelo::conexion()->prepare("SELECT * FROM `horas_no_atencion` WHERE dia =:dia");
+			$sql = mainModelo::conexion()->prepare("SELECT horas_id as id FROM `horas_no_atencion` WHERE dia =:dia");
 			$sql->bindParam(":dia",$fecha);
             $sql -> execute();
 			$listaHoras = $sql->fetchAll(PDO::FETCH_OBJ);
 			$sql = null;
 			$datos = [
-				'horas' => $listaHoras,
-				'citas' => configModelo::citas_no_disponioles($fecha),
-				'fecha' => $fecha,
+				'horasNoDispo' => $listaHoras,
+				'citasNDisp' => configModelo::citas_no_disponioles($fecha),
+				'citasReser' => configModelo::citasReservadas($fecha),
 			];
 			exit(json_encode($datos));
+		}
+		protected static function citasReservadas($fecha){
+			$sql = mainModelo::conexion()->prepare("SELECT c.id as idCita, c.estado, c.tipo_cita_id, 
+				c.horas_id as id, c.mensaje, p.nombre, p.dni, p.celular  FROM `citas` c
+				INNER JOIN `persona` p
+				ON p.id = c.paciente_id
+				WHERE c.fecha =:dia");
+			$sql->bindParam(":dia",$fecha);
+            $sql -> execute();
+			$lista = $sql->fetchAll(PDO::FETCH_OBJ);
+			$sql = null;
+			return $lista;
 		}
 		protected static function citas_no_disponioles($fecha){
 			$sql = mainModelo::conexion()->prepare("SELECT * FROM `cita_no_atencion` WHERE dia =:dia");

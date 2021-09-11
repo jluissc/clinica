@@ -12,6 +12,9 @@
 <link rel="stylesheet" href="<?php echo SERVERURL ?>vistas/assets/css/bootstrap.css">
 <link rel="stylesheet" href="<?php echo SERVERURL ?>vistas/assets/vendors/bootstrap-icons/bootstrap-icons.css">
 <link rel="stylesheet" href="<?php echo SERVERURL ?>vistas/assets/css/app.css">
-<link rel="stylesheet" href="<?php echo SERVERURL ?>vistas/assets/css/config.css">
 <link rel="stylesheet" href="<?php echo SERVERURL ?>vistas/assets/css/pages/auth.css">
+<link rel="stylesheet" href="<?php echo SERVERURL ?>vistas/assets/css/clinica.css">
 <link rel="stylesheet" href="<?php echo SERVERURL ?>vistas/assets/vendors/simple-datatables/style.css">
+<link rel="stylesheet" href="<?php echo SERVERURL ?>vistas/assets/vendors/toastify/toastify.css">
+
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>

@@ -1,13 +1,10 @@
 LhorasAtencion = []
 LcitasAtencion = []
 Lservicios = []
-seleccionFecha = false
-fechaSelecionada = ''
-pacienteId = 0
-document.getElementById('nombre').disabled = true
-document.getElementById('apellido').disabled = true
-document.getElementById('celular').disabled = true
-document.getElementById('correo').disabled = true
+
+console.log("00:00" > "00:01"); //4848584848 > 4848584849 = false
+console.log("12:45" > "18:47"); //4950585253 > 4956585255 = false
+console.log("19:38" > "15:29"); //4957585156 > 4953585057 = true
 
 leerCondicionesAtencion()
 
@@ -28,33 +25,37 @@ function leerCondicionesAtencion(){
     })
 }
 
+// ***********
+// idUser = 0
+// document.getElementById('nombre').disabled = true
+// document.getElementById('apellido').disabled = true
+// document.getElementById('celular').disabled = true
+// document.getElementById('correo').disabled = true
+
+// horasAtencion = []
+
+function cargarModalCita(){
+    mostrarListaServicios(Lservicios)
+}
 
 function mostrarListaServicios(lista){
-    listS = '<option value="0">SELECCIONE</option>'
+    list = '<option value="0">SELECCIONE</option>'
     lista.forEach(servic => {
-        listS +=`<option value="${servic.id}">${servic.nombre}</option>`
-    }); 
-    document.getElementById('select-servc').innerHTML = listS
+        list +=`<option value="${servic.id}">${servic.nombre}</option>`
+    });
+    document.getElementById('select-servc').innerHTML = list
 }
 
 function verificarFecha(dia, mes, anio){
     dia = ('0' +dia).slice(-2)
     fecha = `${anio}-${monthNumber(mes)}-${dia}`;
-    document.getElementById('tipocitaSelect').innerHTML = ''
-    document.getElementById('fechaCita').innerHTML = fecha
-    document.getElementById('horasDisponibles').innerHTML = ''
-    document.getElementById('spinner').innerHTML = `<div class="spinner-grow text-success" role="status">
-            <span class="sr-only"></span>
-        </div>` 
-    seleccionFecha = true
-    fechaSelecionada = fecha
     buscarFechaDisponible(fecha)
 }
 
-function buscarFechaDisponible(dia){
+function buscarFechaDisponible(fecha){
     url = '../ajax/citaAjax.php'
     DATOS = new FormData()
-    DATOS.append('fechaCita', dia)
+    DATOS.append('fechaCita', fecha)
     fetch(url,{
         method : 'post',
         body : DATOS
@@ -62,116 +63,107 @@ function buscarFechaDisponible(dia){
     .then( r => r.json())
     .then( r => {        
         horaNoDisponibles = [...r.horaNoAten,...r.horaOcupadasCita]
-        horaDisp = LhorasAtencion.filter(horasDispo=>{
-            let res = horaNoDisponibles.find((horaNDis)=>{
-                return horaNDis.horas_id == horasDispo.id;
-            });
-            return res == undefined;
-          });
-        fechaActual = new Date()
-        
-        horasActivas = horaDisp.filter(horaD => horaD.estado == 1)
-        horaMenor = horasActivas.filter( horaD =>{
-            fecha = `${dia} ${horaD.hora}`
-            fechaDis = new Date(fecha)
-            return fechaActual.getTime() < fechaDis.getTime()  
-        })
-        
-        filtrarFechasDisponibles(r.citaNoAten, horaNoDisponibles,horaMenor)
-        
-
+        filtrarFechasDisponibles(r.citaNoAten, horaNoDisponibles,fecha)
     })
 }
 
-function filtrarFechasDisponibles(citaNoDisponibles,horaNoDisponibles,horaMenor){
+function filtrarFechasDisponibles(citaNoDisponibles,horaNoDisponibles,fecha2){
+    console.log(horaNoDisponibles);
+    horaAct = new Date()
+    horaAct = horaAct.getTime()
     list = ''
     citaDispo = 0
     citaDisp2o = 0
+    luiss = ''
     LcitasAtencion.forEach((tipo,index) => {
         if(citaNoDisponibles != 0){
             if(!citaNoDisponibles.some( citaN => citaN.tipo_cita_id == tipo.id) && tipo.estado == 1){
                 citaDispo +=1
                 list +=`<input type="radio" class="btn-check" name="tipoCitaUs" id="${tipo.nombre}" value="${tipo.id}" autocomplete="off">
-                <label class="btn btn-outline-success" for="${tipo.nombre}">${tipo.nombre}</label>`
+                <label class="btn btn-outline-primary" for="${tipo.nombre}">${tipo.nombre}</label>`
             }            
         }else {
             if(tipo.estado == 1){
                 citaDisp2o +=1
                 list +=`<input type="radio" class="btn-check" name="tipoCitaUs" id="${tipo.nombre}" value="${tipo.id}" autocomplete="off">
-                <label class="btn btn-outline-success" for="${tipo.nombre}">${tipo.nombre}</label>`
+                <label class="btn btn-outline-primary" for="${tipo.nombre}">${tipo.nombre}</label>`
             }
         }
     });
 
     if(citaDispo>0){
-        
+        document.getElementById('tipocitaSelect').innerHTML = list
         tb = '<div class="row text-center ">'
         
         LhorasAtencion.forEach((hora,index) => {
-            console.log('aa');
             if(horaNoDisponibles != 0){
+
                 if(hora.estado == 1 && !horaNoDisponibles.some( horaN => horaN.horas_id == hora.id)){
-                    tb +=`<div class="col-6 hora-cita">
+                    tb +=`<div class="col-4">
                             <input type="radio" class="btn-check" name="horaAtenUs" id="${index}" value="${hora.id}" autocomplete="off" >
-                            <label class="btn btn-outline-success" for="${index}">${hora.hora}</label>
+                            <label class="btn btn-outline-primary" for="${index}">${hora.hora}</label>
                         </div>`
                 }
             }else{
                 if(hora.estado == 1){
-                    tb +=`<div class="col-6 hora-cita">
+                    tb +=`<div class="col-4">
                             <input type="radio" class="btn-check" name="horaAtenUs" id="${index}" value="${hora.id}" autocomplete="off" >
-                            <label class="btn btn-outline-success" for="${index}">${hora.hora}</label>
+                            <label class="btn btn-outline-primary" for="${index}">${hora.hora}</label>
                         </div>`
                 }
             }                
         });
         tb += '</div>'
-        setTimeout(() => {
-            document.getElementById('tipocitaSelect').innerHTML = list
-            document.getElementById('spinner').innerHTML = ''
-            document.getElementById('horasDisponibles').innerHTML = tb  
-            mostrarListaServicios(Lservicios)
-        }, 1000);
+        document.getElementById('horasDisponibles').innerHTML = tb 
     }else{
         if(citaDisp2o>0){
-            // document.getElementById('tipocitaSelect').innerHTML = list
-            setTimeout(() => {
-                document.getElementById('tipocitaSelect').innerHTML = list    
-                document.getElementById('spinner').innerHTML = '' 
-                mostrarListaServicios(Lservicios)   
-            }, 1000); 
+            document.getElementById('tipocitaSelect').innerHTML = list
             tb = '<div class="row text-center ">'
-            horaMenor.forEach((hora,index) => {
-                tb +=`<div class="col-6 hora-cita">
-                        <input type="radio" class="btn-check" name="horaAtenUs" id="${index}" value="${hora.id}" autocomplete="off" >
-                        <label class="btn btn-outline-success" for="${index}">${hora.hora}</label>
-                    </div>`
+            LhorasAtencion.forEach((hora,index) => {               
+                if(horaNoDisponibles != 0){
+                    
+                    if(horaNoDisponibles.some( horaN => horaN.horas_id == hora.id) && hora.estado == 1){
+                        // luiss = horaNoDisponibles.find( horaN => horaN.horas_id == hora.id)
+                        // fecha = `${fecha2} ${luiss.hora}`
+                        // horaD = new Date(fecha)
+                        // horaD = horaD.getTime()
+                        // console.log('horaD',horaD);
+                        // console.log('horaAct',horaAct);
+                        // console.log(horaD>horaAct);
+                        // if( ){
+                            // if(true){
+                                tb +=`<div class="col-4">
+                                    <input type="radio" class="btn-check" name="horaAtenUs" id="${index}" value="${hora.id}" autocomplete="off" >
+                                    <label class="btn btn-outline-primary" for="${index}">${hora.hora}</label>
+                                    </div>`
+                            // }
+                        // }
+                    }   
+                    // luiss = horaNoDisponibles.find( horaN => horaN.horas_id == hora.id) ? a : '' ;
+                    // console.log(luiss);
+
+                   
+                }else{
+                    if(hora.estado == 1){
+                        tb +=`<div class="col-4">
+                                <input type="radio" class="btn-check" name="horaAtenUs" id="${index}" value="${hora.id}" autocomplete="off" >
+                                <label class="btn btn-outline-primary" for="${index}">${hora.hora}</label>
+                            </div>`
+                    }
+                }                
             });
             tb += '</div>'
-
-            setTimeout(() => {
-                document.getElementById('spinner').innerHTML = ''
-                document.getElementById('horasDisponibles').innerHTML = tb  
-                mostrarListaServicios(Lservicios)
-            }, 1000);        
+            document.getElementById('horasDisponibles').innerHTML = tb                
         }else{
             document.getElementById('tipocitaSelect').innerHTML = ''
             document.getElementById('horasDisponibles').innerHTML = ''
-            document.getElementById('spinner').innerHTML =''
-            document.getElementById('select-servc').innerHTML = '<option value="0">SIN SERVICIOS</option>'
             alertaHTML('danger','Dia no disponible por favor seleccione otra fecha','alertaCita')
         }        
     }    
+    console.log(luiss);
 }
 
-function limpiarCampos(){
-    document.getElementById('tipocitaSelect').innerHTML = ''
-    document.getElementById('horasDisponibles').innerHTML = ''
-    document.getElementById('spinner').innerHTML =''
-    document.getElementById('select-servc').innerHTML = '<option value="0">SIN SERVICIOS</option>'
-    alertaHTML('danger','Dia no disponible por favor seleccione otra fecha','alertaCita')
-    document.getElementById('fechaCita').innerHTML = ''
-}
+
 
 function validarDni(){
     dni = document.getElementById('dni').value
@@ -194,7 +186,7 @@ function validarDni(){
             document.getElementById('celular').disabled = true
             document.getElementById('correo').value = r.correo
             document.getElementById('correo').disabled = true
-            pacienteId = r.id 
+            idUser = r.id 
         }else{
             idUser = 0
             document.getElementById('nombre').value = ''
@@ -205,89 +197,51 @@ function validarDni(){
         }
     })
 }
-function printListAppointments(datos=''){
-    if(datos != '' || datos  != []){
-        html = ''
-        datos.forEach(appoint => {
-            html += `<tr>
-            <td>${appoint.nombre}${appoint.apellidos}</td>
-            <td>${appoint.correo}</td>
-            <td>${appoint.celular}</td>
-            <td>${appoint.fecha}</td>
-            <td>${appoint.hora}</td>
-            <td>
-            <span class="badge bg-success">Activo</span>
-            </td>
-            </tr>`
-        });
-        document.getElementById('listAppointment').innerHTML = html            
-    }
-    else
-        document.getElementById('listAppointment').innerHTML = 'DATOS VACIOS'
-}
 
-function validarCita(){
+function guardarServicio(){
     horaAtenUsEstado = document.querySelector('input[name=horaAtenUs]:checked')
     tipoCitaUs = document.querySelector('input[name=tipoCitaUs]:checked')
-    // nombre = document.getElementById('nombre').value
-    // apellido = document.getElementById('apellido').value
-    // celular = document.getElementById('celular').value
-    // correo= document.getElementById('correo').value
+    console.log();
+    nombre = document.getElementById('nombre').value
+    apellido = document.getElementById('apellido').value
+    celular = document.getElementById('celular').value
+    correo= document.getElementById('correo').value
     dni = document.getElementById('dni').value
     servic = document.getElementById('select-servc').value
-    if(dni != '' ){
-        if(seleccionFecha){
-            if (tipoCitaUs) {
-                if (horaAtenUsEstado) {
-                    if(servic != 0){
-                        url = '../ajax/citaAjax.php'
-                        DATOS = new FormData()
-                        if(pacienteId != 0){
-                            DATOS.append('idUser', pacienteId)
-                            DATOS.append('idServic', servic)
-                            DATOS.append('idHora', horaAtenUsEstado.value)
-                            DATOS.append('fechaf', fechaSelecionada)
-                            DATOS.append('tipoCita', tipoCitaUs.value)
-                            fetch(url,{
-                                method : 'post',
-                                body : DATOS
-                            })
-                            .then( r => r.json())
-                            .then( r => {
-                                if(r == 1){
-                                    alertaHTML('success','Se guardo la cita correctamente','alertaCita')
-                                    document.getElementById('fechaCita').innerHTML = ''
-                                    document.getElementById('tipocitaSelect').innerHTML = ''
-                                    document.getElementById('horasDisponibles').innerHTML = ''
-                                    document.getElementById('select-servc').value = 0
-                                    document.getElementById('nombre').value = ''
-                                    document.getElementById('apellido').value = ''
-                                    document.getElementById('celular').value = ''
-                                    document.getElementById('correo').value = ''
-                                    document.getElementById('dni').value = ''
-                                    // printListAppointments(r)
-                                    setTimeout(() => {
-                                        location.reload();
-                                    }, 1000);
-                                }
-                                // else alertaHTML('danger','Ocurrio algun error','alertaCita')
-                                // console.log(r);
-                            })
-                        }
-                    }
-                    else alertaHTML('danger','Seleccione el servicio','alertaCita')
-                    
+    fecha = document.getElementById('fecha').value
+    if(horaAtenUsEstado && nombre != '' && apellido != '' && dni.length== 8 ){
+        url = '../ajax/citaAjax.php'
+        DATOS = new FormData()
+        if(idUser != 0){
+            DATOS.append('idUser', idUser)
+            DATOS.append('idServic', servic)
+            DATOS.append('idHora', horaAtenUsEstado.value)
+            DATOS.append('fechaf', fecha)
+            DATOS.append('tipoCita', tipoCitaUs.value)
+            fetch(url,{
+                method : 'post',
+                body : DATOS
+            })
+            .then( r => r.json())
+            .then( r => {
+                if(r == 1){
+                    document.getElementById('horasServic').innerHTML = ''
+                    document.getElementById('select-servc').value = 0
+                    document.getElementById('nombre').value = ''
+                    document.getElementById('apellido').value = ''
+                    document.getElementById('celular').value = ''
+                    document.getElementById('correo').value = ''
+                    document.getElementById('dni').value = ''
+                    alertaHTML('success','Se guardo la cita correctamente','alertaCita')
+                }else{
+                    alertaHTML('danger','Ocurrio algun error','alertaCita')
+
                 }
-                else alertaHTML('danger','Seleccione la hora de cita','alertaCita')
-                
-            }
-            else alertaHTML('danger','Seleccione su tipo de cita','alertaCita')
-            
-        }
-        else alertaHTML('danger','Seleccione el dia de cita','alertaCita')                    
+            })
+        }            
+    }else{
+        alertaHTML('danger','Falta seleccionar la hora de cita!','alertaCita')
     }
-    else alertaHTML('danger','Ingrese numero de DNI para validar su cita','alertaCita')
-    
 }
 
 function alertaHTML(tipo, mensaje, idAlerta){
@@ -310,7 +264,87 @@ function apiConsulta(dni){
     .catch(error => console.log('Authorization failed : ' + error.message));
 }
 
+function guardarUser(){
+    nombre = document.getElementById('nombre').value
+    apellido = document.getElementById('apellido').value
+    dni = document.getElementById('dni').value
+    url = '../ajax/citaAjax.php'
+    DATOS = new FormData()
+    DATOS.append('nombre', nombre)
+    DATOS.append('apellido', apellido)
+    DATOS.append('dni', dni)
+    fetch(url,{
+        method : 'post',
+        body : DATOS
+    })
+    .then( r => r.json())
+}
 
+function validarFecha(){
+    leerHorasAtencion()
+    fecha = document.getElementById('fecha').value
+    url = '../ajax/citaAjax.php'
+    DATOS = new FormData()
+    DATOS.append('fecha', fecha)
+    fetch(url,{
+        method : 'post',
+        body : DATOS
+    })
+    .then( r => r.json())
+    .then( r => {
+        if(r.length > 0)
+            filtrarHoraAtencion(r)
+        else{
+            filtrarHoraAtencion([])
+            // alertaHTML('warning','Horas no disponibles, escoge otra fecha por favor','alertaCita')
+            // document.getElementById('horasDisponibles').innerHTML = ''
+        }
+    })
+}
+
+function filtrarHoraAtencion(horaOcupadas=[]){
+    horasOcupad = []
+    horaOcupadas.forEach(horaO => {
+        horasOcupad = [parseInt(horaO.horas_id), ...horasOcupad]
+    });
+    tb = '<div class="row text-center ">'
+    horasAtencion.forEach((hora, index) => {
+        if(hora.estado == 1){
+            // if(horasOcupad == []){
+            //     tb +=`<div class="col-4">
+
+            //             <input type="radio" class="btn-check" name="horaAtenUs" id="${index}" value="${hora.id}" autocomplete="off" >
+            //             <label class="btn btn-outline-primary" for="${index}">${hora.hora}</label></div>
+            //             `
+            // }else{
+                if(!horasOcupad.includes(parseInt(hora.id))){
+                    tb +=`<div class="col-4">
+
+                        <input type="radio" class="btn-check" name="horaAtenUs" id="${index}" value="${hora.id}" autocomplete="off" >
+                        <label class="btn btn-outline-primary" for="${index}">${hora.hora}</label></div>
+                        `
+                }
+            // }
+                            
+        }
+    });
+    tb += '</div>'
+    document.getElementById('horasDisponibles').innerHTML = tb
+}
+
+function leerHorasAtencion(){
+    url = '../ajax/configAjax.php'
+    DATOS = new FormData()
+    DATOS.append('horaAten', 'horaAten')
+    fetch(url,{
+        method : 'post',
+        body : DATOS
+    })
+    .then( r => r.json())
+    .then( r => {
+        horasAtencion = r
+    })
+}
 
 const cronometro = tiempo_final => {
     let now = new Date(),
@@ -387,7 +421,6 @@ generateCalendar = (month, year) => {
                 day.classList.add('calendar-day-hover')
                 day.setAttribute("onclick", `verificarFecha(${i - first_day.getDay() + 1},'${curr_month}',${year})`);
             }else{
-                day.setAttribute("onclick", 'limpiarCampos()');
                 day.classList.add('day-inhabil')
             }
             day.innerHTML += `<span></span>
@@ -452,7 +485,7 @@ const diasActuales = (dia, mes, anio) =>{
     fecha = `${anio}-${mes}-${dia}`
     diaActual= new Date()
     esteDia = new Date(fecha)
-    return (diaActual.getTime() <=esteDia.getTime()+60*60*24*1000);
+    return (diaActual.getDate() <=esteDia.getDate());
     
 }
 let month_list = calendar.querySelector('.month-list')
@@ -493,7 +526,7 @@ document.querySelector('#next-year').onclick = () => {
 
 let dark_mode_toggle = document.querySelector('.dark-mode-switch')
 
-// dark_mode_toggle.onclick = () => {
-//     document.querySelector('body').classList.toggle('light')
-//     document.querySelector('body').classList.toggle('dark')
-// }
+dark_mode_toggle.onclick = () => {
+    document.querySelector('body').classList.toggle('light')
+    document.querySelector('body').classList.toggle('dark')
+}

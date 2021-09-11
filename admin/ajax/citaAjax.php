@@ -6,7 +6,7 @@
 
 	if (isset($_POST['dni']) || isset($_POST['fecha']) || 
     isset($_POST['listaServ']) || isset($_POST['idUser']) ||
-	isset($_POST['id_d']) || isset($_POST['fechaCita'])) {
+	isset($_POST['listAppoint']) || isset($_POST['fechaCita'])) {
 		
 		require_once '../controladores/citaControlador.php';
 		$inst = new citaControlador();
@@ -30,6 +30,16 @@
 
         if (isset($_POST['fechaCita'])) {
 			echo $inst -> buscarFechaCita();
+		}
+
+        if (isset($_POST['listAppoint'])) {
+			session_start(['name' => 'bot']);
+			if($_SESSION['tipo']==1 || in_array(3, $_SESSION['permisos']) ){
+				$inst -> reedListAppointment();
+			}
+			elseif ($_SESSION['tipo']==4) {
+				$inst -> reedListAppointment(true);
+			}
 		}
 
 

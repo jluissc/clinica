@@ -188,21 +188,70 @@ function buscarHorasDisponiblesDia(fecha){
     })
     .then( r => r.json())
     .then( r => {
-        mostrarHorasAtencion(r.horas);
-        mostrarCitasAtencion(r.citas);
+        horaNoDisponn = [...r.horasNoDispo,...r.citasReser]
+        // console.log(horaNoDisponn);
+        mostrarHorasAtencion(r.citasReser, horaNoDisponn,r.horasNoDispo);
+        mostrarCitasAtencion(r.citasNDisp);
+        
     })
 }
 
-function mostrarHorasAtencion(horasNoAtencion){
+function mostrarHorasAtencion(citasReser,horaNoDisponn,horasNoDispo){
+    horaDisp = horasAtencion.filter(horasDispo=>{
+        let res = horaNoDisponn.find((horaNDis)=>{
+            return horaNDis.id == horasDispo.id;
+        });
+        return res == undefined;
+      });
+    
+    horasActivas = horaDisp.filter(horaD => horaD.estado == 1)
+    aa = horasActivas.concat(citasReser);
+    
     div = ''
     horasAtencion.forEach((hora,index) => {
         if(hora.estado != 0 ){
-            atender = horasNoAtencion.some( h => h.horas_id == hora.id) ? '' : 'checked' 
-            div +=`<li class="list-group-item">
-                    <input class="form-check-input me-1" ${atender}  type="checkbox" 
-                        id="horaId_${index}" onchange="estadoHora(${hora.id},this.id)" aria-label="...">
-                    ${hora.hora}
-                </li>`
+            atender = horaNoDisponn.some( h => h.horas_id == hora.id) ? '' : 'checked' 
+            if(citasReser.some( citaR => citaR.id == hora.id)){
+                citasReser.forEach(cit => {
+                    if(cit.id == hora.id){
+                        div +=`
+                        <div class="accordion" id="accordionExample">
+                            <div class="accordion-item">
+                                <li class="list-group-item accordion-button"  data-bs-toggle="collapse" data-bs-target="#ho${index}" aria-expanded="true" aria-controls="ho${index}"
+                                    <input class="form-check-input me-1" ${atender} type="checkbox">
+                                    ${hora.hora} PACIENTE : ${cit.nombre} <img style="max-width: 18px;" src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iaXNvLTg4NTktMSI/Pg0KPCEtLSBHZW5lcmF0b3I6IEFkb2JlIElsbHVzdHJhdG9yIDE5LjAuMCwgU1ZHIEV4cG9ydCBQbHVnLUluIC4gU1ZHIFZlcnNpb246IDYuMDAgQnVpbGQgMCkgIC0tPg0KPHN2ZyB2ZXJzaW9uPSIxLjEiIGlkPSJMYXllcl8xIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB4PSIwcHgiIHk9IjBweCINCgkgdmlld0JveD0iMCAwIDUxMi4wMTEgNTEyLjAxMSIgc3R5bGU9ImVuYWJsZS1iYWNrZ3JvdW5kOm5ldyAwIDAgNTEyLjAxMSA1MTIuMDExOyIgeG1sOnNwYWNlPSJwcmVzZXJ2ZSI+DQo8Zz4NCgk8Zz4NCgkJPHBhdGggZD0iTTUwNS43NTUsMTIzLjU5MmMtOC4zNDEtOC4zNDEtMjEuODI0LTguMzQxLTMwLjE2NSwwTDI1Ni4wMDUsMzQzLjE3NkwzNi40MjEsMTIzLjU5MmMtOC4zNDEtOC4zNDEtMjEuODI0LTguMzQxLTMwLjE2NSwwDQoJCQlzLTguMzQxLDIxLjgyNCwwLDMwLjE2NWwyMzQuNjY3LDIzNC42NjdjNC4xNiw0LjE2LDkuNjIxLDYuMjUxLDE1LjA4Myw2LjI1MWM1LjQ2MiwwLDEwLjkyMy0yLjA5MSwxNS4wODMtNi4yNTFsMjM0LjY2Ny0yMzQuNjY3DQoJCQlDNTE0LjA5NiwxNDUuNDE2LDUxNC4wOTYsMTMxLjkzMyw1MDUuNzU1LDEyMy41OTJ6Ii8+DQoJPC9nPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPC9zdmc+DQo=" />
+                                </li>
+                                <div id="ho${index}" class="accordion-collapse collapse" aria-labelledby="horaI${index}" data-bs-parent="#accordionExample">
+                                    <div class="accordion-body">
+                                        <strong>DNI : ${cit.dni} </strong> <br>
+                                        <strong>CELULAR : ${cit.celular} </strong> <br>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>`
+                    }
+                    
+                });
+                
+            }else{
+                if(horasNoDispo.some( HNDis => HNDis.id == hora.id)){
+                    horasNoDispo.forEach(HNDis => {
+                        if(HNDis.id == hora.id){
+                            div +=`<li class="list-group-item">
+                                <input class="form-check-input me-1"  type="checkbox" 
+                                id="horaId_${index}" onchange="estadoHora(${hora.id},this.id)" aria-label="...">
+                                ${hora.hora}
+                            </li>`
+                        }
+                    });
+                }else{
+                    div +=`<li class="list-group-item">
+                            <input class="form-check-input me-1" ${atender} type="checkbox" 
+                            id="horaId_${index}" onchange="estadoHora(${hora.id},this.id)" aria-label="...">
+                            ${hora.hora}
+                        </li>`
+                }
+            }
         }
         
     });
@@ -237,7 +286,7 @@ function estadoCita(id,idInp){
     })
     .then( r => r.json())
     .then( r => {
-        console.log(r);
+        // console.log(r);
     })
 }
 
@@ -255,7 +304,7 @@ function estadoHora(id,idInp){
     })
     .then( r => r.json())
     .then( r => {
-        console.log(r);
+        // console.log(r);
     })
 }
 

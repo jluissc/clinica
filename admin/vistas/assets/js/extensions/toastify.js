@@ -8,7 +8,7 @@ document.getElementById('background').addEventListener('click', () => {
     Toastify({
         text: "This is a toast",
         duration: 3000,
-        backgroundColor: "linear-gradient(to right, #00b09b, #96c93d)",
+        backgroundColor: "linear-gradient(to right, red, #96c93d)",
     }).showToast();
 })
 document.getElementById('close').addEventListener('click', () => {

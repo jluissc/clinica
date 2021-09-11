@@ -19,6 +19,32 @@
 			$sql = null;
 		}
 
+		protected static function reedListAppointment_m($tipo){
+			// session_start(['name' => 'bot']);
+			$idPaciente = $tipo ? $idPaciente = $_SESSION['id'] : '';
+			if($tipo){
+				$sql = mainModelo::conexion()->prepare("SELECT p.nombre, p.apellidos, p.celular, p.correo, c.fecha, c.tipo_cita_id, h.hora FROM citas c 
+					INNER JOIN persona p
+					ON p.id = c.paciente_id
+					INNER JOIN horas h
+					ON h.id = c.horas_id WHERE p.id=:id
+					ORDER BY c.id DESC");
+				$sql->bindParam(":id",$idPaciente);
+			}else{
+				$sql = mainModelo::conexion()->prepare("SELECT p.nombre, p.apellidos, p.celular, p.correo, c.fecha, c.tipo_cita_id, h.hora FROM citas c 
+					INNER JOIN persona p
+					ON p.id = c.paciente_id
+					INNER JOIN horas h
+					ON h.id = c.horas_id
+					ORDER BY c.id DESC");
+			}
+			$sql -> execute();
+			$resutl = $sql->fetchAll(PDO::FETCH_OBJ);				
+			$sql = null;
+			return $resutl;
+			// exit(json_encode($resutl));
+		}
+
 		protected static function verificarFecha_m($fecha){
 			$sql = mainModelo::conexion()->prepare('SELECT id, fecha, horas_id FROM citas WHERE fecha = "'.$fecha.'"');
 			$sql -> execute();
@@ -55,7 +81,10 @@
 		}
 
 		protected static function buscarHoraCita_m($fecha){
-			$sql = mainModelo::conexion()->prepare('SELECT horas_id FROM horas_no_atencion WHERE dia =:dia');
+			$sql = mainModelo::conexion()->prepare('SELECT hh.horas_id, h.hora  FROM horas_no_atencion hh
+				INNER JOIN `horas` h
+				ON h.id = hh.horas_id
+				WHERE dia =:dia');
 			$sql->bindParam(":dia",$fecha);
 			$sql -> execute();
             $resutl = $sql->fetchAll(PDO::FETCH_OBJ);
@@ -63,7 +92,10 @@
 			return $resutl;
 		}
 		protected static function buscarCitaOcupadas_m($fecha){
-			$sql = mainModelo::conexion()->prepare('SELECT horas_id FROM citas WHERE fecha =:dia');
+			$sql = mainModelo::conexion()->prepare('SELECT hh.horas_id, h.hora  FROM citas hh
+				INNER JOIN `horas` h
+				ON h.id = hh.horas_id
+				WHERE fecha =:dia');
 			$sql->bindParam(":dia",$fecha);
 			$sql -> execute();
             $resutl = $sql->fetchAll(PDO::FETCH_OBJ);
@@ -104,6 +136,13 @@
 			$sql->bindParam(":tipo",$datos['tipo']);
 			$sql -> execute();
 			if($sql -> rowCount() > 0){
+				// session_start(['name' => 'bot']);
+				// if($_SESSION['tipo']==1 || in_array(3, $_SESSION['permisos']) ){
+				// 	citaModelo::reedListAppointment_m(false);
+				// }
+				// elseif ($_SESSION['tipo']==4) {
+				// 	citaModelo::reedListAppointment_m(true);
+				// }
 				exit(json_encode(1));
 			}else{
 				exit(json_encode(0));

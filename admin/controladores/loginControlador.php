@@ -15,7 +15,7 @@
 			$user=mainModelo::limpiar_cadena($_POST['usuario_log']);
 			$pass=mainModelo::limpiar_cadena($_POST['clave_log']);
 			
-			if($user == null && $pass == null ){
+			if($user == '' || $pass == '' ){
 
 				echo '<script>
 						Swal.fire({
@@ -58,39 +58,59 @@
 			];
 
 			$ins = loginModelo::iniciar_sesion_M($dato);
-
+			
 			if($ins -> rowCount() == 1){
 				$datos = $ins -> fetch();
 				if($datos['estado'] == 1){
 					loginModelo::activarSession($datos['id']);
-					// if($logueo -> rowCount() == 1 ){
+					$inst = loginModelo::datosUser_m($datos['id']);
+					// if($inst -> rowCount() == 1){
 						session_start(['name' => 'bot']);
+						$datosPermi = $inst -> fetchAll();
+						$permisos = array();
+						$a =1;
+						foreach ($datosPermi as $key => $permi) {							
+							// array_push($permisos,[
+							// 	'idPerm' => $permi['idPerm'],
+							// 	'perm' => $permi['perm'],
+							// ]);
+							array_push($permisos,$permi['idPerm']);
+						}
+						$_SESSION['permisos'] = $permisos;
 						$_SESSION['id'] = $datos['id'];
 						$_SESSION['nombre'] = $datos['nombre'];
 						$_SESSION['apellido'] = $datos['apellidos'];
 						$_SESSION['dni'] = $datos['dni'];
 						$_SESSION['email'] = $datos['correo'];
-						$_SESSION['foto'] = $datos['foto'];
+						$_SESSION['celular'] = $datos['celular'];
+						$_SESSION['direccion'] = $datos['direccion'];
 						$_SESSION['tipo'] = $datos['tipo_user_id'];
 						$_SESSION['logueo'] = $datos['logueo'];
 						$_SESSION['token'] = md5(uniqid(mt_rand(),true));					
 						
 						return header("Location: ".SERVERURL."home/");
-					// }else{
-					// 	echo '<script>
-					// 		console.log(" no cambio estado logueo");
-					// 	</script>';
 					// }
+					
 					
 				}else{
 					echo '<script>
-						console.log("usuario estado inactivo");
+						Swal.fire({
+							title: "Error",
+							text: "Usuario Inactivo",
+							type: "error",
+							confirmButtonText: "Aceptar"
+						});
 					</script>';
 				}
 				
 			}else{ 
 				echo '<script>
-				console.log("no se encontro paciente");
+						Swal.fire({
+							title: "Error",
+							text: "No se encontro usuario",
+							type: "error",
+							confirmButtonText: "Aceptar"
+						});
 					</script>';
 			} 
 

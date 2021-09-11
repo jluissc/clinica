@@ -28,6 +28,26 @@
 			citaModelo::buscarFechaCita_m($fecha);
 		}
 
+		public function reedListAppointment($tipo = false) {
+            // $fecha = $_POST['fechaCita'];
+			citaModelo::reedListAppointment_m($tipo);
+			$listAppointm = citaModelo::reedListAppointment_m($tipo);
+			$html ='';
+			foreach ($listAppointm as $appoint) {
+				$html .='<tr>
+						<td>'.$appoint->nombre.' '.$appoint->apellidos.'</td>
+						<td>'.$appoint->correo.'</td>
+						<td>'.$appoint->celular.'</td>
+						<td>'.$appoint->fecha.'</td>
+						<td>'.$appoint->hora.'</td>
+						<td>
+							<span class="badge bg-success">Activo</span>
+						</td>
+					</tr>';
+			}
+			return $html; 
+		}
+
 		public function saveCita() {
 			$datos = [
 				'idUser' => $_POST['idUser'],

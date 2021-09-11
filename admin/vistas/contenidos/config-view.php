@@ -1,17 +1,19 @@
-<div class="page-heading">
-    <h3>CONFIGURACIÓN GENERAL DE CITAS, PERMISO, EMPRESA, </h3>
-</div>
+<?php if($_SESSION['tipo']==1){ ?><!-- ADMIN o CAJERO -->
 <section class="row">
+    <div class="page-heading">
+        <h3>CONFIGURACIÓN GENERAL DE CITAS, PERMISO, EMPRESA, </h3>
+    </div>
     <div class="col-12 col-lg-12">
         <div class="row">
-            <div class="col-6 col-lg-6 col-md-6 " >
+            <hr>
+            <div class="col-12 col-sm-6 col-md-6 col-lg-6 " >
                 <div class="row">
                     <div class="card">
                         <div class="card-header">
                             <h4 class="card-title">SELECCIONAR LAS HORAS DE ATENCIÓN</h4>
                         </div>
                         <div class="card-content">
-                            <div class="calendar" style="background-color: wheat;">
+                            <div class="calendar" style="width: 100%;">
                                 <div class="calendar-header">
                                     <span class="month-picker" id="month-picker">February</span>
                                     <div class="year-picker">
@@ -36,14 +38,14 @@
                                     </div>
                                     <div class="calendar-days"></div>
                                 </div>
-                                <div class="calendar-footer">
+                                <!-- <div class="calendar-footer">
                                     <div class="toggle">
                                         <span>Dark Mode</span>
                                         <div class="dark-mode-switch">
                                             <div class="dark-mode-switch-ident"></div>
                                         </div>
                                     </div>
-                                </div>
+                                </div> -->
                                 <div class="month-list"></div>
                             </div>
                         </div>
@@ -51,7 +53,7 @@
                     
                 </div>
             </div>
-            <div class="col-3 col-lg-3 col-md-3 " >
+            <div class="col-12 col-sm-6 col-md-3 col-lg-3 " >
                 <div class="row">
                     <div class="card">
                         <div class="card-header">
@@ -71,7 +73,7 @@
                     
                 </div>
             </div>
-            <div class="col-3 col-lg-3 col-md-3 " >
+            <div class="col-12 col-sm-6 col-md-3 col-lg-3 " >
                 <div class="row">
                     <div class="card">
                         <div class="card-header">
@@ -92,7 +94,7 @@
                 </div>
             </div>
             <hr>
-            <!-- segunda columna del primero -->
+            <!-- Editar permisos de usuarios -->
             <div class="col-6 col-lg-6 col-md-6" >
                 <div class="card">
                     <div class="card-header">
@@ -116,7 +118,7 @@
                     
                 </div>
             </div>
-            
+            <hr>
         </div>
     </div>
 </section>
@@ -163,3 +165,4 @@
     </div>
 </div>
 <script src=" <?php echo SERVERURL ?>vistas/assets/js/config.js"></script>
+<?php } ?>

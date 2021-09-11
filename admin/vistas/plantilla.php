@@ -8,7 +8,7 @@
 	<?php include "./vistas/inc/link.php"; ?>
     
 </head>
-<body > 
+<body class="light"> 
     
 	
 	<?php 

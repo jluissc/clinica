@@ -1,260 +1,220 @@
+<!-- 
+1 PAGOS
+2 GASTOS
+3 CITAS
+4 SERVICIOS
+5 MATERIALES
+
+ -->
+<?php 
+    require_once './controladores/homeControlador.php';
+    $inst = new homeControlador();
+    // echo $inst -> iniciar_sesion_C();
+?>
 <section class="row">
-    <div class="col-12 col-lg-9">
-        <div class="row">
-            <div class="col-6 col-lg-3 col-md-6">
-                <div class="card">
-                    <div class="card-body px-3 py-4-5">
-                        <div class="row">
-                            <div class="col-md-4">
-                                <div class="stats-icon purple">
-                                    <i class="iconly-boldShow"></i>
+    <!-- <?php echo var_dump($_SESSION['permisos']) ?> -->
+    <div class="col-12 col-lg-12">
+        <?php if($_SESSION['tipo']==1 || $_SESSION['tipo']==2 ){ ?><!-- ADMIN o CAJERO -->
+            <?php 
+                $datos = $inst->dateQuantity();
+            ?>
+            
+            <h2>Resumen empresa</h2>
+            <div class="row">
+                <div class="col-6 col-lg-3 col-md-6">
+                    <div class="card">
+                        <div class="card-body px-3 py-4-5">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="stats-icon purple">
+                                        <i class="iconly-boldShow"></i>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="col-md-8">
-                                <h6 class="text-muted font-semibold">Profile Views</h6>
-                                <h6 class="font-extrabold mb-0">112.000</h6>
+                                <div class="col-md-8">
+                                    <h6 class="text-muted font-semibold">Total Pacientes</h6>
+                                    <h6 class="font-extrabold mb-0" id="cant-pacient">
+                                        <?php 
+                                            echo $datos['patients'];
+                                        ?>
+                                    </h6>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="col-6 col-lg-3 col-md-6">
-                <div class="card">
-                    <div class="card-body px-3 py-4-5">
-                        <div class="row">
-                            <div class="col-md-4">
-                                <div class="stats-icon blue">
-                                    <i class="iconly-boldProfile"></i>
+                <div class="col-6 col-lg-3 col-md-6">
+                    <div class="card">
+                        <div class="card-body px-3 py-4-5">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="stats-icon blue">
+                                        <i class="iconly-boldProfile"></i>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="col-md-8">
-                                <h6 class="text-muted font-semibold">Followers</h6>
-                                <h6 class="font-extrabold mb-0">183.000</h6>
+                                <div class="col-md-8">
+                                    <h6 class="text-muted font-semibold">Cita totales</h6>
+                                    <h6 class="font-extrabold mb-0" id="cant-citas">
+                                        <?php 
+                                            echo $datos['appoints'];
+                                        ?>
+                                    </h6>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="col-6 col-lg-3 col-md-6">
-                <div class="card">
-                    <div class="card-body px-3 py-4-5">
-                        <div class="row">
-                            <div class="col-md-4">
-                                <div class="stats-icon green">
-                                    <i class="iconly-boldAdd-User"></i>
+                <?php if(in_array(1, $_SESSION['permisos'])){ ?>
+                <div class="col-6 col-lg-3 col-md-6">
+                    <div class="card">
+                        <div class="card-body px-3 py-4-5">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="stats-icon green">
+                                        <i class="iconly-boldAdd-User"></i>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="col-md-8">
-                                <h6 class="text-muted font-semibold">Following</h6>
-                                <h6 class="font-extrabold mb-0">80.000</h6>
+                                <div class="col-md-8">
+                                    <h6 class="text-muted font-semibold">Entrada</h6>
+                                    <h6 class="font-extrabold mb-0" id="pay-serv">0</h6>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="col-6 col-lg-3 col-md-6">
-                <div class="card">
-                    <div class="card-body px-3 py-4-5">
-                        <div class="row">
-                            <div class="col-md-4">
-                                <div class="stats-icon red">
-                                    <i class="iconly-boldBookmark"></i>
+                <?php } ?>
+                <?php if(in_array(2, $_SESSION['permisos'])){ ?>    
+                <div class="col-6 col-lg-3 col-md-6">
+                    <div class="card">
+                        <div class="card-body px-3 py-4-5">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="stats-icon red">
+                                        <i class="iconly-boldBookmark"></i>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="col-md-8">
-                                <h6 class="text-muted font-semibold">Saved Post</h6>
-                                <h6 class="font-extrabold mb-0">112</h6>
+                                <div class="col-md-8">
+                                    <h6 class="text-muted font-semibold">Salida</h6>
+                                    <h6 class="font-extrabold mb-0" id="pay-gastos">0</h6>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
+                <?php } ?>
             </div>
-        </div>
-        <div class="row">
-            <div class="col-12">
-                <div class="card">
-                    <div class="card-header">
-                        <h4>Profile Visit</h4>
-                    </div>
-                    <div class="card-body">
-                        <div id="chart-profile-visit"></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-12 col-xl-4">
-                <div class="card">
-                    <div class="card-header">
-                        <h4>Profile Visit</h4>
-                    </div>
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-6">
-                                <div class="d-flex align-items-center">
-                                    <svg class="bi text-primary" width="32" height="32" fill="blue"
-                                        style="width:10px">
-                                        <use
-                                            xlink:href="assets/vendors/bootstrap-icons/bootstrap-icons.svg#circle-fill" />
-                                    </svg>
-                                    <h5 class="mb-0 ms-3">Europe</h5>
-                                </div>
-                            </div>
-                            <div class="col-6">
-                                <h5 class="mb-0">862</h5>
-                            </div>
-                            <div class="col-12">
-                                <div id="chart-europe"></div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-6">
-                                <div class="d-flex align-items-center">
-                                    <svg class="bi text-success" width="32" height="32" fill="blue"
-                                        style="width:10px">
-                                        <use
-                                            xlink:href="assets/vendors/bootstrap-icons/bootstrap-icons.svg#circle-fill" />
-                                    </svg>
-                                    <h5 class="mb-0 ms-3">America</h5>
-                                </div>
-                            </div>
-                            <div class="col-6">
-                                <h5 class="mb-0">375</h5>
-                            </div>
-                            <div class="col-12">
-                                <div id="chart-america"></div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-6">
-                                <div class="d-flex align-items-center">
-                                    <svg class="bi text-danger" width="32" height="32" fill="blue"
-                                        style="width:10px">
-                                        <use
-                                            xlink:href="assets/vendors/bootstrap-icons/bootstrap-icons.svg#circle-fill" />
-                                    </svg>
-                                    <h5 class="mb-0 ms-3">Indonesia</h5>
-                                </div>
-                            </div>
-                            <div class="col-6">
-                                <h5 class="mb-0">1025</h5>
-                            </div>
-                            <div class="col-12">
-                                <div id="chart-indonesia"></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-12 col-xl-8">
-                <div class="card">
-                    <div class="card-header">
-                        <h4>Latest Comments</h4>
-                    </div>
-                    <div class="card-body">
-                        <div class="table-responsive">
-                            <table class="table table-hover table-lg">
-                                <thead>
-                                    <tr>
-                                        <th>Name</th>
-                                        <th>Comment</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td class="col-3">
-                                            <div class="d-flex align-items-center">
-                                                <div class="avatar avatar-md">
-                                                    <img src="assets/images/faces/5.jpg">
-                                                </div>
-                                                <p class="font-bold ms-3 mb-0">Si Cantik</p>
-                                            </div>
-                                        </td>
-                                        <td class="col-auto">
-                                            <p class=" mb-0">Congratulations on your graduation!</p>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="col-3">
-                                            <div class="d-flex align-items-center">
-                                                <div class="avatar avatar-md">
-                                                    <img src="assets/images/faces/2.jpg">
-                                                </div>
-                                                <p class="font-bold ms-3 mb-0">Si Ganteng</p>
-                                            </div>
-                                        </td>
-                                        <td class="col-auto">
-                                            <p class=" mb-0">Wow amazing design! Can you make another tutorial for
-                                                this design?</p>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <?php } ?>
+
+        <?php if(in_array(3, $_SESSION['permisos'])){ ?><!-- PERMISO DE CITAS -->
+            <h3>Citas del dia</h3>
+            <div class="row">
+                <?php  echo $inst -> readAppointmentToday()?>
+            </div>    
+        <?php } ?>
+        
+        <?php  if($_SESSION['tipo']==4  ){ ?> SOLO PACIENTES
+            <h2>Hola <?php echo $_SESSION['nombre'].' '.$_SESSION['apellido'] ?></h2>
+            <h3>Citas proximas</h3>
+            <div class="row">
+                <?php  echo $inst -> readAppointmentNexts()?>
+            </div>  
+        <?php } ?>
+        
     </div>
-    <div class="col-12 col-lg-3">
-        <div class="card">
-            <div class="card-body py-4 px-5">
-                <div class="d-flex align-items-center">
-                    <div class="avatar avatar-xl">
-                        <img src="assets/images/faces/1.jpg" alt="Face 1">
-                    </div>
-                    <div class="ms-3 name">
-                        <h5 class="font-bold">John Duck</h5>
-                        <h6 class="text-muted mb-0">@johnducky</h6>
-                    </div>
+    <!-- MODAL SHOW APPOINTMENT -->
+    <div class="modal fade text-left" id="info" tabindex="-1" role="dialog"
+        aria-labelledby="myModalLabel130" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable"
+            role="document">
+            <div class="modal-content" id="show-appointm">
+                <div class="modal-header bg-info">
+                    <h5 class="modal-title white" id="myModalLabel130">Detalle Cita  </h5>
+                    <button type="button" class="close" data-bs-dismiss="modal"
+                        aria-label="Close">
+                        <i data-feather="x"></i>
+                    </button>
                 </div>
-            </div>
-        </div>
-        <div class="card">
-            <div class="card-header">
-                <h4>Recent Messages</h4>
-            </div>
-            <div class="card-content pb-4">
-                <div class="recent-message d-flex px-4 py-3">
-                    <div class="avatar avatar-lg">
-                        <img src="assets/images/faces/4.jpg">
-                    </div>
-                    <div class="name ms-4">
-                        <h5 class="mb-1">Hank Schrader</h5>
-                        <h6 class="text-muted mb-0">@johnducky</h6>
-                    </div>
+                <div class="modal-body">
+                    Tart lemon drops macaroon oat cake chocolate toffee chocolate
+                    bar icing. Pudding jelly beans
+                    carrot cake pastry gummies cheesecake lollipop. I love cookie
+                    lollipop cake I love sweet
+                    gummi bears cupcake dessert.
                 </div>
-                <div class="recent-message d-flex px-4 py-3">
-                    <div class="avatar avatar-lg">
-                        <img src="assets/images/faces/5.jpg">
-                    </div>
-                    <div class="name ms-4">
-                        <h5 class="mb-1">Dean Winchester</h5>
-                        <h6 class="text-muted mb-0">@imdean</h6>
-                    </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-light-secondary"
+                        data-bs-dismiss="modal">
+                        <i class="bx bx-x d-block d-sm-none"></i>
+                        <span class="d-none d-sm-block">Close</span>
+                    </button>
+                    <button type="button" class="btn btn-info ml-1"
+                        data-bs-dismiss="modal">
+                        <i class="bx bx-check d-block d-sm-none"></i>
+                        <span class="d-none d-sm-block">Accept</span>
+                    </button>
                 </div>
-                <div class="recent-message d-flex px-4 py-3">
-                    <div class="avatar avatar-lg">
-                        <img src="assets/images/faces/1.jpg">
-                    </div>
-                    <div class="name ms-4">
-                        <h5 class="mb-1">John Dodol</h5>
-                        <h6 class="text-muted mb-0">@dodoljohn</h6>
-                    </div>
-                </div>
-                <div class="px-4">
-                    <button class='btn btn-block btn-xl btn-light-primary font-bold mt-3'>Start
-                        Conversation</button>
-                </div>
-            </div>
-        </div>
-        <div class="card">
-            <div class="card-header">
-                <h4>Visitors Profile</h4>
-            </div>
-            <div class="card-body">
-                <div id="chart-visitors-profile"></div>
             </div>
         </div>
     </div>
 </section>
+
+
+<script>
+    const urlPrincipal = '<?php echo SERVERURL?>';
+    // var el = document.getElementById("showDetailAppoint");   
+    // el.addEventListener("click", modifyText);   
+
+    // function modifyText(){
+    //     console.log('diste click pendejo');        
+    // }
+
+    function showDetailAppoint(idAppoint){
+        url = urlPrincipal+'ajax/homeAjax.php'
+        // let datos = {
+        //     idAppoint : idAppoint,
+        //     url : url,
+        // }
+        data = new FormData()
+        data.append('idAppoint' , idAppoint)
+
+        fetch(url, {
+            method : 'POST',
+            body : data
+        })
+        .then( result => result.json())
+        .then( result => appointmentHTML(result))
+    }
+
+    function appointmentHTML(appointDate){
+        console.log(appointDate);
+        statusMessage = !!appointDate.mensaje ? 'Mensaje' : 'Mandarle un mensaje'
+        message = !!appointDate.mensaje ? appointDate.mensaje : ''
+        html = `<div class="modal-header bg-info">
+                <h5 class="modal-title white" id="myModalLabel130">${appointDate.nombre} ${appointDate.apellidos}</h5>
+                <button type="button" class="close" data-bs-dismiss="modal"
+                    aria-label="Close">
+                    <i data-feather="x"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="col-sm-12">
+                    <h6>${statusMessage}</h6>
+                    <input class="form-control" type="text" placeholder="Enviarle un mensaje " value="${message}">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-light-secondary"
+                    data-bs-dismiss="modal">
+                    <i class="bx bx-x d-block d-sm-none"></i>
+                    <span class="d-none d-sm-block">Cancelar</span>
+                </button>
+                <button type="button" class="btn btn-info ml-1"
+                    data-bs-dismiss="modal">
+                    <i class="bx bx-check d-block d-sm-none"></i>
+                    <span class="d-none d-sm-block">Enviarle</span>
+                </button>
+            </div>`
+        document.getElementById('show-appointm').innerHTML = html
+    }
+
+
+</script>
