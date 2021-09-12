@@ -4,19 +4,22 @@
 
 	require_once '../config/app.php';
 
-	if (isset($_POST['idCustomer']) || isset($_POST['idDelete'])) {
+	if (isset($_POST['idCustomer']) || isset($_POST['idDelete']) || 
+		isset($_POST['dni_appoint'])) {
 		
 		require_once '../controladores/clientesControlador.php';
 		$inst = new clienteControlador();
 
-		// registro nueva products
+		// 
 		if (isset($_POST['idCustomer'])) {
 			$inst -> showCustomer();
+		}
+		if (isset($_POST['dni_appoint'])) {
+			$inst -> insertAppoint();
 		}
 
 		if (isset($_POST['idDelete'])) {
             $inst -> deleteCustomer();
-			// exit(json_encode($_POST['idDelete']));
 		}
 	} else {
 		session_start(['name' => 'bot']);
