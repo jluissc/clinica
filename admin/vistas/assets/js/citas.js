@@ -32,9 +32,9 @@ function datosTransf(idAppoint,tipo){
         document.getElementById('estadoPay').innerHTML = ''
     }else{
         document.getElementById('estadoPay').innerHTML = `<button type="button" class="btn btn-info ml-1" onclick="mandarDatosPago()">
-                        <i class="bx bx-check d-block d-sm-none"></i>
-                        <span class="d-none d-sm-block">Mandar Datos</span>
-                    </button>`
+                <i class="bx bx-check d-block d-sm-none"></i>
+                <span class="d-none d-sm-block">Mandar Datos</span>
+            </button>`
     }
     console.log(idAppoint);
 }

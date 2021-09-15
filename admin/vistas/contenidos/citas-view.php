@@ -192,7 +192,7 @@
         role="document">
         <div class="modal-content">
             <div class="modal-header bg-info">
-                <h5 class="modal-title white" id="tituloModal"> Info Modal </h5>
+                <h5 class="modal-title white" id="tituloModal"> Datos de transferencia </h5>
                 <button type="button" class="close" data-bs-dismiss="modal"
                     aria-label="Close">
                     <i data-feather="x"></i>
@@ -205,6 +205,16 @@
                     banco
                     total
                 -->
+                <?php 
+                    if($_SESSION['tipo']==4){
+                ?>
+                <div>
+                    <h5>Num. Cuenta : 1931903910931029301</h5>
+                    <h5>CCI : 005459854145421212</h5>
+                </div>
+                <?php 
+                  }
+                ?>
                 <div class="form-group">
                     <div class="col-12">
                         <input type="text" id="numb_pay" class="form-control font-bold" placeholder="Numero de operación">
@@ -240,17 +250,19 @@
                     <i class="bx bx-x d-block d-sm-none"></i>
                     <span class="d-none d-sm-block">Cancelar</span>
                 </button>
-                <div id="estadoPay">
-                    <!-- <button type="button" class="btn btn-info ml-1" onclick="mandarDatosPago()">
-                        <i class="bx bx-check d-block d-sm-none"></i>
-                        <span class="d-none d-sm-block">Mandar Datos</span>
-                    </button> -->
-                </div>
+                <div id="estadoPay"> </div>
                 
                 <?php 
                     }elseif($_SESSION['tipo']==1){
                 ?>
-                check de validar
+                <div class="form-check">
+                    <div class="custom-control custom-checkbox">
+                        <input type="checkbox"
+                            class="form-check-input form-check-success form-check-glow"
+                            name="customCheck" id="customColorCheck3">
+                        <label class="form-check-label" for="customColorCheck3">Validar Transferencia</label>
+                    </div>
+                </div>
                 <?php 
                     }
                 ?>
