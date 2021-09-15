@@ -27,7 +27,20 @@ function leerCondicionesAtencion(){
         
     })
 }
-
+function datosTransf(idAppoint,tipo){
+    if(tipo == 0){
+        document.getElementById('estadoPay').innerHTML = ''
+    }else{
+        document.getElementById('estadoPay').innerHTML = `<button type="button" class="btn btn-info ml-1" onclick="mandarDatosPago()">
+                        <i class="bx bx-check d-block d-sm-none"></i>
+                        <span class="d-none d-sm-block">Mandar Datos</span>
+                    </button>`
+    }
+    console.log(idAppoint);
+}
+ function payAppoint(idAppoint){
+    console.log(idAppoint);
+ }
 
 function mostrarListaServicios(lista){
     listS = '<option value="0">SELECCIONE</option>'

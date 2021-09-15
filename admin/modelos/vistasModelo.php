@@ -5,7 +5,7 @@
 	class vistasModelo{
 
 		protected static function obtener_vistas_M($ruta){
-			$listasVistas = ["citas","home","servicio","config","clientes"];
+			$listasVistas = ["citas","home","servicio","config","clientes","pagos"];
 			// $listasVistas = ["home","servicio"];
 			if(in_array($ruta,$listasVistas)){
 				// si exist el archivo el d eabajo

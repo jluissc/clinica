@@ -20,7 +20,7 @@
                             if($_SESSION['tipo']==1 || in_array(3, $_SESSION['permisos']) ){
                         ?>
 
-                            <span class="badge bg-info text-dark"><a href="<?php echo SERVERURL.'pacientes/' ?>" target="_blank" >Registrar Nuevo Paciente</a></span>
+                            <span class="badge bg-info text-dark"><a href="<?php echo SERVERURL.'clientes/' ?>" target="_blank" >Registrar Nuevo Paciente</a></span>
                         <?php 
                             }
                         ?>
@@ -137,6 +137,7 @@
                             <!-- <th>Servicio</th> -->
                             <th>Fecha</th>
                             <th>Hora</th>
+                            <th>Estado Pago</th>
                             <th>Acciones</th>
                         </tr>
                     </thead>
@@ -166,6 +167,7 @@
                             <!-- <th>Servicio</th> -->
                             <th>Fecha</th>
                             <th>Hora</th>
+                            <th>Estado Pago</th>
                             <th>Acciones</th>
                         </tr>
                     </thead>
@@ -183,28 +185,78 @@
         <?php } ?>PACIENTES
     </div>
 </section>
-
+<!-- data-bs-toggle="modal" data-bs-target="#info" -->
+<div class="modal fade text-left" id="info" tabindex="-1" role="dialog"
+    aria-labelledby="myModalLabel130" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable"
+        role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-info">
+                <h5 class="modal-title white" id="tituloModal"> Info Modal </h5>
+                <button type="button" class="close" data-bs-dismiss="modal"
+                    aria-label="Close">
+                    <i data-feather="x"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <!-- 
+                    detalles
+                    numero operacion
+                    banco
+                    total
+                -->
+                <div class="form-group">
+                    <div class="col-12">
+                        <input type="text" id="numb_pay" class="form-control font-bold" placeholder="Numero de operación">
+                    </div>
+                    
+                </div>
+                <!-- <div id="spinnerTemp"> -->
+                    
+                <!-- </div> -->
+                <div class="form-group">
+                    <div class="col-12">
+                        <input type="text" id="name_appoint" class="form-control font-bold" placeholder="Nombre de banco" autocomplete="false">
+                    </div>
+                    
+                </div>
+                <div class="form-group">
+                    <div class="col-12">
+                        <input type="text" id="last_appoint" class="form-control font-bold" placeholder="Monto transferido" autocomplete="false">
+                    </div>
+                </div>
+                <!-- <div class="form-group">
+                    <div class="col-12">
+                        <input type="text" id="celphone_appoint" class="form-control font-bold" placeholder="Nombres (opcional)" autocomplete="false">
+                    </div>
+                    
+                </div> -->
+            </div>
+            <div class="modal-footer">
+                <?php 
+                    if($_SESSION['tipo']==4){
+                ?>
+                <button type="button" class="btn btn-light-secondary" data-bs-dismiss="modal">
+                    <i class="bx bx-x d-block d-sm-none"></i>
+                    <span class="d-none d-sm-block">Cancelar</span>
+                </button>
+                <div id="estadoPay">
+                    <!-- <button type="button" class="btn btn-info ml-1" onclick="mandarDatosPago()">
+                        <i class="bx bx-check d-block d-sm-none"></i>
+                        <span class="d-none d-sm-block">Mandar Datos</span>
+                    </button> -->
+                </div>
+                
+                <?php 
+                    }elseif($_SESSION['tipo']==1){
+                ?>
+                check de validar
+                <?php 
+                    }
+                ?>
+            </div>
+        </div>
+    </div>
+</div>
 
 <script src=" <?php echo SERVERURL ?>vistas/assets/js/citas.js"></script>
-<script>
-    // const URL = '<?php echo SERVERURL ?>'
-    // tipoU = '<?php echo $_SESSION['tipo'] ?>'
-    // const tipo = tipoU  == 1 ? false : tipoU == 4 ? 'true' : '' 
-    
-    // leer()
-    
-    // function leer(){
-    //     urlP = URL+'ajax/citaAjax.php'
-    //     datos = new FormData()
-    //     datos.append('listAppoint', tipo)
-    //     fetch(urlP,{
-    //         method : 'POST',
-    //         body : datos
-    //     })
-    //     .then( result => result.json())
-    //     .then( result => printListAppointments(result))
-    // }
-
-    
-    
-</script>

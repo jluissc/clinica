@@ -23,15 +23,16 @@
 			// session_start(['name' => 'bot']);
 			$idPaciente = $tipo ? $idPaciente = $_SESSION['id'] : '';
 			if($tipo){
-				$sql = mainModelo::conexion()->prepare("SELECT p.nombre, p.apellidos, p.celular, p.correo, c.fecha, c.tipo_cita_id, h.hora FROM citas c 
+				$sql = mainModelo::conexion()->prepare("SELECT p.nombre, p.apellidos, p.celular, p.correo, c.id, c.fecha, c.tipo_cita_id, h.hora FROM citas c 
 					INNER JOIN persona p
 					ON p.id = c.paciente_id
 					INNER JOIN horas h
-					ON h.id = c.horas_id WHERE p.id=:id
+					ON h.id = c.horas_id 
+					WHERE p.id=:id
 					ORDER BY c.id DESC");
 				$sql->bindParam(":id",$idPaciente);
 			}else{
-				$sql = mainModelo::conexion()->prepare("SELECT p.nombre, p.apellidos, p.celular, p.correo, c.fecha, c.tipo_cita_id, h.hora FROM citas c 
+				$sql = mainModelo::conexion()->prepare("SELECT p.nombre, p.apellidos, p.celular, p.correo, c.id, c.fecha, c.tipo_cita_id, h.hora FROM citas c 
 					INNER JOIN persona p
 					ON p.id = c.paciente_id
 					INNER JOIN horas h
@@ -55,6 +56,30 @@
 				exit(json_encode(0));
 			}
 			$sql = null;
+		}
+
+		protected static function reedListPayAppoint_m(){
+			$sql = mainModelo::conexion()->prepare('SELECT id, fecha, horas_id FROM citas WHERE fecha = "'.$fecha.'"');
+			$sql -> execute();
+            if($sql -> rowCount() > 0){
+                $resutl = $sql->fetchAll(PDO::FETCH_OBJ);
+				exit(json_encode($resutl));
+			}else{
+				exit(json_encode(0));
+			}
+			$sql = null;
+		}
+		protected static function statusPayAppoint($idAppoint){
+			$sql = mainModelo::conexion()->prepare('SELECT tipo_pago_id, estado FROM cita_pagos WHERE citas_id = '.$idAppoint.'');
+			$sql -> execute();
+            if($sql -> rowCount() == 1){
+				$resutl = $sql->fetch(PDO::FETCH_OBJ);
+				$sql = null;
+                return [true,$resutl];
+			}else{
+				$sql = null;
+                return false;
+			}
 		}
 
 		protected static function buscarFechaCita_m($fecha){

@@ -13,6 +13,7 @@
 			$listCustomers = clienteModelo::reedListCustomers_m();
 			$html ='';
 			foreach ($listCustomers as $customer) {
+				// <button class="btn btn-outline-primary" onclick="showDetailCustomer('.$customer->id.')">Detalles</button>
 				$html .='<tr>
 						<td>'.$customer->nombre.' '.$customer->apellidos.'</td>
 						<td>'.$customer->correo.'</td>
@@ -20,7 +21,6 @@
 						<td>'.$customer->correo.'</td>
 						<td>'.$customer->celular.'</td>
 						<td>
-							<button class="btn btn-outline-primary" onclick="showDetailCustomer('.$customer->id.')">Detalles</button>
 							<button class="btn btn-outline-info" onclick="showCustomer('.$customer->id.',2)" data-bs-toggle="modal"
 								data-bs-target="#info">Editar</button>
 							<button class="btn btn-outline-danger" onclick="deleteCustomer('.$customer->id.')">Eliminar</button>
