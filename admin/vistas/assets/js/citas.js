@@ -4,6 +4,7 @@ Lservicios = []
 seleccionFecha = false
 fechaSelecionada = ''
 pacienteId = 0
+idAppoint=0 /* Id Cita seleccionado */
 document.getElementById('nombre').disabled = true
 document.getElementById('apellido').disabled = true
 document.getElementById('celular').disabled = true
@@ -27,20 +28,116 @@ function leerCondicionesAtencion(){
         
     })
 }
-function datosTransf(idAppoint,tipo){
-    if(tipo == 0){
-        document.getElementById('estadoPay').innerHTML = ''
-    }else{
+function datosTransf(idAppointd,showBtn){
+    idAppoint = idAppointd
+    if(showBtn){
         document.getElementById('estadoPay').innerHTML = `<button type="button" class="btn btn-info ml-1" onclick="mandarDatosPago()">
                 <i class="bx bx-check d-block d-sm-none"></i>
                 <span class="d-none d-sm-block">Mandar Datos</span>
             </button>`
+    }else{
+        document.getElementById('estadoPay').innerHTML = ''
     }
     console.log(idAppoint);
 }
- function payAppoint(idAppoint){
-    console.log(idAppoint);
- }
+
+function validarTransf(idAppointd){
+    datos = new FormData()
+    datos.append('idAppointdV',idAppointd)
+    fetch(URL+'ajax/citaAjax.php',{
+        method : 'POST',
+        body : datos,
+    })
+    .then( result => result.json())
+    .then( result => {
+        console.log(result)
+        document.getElementById('aasda').value = result.detalles
+        document.getElementById('name_bank').value = result.medio_pago
+        document.getElementById('total_pay').value = result.total
+        estado = result.estado == 1 ? 'checked disabled' : '' 
+        document.getElementById('validarTransfer').innerHTML = ` <div class="custom-control custom-checkbox">
+                <input type="checkbox" class="form-check-input form-check-success form-check-glow" ${estado} onchange="validarTRansfern(${result.id})" id="checkValidTransf">
+                <label class="form-check-label" for="customColorCheck3">Validar Transferencia</label>
+            </div>`
+
+    })
+}
+
+function validarTRansfern(idAppointPay){
+    console.log(idAppointPay);
+    document.getElementById('checkValidTransf').disabled = true
+    estado = document.getElementById('checkValidTransf').checked
+    datos = new FormData()
+    datos.append('estadoTransf',estado)
+    datos.append('idPayAppoint',idAppointPay)
+    fetch(URL+'ajax/citaAjax.php',{
+        method : 'POST',
+        body : datos,
+    })
+    .then( result => result.json())
+    .then( result => {
+        console.log(result)
+        if(result == 1){
+            alertaToastify('Se verifico transferencia', 'green')
+            setTimeout(() => {
+                location.reload()
+            }, 2000);
+        }else{
+
+        }
+    })
+}
+
+function mandarDatosPago(){
+    numb_pay = document.getElementById('aasda').value
+    name_bank = document.getElementById('name_bank').value
+    total_pay = document.getElementById('total_pay').value
+    if(numb_pay != ''){
+        if(name_bank != ''){
+            if (total_pay != '') {
+                console.log(idAppoint);
+                datos = new FormData()
+                datos.append('numb_pay',numb_pay)
+                datos.append('name_bank',name_bank)
+                datos.append('total_pay',total_pay)
+                datos.append('idAppoint',idAppoint)
+                fetch(URL+'ajax/citaAjax.php',{
+                    method : 'POST',
+                    body : datos
+                })
+                .then(result => result.json())
+                .then(result => {
+                    console.log(result)
+                    if(result){
+                        alertaToastify('Se mando tus datos de transferencia','green')
+                        setTimeout(() => {
+                            location.reload()
+                        }, 1500);
+                    }
+                    else alertaToastify('Intentalo nuevamente por favor','red') 
+                })
+                .catch(error => alertaToastify('Comuniquese con el area de soporte','red') )
+            } 
+            else alertaToastify('Monto necesario','red') 
+        }
+        else  alertaToastify('Nombre del banco necesario','red') 
+    }
+    else alertaToastify('Número de operación necesario','red')
+}
+
+function alertaToastify(mensaje, color = 'red'){
+    Toastify({
+        text: mensaje,
+        duration: 1000,
+        backgroundColor: color,
+    }).showToast();
+}
+
+
+
+function payAppoint(idAppoint){
+console.log(idAppoint);
+}
 
 function mostrarListaServicios(lista){
     listS = '<option value="0">SELECCIONE</option>'

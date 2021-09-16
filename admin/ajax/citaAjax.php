@@ -6,7 +6,9 @@
 
 	if (isset($_POST['dni']) || isset($_POST['fecha']) || 
     isset($_POST['listaServ']) || isset($_POST['idUser']) ||
-	isset($_POST['listAppoint']) || isset($_POST['fechaCita'])) {
+	isset($_POST['listAppoint']) || isset($_POST['fechaCita'])||
+	isset($_POST['numb_pay']) ||  isset($_POST['idAppointdV']) ||
+	isset($_POST['estadoTransf'])) {
 		
 		require_once '../controladores/citaControlador.php';
 		$inst = new citaControlador();
@@ -30,6 +32,20 @@
 
         if (isset($_POST['fechaCita'])) {
 			echo $inst -> buscarFechaCita();
+		}
+
+        if (isset($_POST['estadoTransf'])) {
+			echo $inst -> validarTransferencia();
+		}
+
+        if (isset($_POST['idAppointdV'])) {
+			echo $inst -> searchAppointPay();
+		}
+
+        if (isset($_POST['numb_pay'])) {
+			// echo $inst -> buscarFechaCita();
+			$inst -> saveDatosPayAppoint();
+			exit(json_encode($_POST['numb_pay']));
 		}
 
         if (isset($_POST['listAppoint'])) {

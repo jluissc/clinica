@@ -215,9 +215,9 @@
                 <?php 
                   }
                 ?>
-                <div class="form-group">
+                 <div class="form-group">
                     <div class="col-12">
-                        <input type="text" id="numb_pay" class="form-control font-bold" placeholder="Numero de operación">
+                        <input type="text" id="aasda" class="form-control font-bold" placeholder="Nombre de banco" autocomplete="false">
                     </div>
                     
                 </div>
@@ -226,13 +226,13 @@
                 <!-- </div> -->
                 <div class="form-group">
                     <div class="col-12">
-                        <input type="text" id="name_appoint" class="form-control font-bold" placeholder="Nombre de banco" autocomplete="false">
+                        <input type="text" id="name_bank" class="form-control font-bold" placeholder="Nombre de banco" autocomplete="false">
                     </div>
                     
                 </div>
                 <div class="form-group">
                     <div class="col-12">
-                        <input type="text" id="last_appoint" class="form-control font-bold" placeholder="Monto transferido" autocomplete="false">
+                        <input type="text" id="total_pay" class="form-control font-bold" placeholder="Monto transferido" autocomplete="false">
                     </div>
                 </div>
                 <!-- <div class="form-group">
@@ -255,13 +255,8 @@
                 <?php 
                     }elseif($_SESSION['tipo']==1){
                 ?>
-                <div class="form-check">
-                    <div class="custom-control custom-checkbox">
-                        <input type="checkbox"
-                            class="form-check-input form-check-success form-check-glow"
-                            name="customCheck" id="customColorCheck3">
-                        <label class="form-check-label" for="customColorCheck3">Validar Transferencia</label>
-                    </div>
+                <div class="form-check" id="validarTransfer">
+                   
                 </div>
                 <?php 
                     }

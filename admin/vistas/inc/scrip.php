@@ -15,3 +15,7 @@
     let dataTable = new simpleDatatables.DataTable(table1);
     
 </script>
+
+<script>
+    const URL = "http://127.0.0.1/clinica/admin/";
+</script>

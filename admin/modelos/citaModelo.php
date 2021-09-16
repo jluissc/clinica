@@ -116,6 +116,45 @@
 			$sql = null;
 			return $resutl;
 		}
+
+		protected static function validarTransferencia_m($idAppointPay){
+			$sql = mainModelo::conexion()->prepare('UPDATE `cita_pagos` SET estado = 1
+				WHERE id ='.$idAppointPay.'');
+			$sql -> execute();
+			// $sql = null;
+			if ($sql->rowCount()== 1) {
+				exit(json_encode(1));
+			} else {
+				exit(json_encode(0));
+			}
+			// return $resutl;
+		}
+
+		protected static function saveDatosPayAppoint_m($datos){
+			$sql = mainModelo::conexion()->prepare('INSERT INTO `cita_pagos`(`tipo_pago_id`, `detalles`, `medio_pago`, `fecha`, `total`, `estado`, `citas_id`) 
+				VALUES (2, :numPago, :medioPago, now(), :total, 0 , :citaId)');
+			$sql->bindParam(":numPago",$datos['numb_pay']);
+			$sql->bindParam(":medioPago",$datos['name_bank']);
+			$sql->bindParam(":total",$datos['total_pay']);
+			$sql->bindParam(":citaId",$datos['idAppoint']);
+			$sql -> execute();
+			if ($sql->rowCount()== 1) {
+				exit(json_encode(1));
+			} else {
+				exit(json_encode(0));
+			}
+		}
+
+		protected static function searchAppointPay_m($idAppoint){
+			$sql = mainModelo::conexion()->prepare('SELECT * FROM cita_pagos WHERE citas_id = '.$idAppoint.'');
+			$sql -> execute();
+			$listaDatos = $sql->fetch(PDO::FETCH_OBJ);
+			if ($sql->rowCount()== 1) {
+				exit(json_encode($listaDatos));
+			} else {
+				exit(json_encode(0));
+			}
+		}
 		protected static function buscarCitaOcupadas_m($fecha){
 			$sql = mainModelo::conexion()->prepare('SELECT hh.horas_id, h.hora  FROM citas hh
 				INNER JOIN `horas` h

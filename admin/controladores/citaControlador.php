@@ -27,15 +27,36 @@
 			citaModelo::buscarFechaCita_m($fecha);
 		}
 
+		public function validarTransferencia() {
+            $estado = $_POST['estadoTransf'];
+            $id = $_POST['idPayAppoint'];
+			citaModelo::validarTransferencia_m($id);
+		}
+
+		public function searchAppointPay() {
+            $idAppointdV = $_POST['idAppointdV'];
+			citaModelo::searchAppointPay_m($idAppointdV);
+		}
+		public function saveDatosPayAppoint() {
+            // $fecha = $_POST['fechaCita'];
+			$datos = [
+				'numb_pay' => $_POST['numb_pay'],
+				'name_bank' => $_POST['name_bank'],
+				'total_pay' => $_POST['total_pay'],
+				'idAppoint' => $_POST['idAppoint'],
+			];
+			citaModelo::saveDatosPayAppoint_m($datos);
+		}
+
 		public function reedListAppointment($tipo = false) {
             // $fecha = $_POST['fechaCita'];
 			// citaModelo::reedListAppointment_m($tipo);
 			$listAppointm = citaModelo::reedListAppointment_m($tipo);
 			$html ='';
 			foreach ($listAppointm as $appoint) {
-				$btnPagar = '<button class="btn btn-outline-primary" onclick="payAppoint('.$appoint->id.')">Pagar Tarjeta</button><button class="btn btn-outline-info" data-bs-toggle="modal" data-bs-target="#info" onclick="datosTransf('.$appoint->id.')"> Mandar Transf.</button>';
+				$btnPagar = '<button class="btn btn-outline-primary" onclick="payAppoint('.$appoint->id.')">Pagar Tarjeta</button><button class="btn btn-outline-info" data-bs-toggle="modal" data-bs-target="#info" onclick="datosTransf('.$appoint->id.',true)"> Mandar Transf.</button>';
 				$btnsAcc = $tipo ? $btnPagar : 'AVISAR AL CLIENTE'; 
-				$btnPago = $tipo ? '<button class="btn btn-outline-info" data-bs-toggle="modal" data-bs-target="#info" onclick="datosTransf('.$appoint->id.',0)"> Datos Transf.</button>' : '<button class="btn btn-outline-info" data-bs-toggle="modal" data-bs-target="#info"> Validar Transf.</button>'; 
+				$btnPago = $tipo ? '<button class="btn btn-outline-info" data-bs-toggle="modal" data-bs-target="#info" onclick="datosTransf('.$appoint->id.',false)"> Datos Transf.</button>' : '<button class="btn btn-outline-info" data-bs-toggle="modal" data-bs-target="#info" onclick="validarTransf('.$appoint->id.')"> Validar Transf.</button>'; 
 				$result = citaModelo::statusPayAppoint($appoint->id);
 				$pago = $result ? ($result[1]->tipo_pago_id == 1 ? '<span class="badge bg-success">Pago directo</span>' : ($result[1]->estado == 1 ? '<span class="badge bg-success">Transf. Verificado</span>' :'<span class="badge bg-danger">Transf. NO Verif.</span>')) : 'Falta Pagar';
 				$acciones = $result ? ($result[1]->tipo_pago_id == 2 && $result[1]->estado == 0 ? $btnPago: 'PAGADO') : $btnsAcc;
