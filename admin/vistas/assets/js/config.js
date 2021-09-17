@@ -2,16 +2,14 @@ horasAtencion = []
 citasAtencion = []
 users_permisos = []
 permisos = []
-
-// user_id = 0 /* SELECT USER FOR CHANGE PERMISION */
 fechaSelecionada = ''
+
 leerHorasAtencion()
 
 function leerHorasAtencion(){
-    url = '../ajax/configAjax.php'
     DATOS = new FormData()
     DATOS.append('horaAten', 'horaAten')
-    fetch(url,{
+    fetch(URL+'ajax/configAjax.php',{
         method : 'post',
         body : DATOS
     })
@@ -27,7 +25,7 @@ function leerHorasAtencion(){
         
     })
 }
-users_permisos = []
+
 function filtrarUsers(users){
     users.forEach(user => {
         if(users_permisos.some( userInt => userInt.persona_id == user.persona_id)){
@@ -73,11 +71,10 @@ function mostrarCrudHoras(){
 
 function updateHora(id, idInp){
     estado = document.getElementById(`${idInp}`).checked ? 1: 0
-    url = '../ajax/configAjax.php'
     DATOS = new FormData()
     DATOS.append('estadoHoraC', estado)
     DATOS.append('hora_idHoraC', id)
-    fetch(url,{
+    fetch(URL+'ajax/configAjax.php',{
         method : 'post',
         body : DATOS
     })
@@ -92,11 +89,10 @@ function updateHora(id, idInp){
 
 function updateCita(id, idInp){
     estado = document.getElementById(`${idInp}`).checked ? 1: 0
-    url = '../ajax/configAjax.php'
     DATOS = new FormData()
     DATOS.append('estadoCitaC', estado)
     DATOS.append('cita_idCitaC', id)
-    fetch(url,{
+    fetch(URL+'ajax/configAjax.php',{
         method : 'post',
         body : DATOS
     })
@@ -153,11 +149,10 @@ function listaPermiso(user_id){
 }
 
 function updatePermisUser(idInput, user_id){
-    url = '../ajax/configAjax.php'
     DATOS = new FormData()
     DATOS.append('tipoPerm', idInput)
     DATOS.append('user_idPerm', user_id)
-    fetch(url,{
+    fetch(URL+'ajax/configAjax.php',{
         method : 'post',
         body : DATOS
     })
@@ -173,16 +168,14 @@ function runCommand(dia,mes, anio){
     document.getElementById('fechaSelec').innerHTML = `${anio}-${monthNumber(mes)}-${dia}`
     fechaSelecionada = fecha
     buscarHorasDisponiblesDia(fecha)
-
 }
 
 function buscarHorasDisponiblesDia(fecha){
     document.getElementById('listaHoraAten').innerHTML = ''
     document.getElementById('listaTipoAtenc').innerHTML = ''
-    url = '../ajax/configAjax.php'
     DATOS = new FormData()
     DATOS.append('fecha', fecha)
-    fetch(url,{
+    fetch(URL+'ajax/configAjax.php',{
         method : 'post',
         body : DATOS
     })
@@ -274,13 +267,12 @@ function mostrarCitasAtencion(citasNoAtencion){
 
 function estadoCita(id,idInp){
     estado = document.getElementById(`${idInp}`).checked ? 1: 0
-    url = '../ajax/configAjax.php'
     DATOS = new FormData()
     DATOS.append('estadoCita', estado)
     DATOS.append('fechaCita', fechaSelecionada)
     DATOS.append('cita_idCita', id)
     DATOS.append('sedeC', 1)
-    fetch(url,{
+    fetch(URL+'ajax/configAjax.php',{
         method : 'post',
         body : DATOS
     })
@@ -292,13 +284,12 @@ function estadoCita(id,idInp){
 
 function estadoHora(id,idInp){
     estado = document.getElementById(`${idInp}`).checked ? 1: 0
-    url = '../ajax/configAjax.php'
     DATOS = new FormData()
     DATOS.append('estadoSelec', estado)
     DATOS.append('fechaSelec', fechaSelecionada)
     DATOS.append('hora_idSelec', id)
     DATOS.append('sede', 1)
-    fetch(url,{
+    fetch(URL+'ajax/configAjax.php',{
         method : 'post',
         body : DATOS
     })
@@ -307,7 +298,6 @@ function estadoHora(id,idInp){
         // console.log(r);
     })
 }
-
 
 // CALENDARIO JS
 
@@ -451,7 +441,7 @@ document.querySelector('#next-year').onclick = () => {
 
 let dark_mode_toggle = document.querySelector('.dark-mode-switch')
 
-dark_mode_toggle.onclick = () => {
-    document.querySelector('body').classList.toggle('light')
-    document.querySelector('body').classList.toggle('dark')
-}
+// dark_mode_toggle.onclick = () => {
+//     document.querySelector('body').classList.toggle('light')
+//     document.querySelector('body').classList.toggle('dark')
+// }

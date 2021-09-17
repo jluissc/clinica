@@ -21,6 +21,15 @@
 			];
 			exit(json_encode($datos));
 		}
+		protected static function listNotifications_m(){
+			$datoss = [
+				'citas' => configModelo::citasReservadas(),
+				'citas' => configModelo::citasReservadas(),
+			];
+			$datos = configModelo::citasReservadas();
+			return $datos;
+		}
+
 		protected static function listarTipoAtencion_m(){
 			$sql = mainModelo::conexion()->prepare("SELECT * FROM tipo_cita");
 			$sql -> execute();
@@ -28,7 +37,6 @@
 			$sql = null;
 			return $tipoAtencion;
 		}
-
 		protected static function listarServicios_m(){
 			$sql = mainModelo::conexion()->prepare("SELECT * FROM servicios");
 			$sql -> execute();
@@ -36,7 +44,6 @@
 			$sql = null;
 			return $tipoAtencion;
 		}
-
 		protected static function listarUsers_m(){
 			$sql = mainModelo::conexion()->prepare("SELECT p.id, p.nombre,p.correo, p.tipo_user_id, pu.* FROM persona p
 				INNER JOIN permisos_user pu
@@ -47,7 +54,6 @@
 			$sql = null;
 			return $tipoAtencion;
 		}
-
 		protected static function listarPermisos_m(){
 			$sql = mainModelo::conexion()->prepare("SELECT * FROM permisos");
 			$sql -> execute();
@@ -55,7 +61,6 @@
 			$sql = null;
 			return $permisos;
 		}
-
 		protected static function estadoHoraAtenc_m($datos){
 			$sql = mainModelo::conexion()->prepare("UPDATE horas_atencion SET estado =:estado  WHERE id =:id");
 			$sql->bindParam(":estado",$datos['estadoH']);
@@ -67,7 +72,6 @@
 				exit(json_encode(0));
 			}
 		}
-
 		protected static function updateFechaAtencion_m($datos){
 			$sql = mainModelo::conexion()->prepare("SELECT * FROM `horas_no_atencion` WHERE dia =:dia AND horas_id =:hora_id AND sede_id =:sede");
 			$sql->bindParam(":dia",$datos['fechaSelec']);
@@ -81,8 +85,7 @@
 				configModelo::insertHourNotAtencion($datos);
 				exit(json_encode(0));
 			}
-		}
-		
+		}		
 		protected static function deleteHourNotAtencion($datos){
 			$sql = mainModelo::conexion()->prepare("DELETE FROM `horas_no_atencion` WHERE dia =:dia AND horas_id =:hora_id AND sede_id =:sede");
 			$sql->bindParam(":dia",$datos['fechaSelec']);
@@ -90,8 +93,7 @@
 			$sql->bindParam(":sede",$datos['sede']);
             $sql -> execute();			
 			$sql = null;
-		}
-		
+		}		
 		protected static function insertHourNotAtencion($datos){
 			$sql = mainModelo::conexion()->prepare("INSERT INTO `horas_no_atencion` (`dia`, `horas_id`, `sede_id`) 
 				VALUES (:dia, :hora , :sede) ");
@@ -114,8 +116,7 @@
 				configModelo::insertPermisoUser_m($datos);
 				exit(json_encode(0));
 			}
-		}
-		
+		}		
 		protected static function deletePermisoUser_m($datos){
 			$sql = mainModelo::conexion()->prepare("DELETE FROM `permisos_user` 
 				WHERE persona_id =:persona_id AND permisos_id =:permisos_id");
@@ -123,8 +124,7 @@
 			$sql->bindParam(":permisos_id",$datos['tipo']);
             $sql -> execute();			
 			$sql = null;
-		}
-		
+		}		
 		protected static function insertPermisoUser_m($datos){
 			$sql = mainModelo::conexion()->prepare("INSERT INTO `permisos_user` (`persona_id`, `permisos_id`) 
 				VALUES (:persona_id, :permisos_id) ");
@@ -132,8 +132,7 @@
 			$sql->bindParam(":permisos_id",$datos['tipo']);
             $sql -> execute();			
 			$sql = null;
-		}
-		
+		}		
 		protected static function updateCitaAtencion_m($datos){
 			$sql = mainModelo::conexion()->prepare("SELECT * FROM `cita_no_atencion` WHERE dia =:dia AND tipo_cita_id =:hora_id AND sede_id =:sede");
 			$sql->bindParam(":dia",$datos['fechaSelec']);
@@ -148,7 +147,6 @@
 				exit(json_encode(0));
 			}
 		}
-
 		protected static function deleteCitaNotAtencion($datos){
 			$sql = mainModelo::conexion()->prepare("DELETE FROM `cita_no_atencion` WHERE dia =:dia AND tipo_cita_id =:hora_id AND sede_id =:sede");
 			$sql->bindParam(":dia",$datos['fechaSelec']);
@@ -156,8 +154,7 @@
 			$sql->bindParam(":sede",$datos['sede']);
             $sql -> execute();			
 			$sql = null;
-		}
-		
+		}		
 		protected static function insertCitaNotAtencion($datos){
 			$sql = mainModelo::conexion()->prepare("INSERT INTO `cita_no_atencion` (`dia`, `tipo_cita_id`, `sede_id`) 
 				VALUES (:dia, :hora , :sede) ");
@@ -167,7 +164,6 @@
             $sql -> execute();			
 			$sql = null;
 		}
-
 		protected static function horas_no_disponibles($fecha){
 			$sql = mainModelo::conexion()->prepare("SELECT horas_id as id FROM `horas_no_atencion` WHERE dia =:dia");
 			$sql->bindParam(":dia",$fecha);
@@ -181,13 +177,18 @@
 			];
 			exit(json_encode($datos));
 		}
-		protected static function citasReservadas($fecha){
+		protected static function citasReservadas($fecha=''){
+			$dia = $fecha != '' ? $fecha : date('Y-m-d');
 			$sql = mainModelo::conexion()->prepare("SELECT c.id as idCita, c.estado, c.tipo_cita_id, 
-				c.horas_id as id, c.mensaje, p.nombre, p.dni, p.celular  FROM `citas` c
+				c.horas_id as id, c.mensaje, p.nombre, p.dni, p.celular , h.hora, tc.nombre AS tipo FROM `citas` c
 				INNER JOIN `persona` p
 				ON p.id = c.paciente_id
+				INNER JOIN `horas` h
+				ON c.horas_id  = h.id
+				INNER JOIN `tipo_cita` tc
+				ON tc.id  = c.tipo_cita_id
 				WHERE c.fecha =:dia");
-			$sql->bindParam(":dia",$fecha);
+			$sql->bindParam(":dia",$dia);
             $sql -> execute();
 			$lista = $sql->fetchAll(PDO::FETCH_OBJ);
 			$sql = null;
@@ -201,8 +202,6 @@
 			$sql = null;
 			return $lista;
 		}
-
-		
 		protected static function updateHoraCrud_m($datos){
 			$sql = mainModelo::conexion()->prepare("UPDATE `horas` SET `estado` =:estado WHERE id =:id");
 			$sql->bindParam(":estado",$datos['estado']);
@@ -214,7 +213,6 @@
 				exit(json_encode(0));
 			}
 		}
-
 		protected static function updateCitaCrud_m($datos){
 			$sql = mainModelo::conexion()->prepare("UPDATE `tipo_cita` SET `estado` =:estado WHERE id =:id");
 			$sql->bindParam(":estado",$datos['estado']);

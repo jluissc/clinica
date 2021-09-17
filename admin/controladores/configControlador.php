@@ -12,6 +12,18 @@
 			configModelo::listarHoraAtencion_m();
 		}
 
+		public function listNotifications() {
+			$lists = configModelo::listNotifications_m();
+
+			$listHTML = '<li>
+				<h6 class="dropdown-header" > <a href="'.SERVERURL.'citas">Citas de hoy</a></h6>
+			</li>';
+			foreach ($lists as $list) {
+				$listHTML .= '<li><a class="dropdown-item">'.$list->nombre.' <span class="badge bg-info text-dark"><i class="far fa-clock"></i> '.$list->hora.'</span> '.$list->tipo.'</a></li>';
+			}
+			return $listHTML;
+		}
+
 		public function estadoHoraAtenc() {
 			$datos = [
                 'estadoH' => $_POST['estadoH'],

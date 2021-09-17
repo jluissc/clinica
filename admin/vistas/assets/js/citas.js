@@ -13,10 +13,10 @@ document.getElementById('correo').disabled = true
 leerCondicionesAtencion()
 
 function leerCondicionesAtencion(){
-    url = '../ajax/configAjax.php'
+    // url = '../ajax/configAjax.php'
     DATOS = new FormData()
     DATOS.append('horaAten', 'horaAten')
-    fetch(url,{
+    fetch(URL+'ajax/configAjax.php',{
         method : 'post',
         body : DATOS
     })
@@ -158,19 +158,22 @@ function verificarFecha(dia, mes, anio){
         </div>` 
     seleccionFecha = true
     fechaSelecionada = fecha
+    console.log(fecha);
     buscarFechaDisponible(fecha)
 }
 
 function buscarFechaDisponible(dia){
+    console.log(dia);
     url = '../ajax/citaAjax.php'
     DATOS = new FormData()
     DATOS.append('fechaCita', dia)
-    fetch(url,{
+    fetch(URL+'ajax/citaAjax.php',{
         method : 'post',
         body : DATOS
     })
     .then( r => r.json())
-    .then( r => {        
+    .then( r => {   
+        console.log(r);     
         horaNoDisponibles = [...r.horaNoAten,...r.horaOcupadasCita]
         horaDisp = LhorasAtencion.filter(horasDispo=>{
             let res = horaNoDisponibles.find((horaNDis)=>{
@@ -194,6 +197,9 @@ function buscarFechaDisponible(dia){
 }
 
 function filtrarFechasDisponibles(citaNoDisponibles,horaNoDisponibles,horaMenor){
+    console.log(citaNoDisponibles);
+    console.log(horaNoDisponibles);
+    console.log(horaMenor);
     list = ''
     citaDispo = 0
     citaDisp2o = 0
@@ -269,7 +275,7 @@ function filtrarFechasDisponibles(citaNoDisponibles,horaNoDisponibles,horaMenor)
             document.getElementById('horasDisponibles').innerHTML = ''
             document.getElementById('spinner').innerHTML =''
             document.getElementById('select-servc').innerHTML = '<option value="0">SIN SERVICIOS</option>'
-            alertaHTML('danger','Dia no disponible por favor seleccione otra fecha','alertaCita')
+            alertaHTML('danger','Dia no disponible por favor seleccione otra fechass','alertaCita')
         }        
     }    
 }
