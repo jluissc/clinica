@@ -8,7 +8,7 @@
     isset($_POST['listaServ']) || isset($_POST['idUser']) ||
 	isset($_POST['listAppoint']) || isset($_POST['fechaCita'])||
 	isset($_POST['numb_pay']) ||  isset($_POST['idAppointdV']) ||
-	isset($_POST['estadoTransf'])) {
+	isset($_POST['estadoTransf']) || isset($_POST['idPayDirect'])) {
 		
 		require_once '../controladores/citaControlador.php';
 		$inst = new citaControlador();
@@ -16,6 +16,10 @@
 		// registro nueva products
 		if (isset($_POST['dni'])) {
 			echo $inst -> verificarDni();
+		}
+
+		if (isset($_POST['idPayDirect'])) {
+			$inst -> idPayDirect();
 		}
         // prod 
 		if (isset($_POST['fecha'])) {

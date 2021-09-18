@@ -19,24 +19,43 @@
 			$sql = null;
 		}
 
+		protected static function idPayDirect_m($idAppoint, $monto=50){
+			$sql = mainModelo::conexion()->prepare('INSERT INTO cita_pagos (`tipo_pago_id`, `detalles`, `medio_pago`, `fecha`, `total`, `estado`, `citas_id`)
+				VALUES (3, "PAGO DIRECTO", "FISICO", now(), :monto, 1, :cita_id)');
+			$sql->bindParam(":monto",$monto);
+			$sql->bindParam(":cita_id",$idAppoint);
+			$sql -> execute();
+            if($sql -> rowCount() > 0){
+				$sql = null;
+				exit(json_encode(1));
+			}else{
+				$sql = null;
+				exit(json_encode(0));
+			}
+		}
+
 		protected static function reedListAppointment_m($tipo){
 			// session_start(['name' => 'bot']);
 			$idPaciente = $tipo ? $idPaciente = $_SESSION['id'] : '';
 			if($tipo){
-				$sql = mainModelo::conexion()->prepare("SELECT p.nombre, p.apellidos, p.celular, p.correo, c.id, c.fecha, c.tipo_cita_id, h.hora FROM citas c 
+				$sql = mainModelo::conexion()->prepare("SELECT p.nombre, p.apellidos, p.celular, p.correo, c.id, c.fecha, c.tipo_cita_id, h.hora, tc.precio FROM citas c 
 					INNER JOIN persona p
 					ON p.id = c.paciente_id
 					INNER JOIN horas h
 					ON h.id = c.horas_id 
+					INNER JOIN tipo_cita tc
+					ON tc.id = c.tipo_cita_id
 					WHERE p.id=:id
 					ORDER BY c.id DESC");
 				$sql->bindParam(":id",$idPaciente);
 			}else{
-				$sql = mainModelo::conexion()->prepare("SELECT p.nombre, p.apellidos, p.celular, p.correo, c.id, c.fecha, c.tipo_cita_id, h.hora FROM citas c 
+				$sql = mainModelo::conexion()->prepare("SELECT p.nombre, p.apellidos, p.celular, p.correo, c.id, c.fecha, c.tipo_cita_id, h.hora, tc.precio FROM citas c 
 					INNER JOIN persona p
 					ON p.id = c.paciente_id
 					INNER JOIN horas h
 					ON h.id = c.horas_id
+					INNER JOIN tipo_cita tc
+					ON tc.id = c.tipo_cita_id
 					ORDER BY c.id DESC");
 			}
 			$sql -> execute();

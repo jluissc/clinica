@@ -89,6 +89,86 @@ function validarTRansfern(idAppointPay){
     })
 }
 
+function payDirect(idAppointPay){
+    document.getElementById(`pagoDirecto_${idAppointPay}`).checked = false
+    // Swal.fire({
+    //     title: '¿Pago Directo?',
+    //     text: "!",
+    //     icon: 'warning',
+    //     showCancelButton: true,
+    //     confirmButtonColor: '#3085d6',
+    //     cancelButtonColor: '#d33',
+    //     confirmButtonText: 'Yes, delete it!'
+    //   }).then((result) => {
+    //     if (result.isConfirmed) {
+    //         document.getElementById(`pagoDirecto_${idAppointPay}`).disabled = true
+    //         document.getElementById(`pagoDirecto_${idAppointPay}`).checked = true
+    //         datos = new FormData()
+    //         datos.append('idPayDirect',idAppointPay)
+    //         fetch(URL+'ajax/citaAjax.php',{
+    //             method : 'POST',
+    //             body : datos,
+    //         })
+    //         .then( result => result.json())
+    //         .then( result => {
+    //             console.log(result)
+    //             if(result == 1){
+    //                 alertaToastify('Se verifico transferencia', 'green',2000)
+    //                 setTimeout(() => {
+    //                     location.reload()
+    //                 }, 1000);
+    //             }else{
+
+    //             }
+    //         })
+    //     }
+    // })
+
+    // ***************
+
+    Swal.fire({
+        title: 'Ingrese el monto de pago S/. ',
+        input: 'text',
+        inputAttributes: {
+          autocapitalize: 'off'
+        },
+        showCancelButton: true,
+        confirmButtonText: 'Look up',
+        showLoaderOnConfirm: true,
+    }).then((result) => {
+        if (result.isConfirmed) {
+            document.getElementById(`pagoDirecto_${idAppointPay}`).disabled = true
+            document.getElementById(`pagoDirecto_${idAppointPay}`).checked = true
+            datos = new FormData()
+            datos.append('idPayDirect',idAppointPay)
+            datos.append('montoPayDirect',parseInt(result.value))
+            fetch(URL+'ajax/citaAjax.php',{
+                method : 'POST',
+                body : datos,
+            })
+            .then( result => result.json())
+            .then( result => {
+                console.log(result)
+                if(result == 1){
+                    alertaToastify('Se guardo el pago', 'green',2000)
+                    Swal.fire({
+                        title: `Se guardo el pago`,
+                        // imageUrl: result.value.avatar_url
+                        })
+                        
+                    setTimeout(() => {
+                        location.reload()
+                    }, 1000);
+                }else{
+
+                }
+            })
+        }
+    })
+    
+    
+}
+
 function mandarDatosPago(){
     numb_pay = document.getElementById('aasda').value
     name_bank = document.getElementById('name_bank').value

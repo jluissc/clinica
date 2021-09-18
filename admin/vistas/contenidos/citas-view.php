@@ -137,6 +137,7 @@
                             <!-- <th>Servicio</th> -->
                             <th>Fecha</th>
                             <th>Hora</th>
+                            <th>Monto</th>
                             <th>Estado Pago</th>
                             <th>Acciones</th>
                         </tr>
@@ -167,6 +168,7 @@
                             <!-- <th>Servicio</th> -->
                             <th>Fecha</th>
                             <th>Hora</th>
+                            <th>Monto</th>
                             <th>Estado Pago</th>
                             <th>Acciones</th>
                         </tr>
