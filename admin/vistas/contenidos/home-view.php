@@ -12,13 +12,13 @@
     // echo $inst -> iniciar_sesion_C();
 ?>
 <section class="row">
+    
     <!-- <?php echo var_dump($_SESSION['permisos']) ?> -->
     <div class="col-12 col-lg-12">
         <?php if($_SESSION['tipo']==1 || $_SESSION['tipo']==2 ){ ?><!-- ADMIN o CAJERO -->
             <?php 
                 $datos = $inst->dateQuantity();
-            ?>
-            
+            ?>            
             <h2>Resumen empresa</h2>
             <div class="row">
                 <div class="col-6 col-lg-3 col-md-6">
@@ -111,8 +111,77 @@
             </div>    
         <?php } ?>
         
-        <?php  if($_SESSION['tipo']==4  ){ ?> SOLO PACIENTES
+        <?php  if($_SESSION['tipo']==4  ){ ?> <!-- SOLO PACIENTES -->
             <h2>Hola <?php echo $_SESSION['nombre'].' '.$_SESSION['apellido'] ?></h2>
+            <section id="groups">
+                <div class="row match-height">
+                    <div class="col-12 mt-3 mb-1">
+                        <h4 class="section-title text-uppercase" >Datos <a class="" style="text-decoration: underline; cursor: pointer" onclick="showDatos()" >Editar datos</a></h4>
+                    </div>
+                </div>
+                <div class="row match-height">
+                    <div class="col-12 text-center">
+                        <div class="card-group">
+                            <div class="card">
+                                <div class="card-content">
+                                    <img class="card-img-top img-fluid" src="<?php echo SERVERURL ?>vistas/assets/images/samples/5.png" alt="Card image cap">
+                                    <div class="card-body">
+                                        <h4 class="card-title">TALLA</h4>
+                                        <!-- <p class="card-text">
+                                            This card has supporting text below as a natural lead-in to additional
+                                            content.</p> -->
+                                            <h2>1.87 cm</h2>
+                                        <!-- <small class="text-muted">Last updated 3 mins ago</small> -->
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card">
+                                <div class="card-content">
+                                    <img class="card-img-top img-fluid" src="<?php echo SERVERURL ?>vistas/assets/images/samples/6.png"
+                                        alt="Card image cap" />
+                                    <div class="card-body">
+                                        <h4 class="card-title">PESO</h4>
+                                        <!-- <p class="card-text">
+                                            This card has supporting text below as a natural lead-in to additional
+                                            content.
+                                        </p> -->
+                                        <h2>65.00 Kg</h2>
+                                        <!-- <small class="text-muted">Last updated 3 mins ago</small> -->
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card">
+                                <div class="card-content">
+                                    <img class="card-img-top img-fluid" src="<?php echo SERVERURL ?>vistas/assets/images/samples/3.png" alt="Card image cap">
+                                    <div class="card-body">
+                                        <h4 class="card-title">EDAD</h4>
+                                        <!-- <p class="card-text">
+                                            This card has supporting text below as a natural lead-in to additional
+                                            content.
+                                        </p> -->
+                                        <h2>24 años</h2>
+                                        <!-- <small class="text-muted">Last updated 3 mins ago</small> -->
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card">
+                                <div class="card-content">
+                                    <img class="card-img-top img-fluid" src="<?php echo SERVERURL ?>vistas/assets/images/samples/4.png" alt="Card image cap">
+                                    <div class="card-body">
+                                        <h4 class="card-title">TIPO SANGRE</h4>
+                                        <!-- <p class="card-text">
+                                            This card has supporting text below as a natural lead-in to additional
+                                            content.
+                                        </p> -->
+                                        <h2>O+</h2>
+                                        <!-- <small class="text-muted">Last updated 3 mins ago</small> -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
             <h3>Citas proximas</h3>
             <div class="row">
                 <?php  echo $inst -> readAppointmentNexts()?>

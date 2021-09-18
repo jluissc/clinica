@@ -48,14 +48,14 @@
 						});
 					</script>';
 			}
-
-			// $aaaa = mainModelo::encryption($pass);
-
-
+			
 			$dato = [
 				"user" => $user,
-				"pass" => $pass,
+				"pass" => mainModelo::encryption($pass),
+				// "pass" => $pass,
 			];
+			// eTc1MmRqY3NZYUtxR2pMWnRFczdPQT09 hco@lima
+			// T0xXdWpMcVB3SVBIQkJiTHNBZXJNZz09 hco@lima
 
 			$ins = loginModelo::iniciar_sesion_M($dato);
 			
@@ -88,7 +88,7 @@
 						$_SESSION['logueo'] = $datos['logueo'];
 						$_SESSION['token'] = md5(uniqid(mt_rand(),true));					
 						
-						return header("Location: ".SERVERURL."home/");
+						return header("Location: ".SERVERURL."home");
 					// }
 					
 					
@@ -120,26 +120,26 @@
 			session_unset();
 			session_destroy();
 			if (headers_sent()) {
-				echo "<script> window.location.href='".SERVERURL."login/';</script>";
+				echo "<script> window.location.href='".SERVERURL."';</script>";
 			}else{
-				return header("Location: ".SERVERURL."login/");
+				return header("Location: ".SERVERURL);
 			}
 		}
 
 		public function cierre_sesion_C(){
 			session_start(['name' => 'bot']);
 			$token = mainModelo::decryption($_POST['token']);
-			$usuario = mainModelo::decryption($_POST['usuario']);
+			$usuario = mainModelo::decryption($_POST['nombre']);
 
-			if ($token == $_SESSION['token_bot'] && $usuario == $_SESSION['usuario_bot']) {
+			if ($token == $_SESSION['token'] && $usuario == $_SESSION['nombre']) {
 				session_unset();
 				session_destroy();
 				$alerta = [
 					"Alerta" => "redireccionar",
-					"URL" => SERVERURL."login/"
+					"URL" => SERVERURL
 				];
 				echo json_encode($alerta);
-				exit();
+				// exit();
 			} else {
 				$alerta=[
 					"Alerta"=>"simple",

@@ -15,7 +15,8 @@
 				ON p.id = c.paciente_id
                 INNER JOIN horas h
                 ON h.id = c.horas_id
-				WHERE c.fecha =:fecha");
+				
+				WHERE c.fecha =:fecha ORDER BY h.id ASC");
             // $sql->bindParameters(':fecha',$fechaActual);
             $sql->bindParam(":fecha",$fechaActual);
 			$sql -> execute();

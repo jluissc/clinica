@@ -158,22 +158,23 @@
                                 body : dat
                             })
                             .then(result => result.json())
-                            .then(result => result == 1 ? location.reload() : console.log('no se elimino'))
+                            .then(result => {
+                                if(result){
+                                    alertaToastify('Datos Cambiados','green')
+                                    setTimeout(() => {
+                                        location.reload()
+                                    }, 1500);
+                                }else alertaToastify('Intentalo nuevamente')
+                                
+                            })
                         } 
-                        else alertaHTML('Celular obligatorio')
+                        else alertaToastify('Celular obligatorio')
                     }
-                    else alertaHTML('Apellidos obligatorio')
+                    else alertaToastify('Apellidos obligatorio')
                 }
-                else alertaHTML('Nombres obligatorios')                
+                else alertaToastify('Nombres obligatorios')                
             }
-            else alertaHTML('Dni obligatorio')
-        }
-        function alertaHTML(mensaje, color = 'red'){
-            Toastify({
-                text: mensaje,
-                duration: 1000,
-                backgroundColor: color,
-            }).showToast();
+            else alertaToastify('Dni obligatorio')
         }
         function mandarCampos(estadoModal,datos= []){
             if(estadoModal == 2 || estadoModal == 3){
@@ -240,7 +241,7 @@
                             </div>`
                 // const url="https://api.apis.net.pe/v1/dni?numero=60691536";
                 // const url="https://api.apis.net.pe/v1/dni?numero=60691536";
-                const url=`https://dniruc.apisperu.com/api/v1/dni/${dni}?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6Impsc2MuaGNvOTZAZ21haWwuY29tIn0.ysxMDCaGlMQRJen3msmMcniIx_Q-nuhjXjQ4RNkP31o`;
+                urlApi=`https://dniruc.apisperu.com/api/v1/dni/${dni}?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6Impsc2MuaGNvOTZAZ21haWwuY29tIn0.ysxMDCaGlMQRJen3msmMcniIx_Q-nuhjXjQ4RNkP31o`;
                 // ,{    
                 //     mode: 'no-cors', // no-cors, *cors, same-origin
                 //     headers: {
@@ -248,10 +249,11 @@
                 //     'Access-Control-Allow-Origin': '*'
                 //     },
                 // }
-                fetch(url)
+                fetch(urlApi)
+                // .then(r => r.statusText)
                 .then(r => r.json())
                 .then(r => {
-                    setTimeout(() => {
+                    // setTimeout(() => {
                         datos = {
                             dni : r.dni,
                             nombre : r.nombres,
@@ -262,9 +264,10 @@
                         }
                         document.getElementById('spinnerTemp').innerHTML = ''
                         mandarCampos(3,datos)
-                    }, 500);
+                    // }, 500);
 
                 })
+                .catch(r => console.log(r))
             }else{
                 console.log('mal');
             }

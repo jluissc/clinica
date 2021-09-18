@@ -7,6 +7,10 @@
 	} 
 
 	class homeControlador extends homeModelo	{
+
+    public function clave(){
+      return mainModelo::encryption('22510467');
+    }
 		
 		public function readAppointmentToday() {
       $appointments = homeModelo::readAppointmentToday_m();
@@ -18,9 +22,9 @@
         $color = ($appointment->tipo_cita_id == 2) ? 'success': 'warning';
         $typeColor = ($appointment->tipo_cita_id == 1) ? 'info': $color;
         
-        $hmtl .= '<div class="col-sm-3 appoint-'.$typeColor.'">
+        $hmtl .= '<div class="col-sm-3 ">
           <div class="card">
-            <div class="card-body">
+            <div class="card-body appoint-'.$typeColor.'">
               <h5 class="card-title">'.$appointment->nombre.' '.$appointment->apellidos.'</h5>
               <h6 class="card-text">CELULAR : '.$appointment->celular.' </h6>
               <h6 class="card-text">HORA : '.$appointment->hora.' </h6>
@@ -46,9 +50,9 @@
         $color = ($appointment->tipo_cita_id == 2) ? 'success': 'warning';
         $typeColor = ($appointment->tipo_cita_id == 1) ? 'info': $color;
         
-        $hmtl .= '<div class="col-sm-3 appoint-'.$typeColor.'">
+        $hmtl .= '<div class="col-sm-3 ">
           <div class="card">
-            <div class="card-body">
+            <div class="card-body appoint-'.$typeColor.'">
               <h6 class="card-text">FECHA : '.$appointment->fecha.' </h6>
               <h6 class="card-text">HORA : '.$appointment->hora.' </h6>
               <h6 class="card-text">TIPO CITA : '.$typeAppoint.' </h6>
@@ -60,7 +64,7 @@
         //           data-bs-target="#info" onclick="showDetailAppoint('.$appointment->id.')">Ver Detalles
         //       </button>
       }
-      return $hmtl;
+      return $hmtl != '' ? $hmtl : '<h4>No tienes cita proxima</h4>';
 		}
 
     public function showDetailAppoint(){

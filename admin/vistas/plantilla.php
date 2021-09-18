@@ -61,7 +61,8 @@
                 ?>
             </header>
             
-            <div id="main-content">
+            <div id="main-content" style="    background-color: #bcfaef;
+">
                 <div class="page-heading">
                     <?php include $vistas; ?>
                 </div>

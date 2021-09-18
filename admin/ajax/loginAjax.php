@@ -4,7 +4,7 @@
 
 	require_once '../config/app.php';	
 
-	if (isset($_POST['token']) && isset($_POST['usuario'])) {
+	if (isset($_POST['token']) && isset($_POST['nombre'])) {
 		require_once '../controladores/loginControlador.php';
 		$inst = new loginControlador();
 		echo $inst -> cierre_sesion_C();

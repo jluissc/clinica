@@ -1,3 +1,5 @@
+// const URLD = "http://127.0.0.1/clinica/admin/";
+
 LhorasAtencion = []
 LcitasAtencion = []
 Lservicios = []
@@ -13,7 +15,6 @@ document.getElementById('correo').disabled = true
 leerCondicionesAtencion()
 
 function leerCondicionesAtencion(){
-    // url = '../ajax/configAjax.php'
     DATOS = new FormData()
     DATOS.append('horaAten', 'horaAten')
     fetch(URL+'ajax/configAjax.php',{
@@ -125,13 +126,7 @@ function mandarDatosPago(){
     else alertaToastify('Número de operación necesario','red')
 }
 
-function alertaToastify(mensaje, color = 'red'){
-    Toastify({
-        text: mensaje,
-        duration: 1000,
-        backgroundColor: color,
-    }).showToast();
-}
+
 
 
 
@@ -275,7 +270,7 @@ function filtrarFechasDisponibles(citaNoDisponibles,horaNoDisponibles,horaMenor)
             document.getElementById('horasDisponibles').innerHTML = ''
             document.getElementById('spinner').innerHTML =''
             document.getElementById('select-servc').innerHTML = '<option value="0">SIN SERVICIOS</option>'
-            alertaHTML('danger','Dia no disponible por favor seleccione otra fechass','alertaCita')
+            alertaToastify('Dia no disponible por favor seleccione otra fechas')
         }        
     }    
 }
@@ -285,17 +280,17 @@ function limpiarCampos(){
     document.getElementById('horasDisponibles').innerHTML = ''
     document.getElementById('spinner').innerHTML =''
     document.getElementById('select-servc').innerHTML = '<option value="0">SIN SERVICIOS</option>'
-    alertaHTML('danger','Dia no disponible por favor seleccione otra fecha','alertaCita')
+    alertaToastify('Dia no disponible por favor seleccione otra fechas')
     document.getElementById('fechaCita').innerHTML = ''
 }
 
 function validarDni(){
     dni = document.getElementById('dni').value
     // apiConsulta(dni)
-    url = '../ajax/citaAjax.php'
+    // url = '../ajax/citaAjax.php'
     DATOS = new FormData()
     DATOS.append('dni', dni)
-    fetch(url,{
+    fetch(URL+'ajax/citaAjax.php',{
         method : 'post',
         body : DATOS
     })
@@ -317,7 +312,7 @@ function validarDni(){
             document.getElementById('apellido').value = ''
             document.getElementById('celular').value = ''
             document.getElementById('correo').value = ''
-            alertaHTML('warning','Paciente nuevo, registrelo primero, en el link de arriba','alertaCita')
+            alertaToastify('Paciente nuevo, registrelo para continuar','info',1500)
         }
     })
 }
@@ -364,14 +359,14 @@ function validarCita(){
                             DATOS.append('idHora', horaAtenUsEstado.value)
                             DATOS.append('fechaf', fechaSelecionada)
                             DATOS.append('tipoCita', tipoCitaUs.value)
-                            fetch(url,{
+                            fetch(URL+'ajax/citaAjax.php',{
                                 method : 'post',
                                 body : DATOS
                             })
                             .then( r => r.json())
                             .then( r => {
                                 if(r == 1){
-                                    alertaHTML('success','Se guardo la cita correctamente','alertaCita')
+                                    alertaToastify('Se guardo la cita correctamente','green')
                                     document.getElementById('fechaCita').innerHTML = ''
                                     document.getElementById('tipocitaSelect').innerHTML = ''
                                     document.getElementById('horasDisponibles').innerHTML = ''
@@ -386,34 +381,15 @@ function validarCita(){
                                         location.reload();
                                     }, 1000);
                                 }
-                                // else alertaHTML('danger','Ocurrio algun error','alertaCita')
                                 // console.log(r);
                             })
                         }
-                    }
-                    else alertaHTML('danger','Seleccione el servicio','alertaCita')
-                    
-                }
-                else alertaHTML('danger','Seleccione la hora de cita','alertaCita')
-                
-            }
-            else alertaHTML('danger','Seleccione su tipo de cita','alertaCita')
-            
-        }
-        else alertaHTML('danger','Seleccione el dia de cita','alertaCita')                    
-    }
-    else alertaHTML('danger','Ingrese numero de DNI para validar su cita','alertaCita')
+                    } else alertaToastify('Seleccione el servicio')                    
+                } else alertaToastify('Seleccione la hora de cita','red',1500)                 
+            } else alertaToastify('Seleccione su tipo de cita','red',1500)             
+        } else alertaToastify('Seleccione el dia de cita','red',1500) 
+    } else alertaToastify('Ingrese numero de DNI para validar su cita','red',1500) 
     
-}
-
-function alertaHTML(tipo, mensaje, idAlerta){
-    alerta = `<div class="alert alert-${tipo}" role="alert">
-            ${mensaje}
-        </div>`
-    document.getElementById(`${idAlerta}`).innerHTML = alerta
-    setTimeout(() => {
-        document.getElementById(`${idAlerta}`).innerHTML = ''            
-    }, 3000);
 }
 
 function apiConsulta(dni){
@@ -460,156 +436,3 @@ function countDown (tiempo_final, elemt,  finallMensaje)  {
 
 
 
-// calendario
-let calendar = document.querySelector('.calendar')
-
-const month_names = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre']
-
-isLeapYear = (year) => {
-    return (year % 4 === 0 && year % 100 !== 0 && year % 400 !== 0) || (year % 100 === 0 && year % 400 ===0)
-}
-
-getFebDays = (year) => {
-    return isLeapYear(year) ? 29 : 28
-}
-
-generateCalendar = (month, year) => {
-
-    let calendar_days = calendar.querySelector('.calendar-days')
-    let calendar_header_year = calendar.querySelector('#year')
-
-    let days_of_month = [31, getFebDays(year), 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
-
-    calendar_days.innerHTML = ''
-
-    let currDate = new Date()
-    if (!month) month = currDate.getMonth()
-    if (!year) year = currDate.getFullYear()
-
-    let curr_month = `${month_names[month]}`
-    month_picker.innerHTML = curr_month
-    calendar_header_year.innerHTML = year
-
-    // get first day of month
-    
-    let first_day = new Date(year, month, 1)
-
-    for (let i = 0; i <= days_of_month[month] + first_day.getDay() - 1; i++) {
-        let day = document.createElement('div')
-        if (i >= first_day.getDay()) {
-            
-            day.innerHTML = i - first_day.getDay() + 1
-            if(diasActuales(i - first_day.getDay() + 1,curr_month,year)){
-                day.classList.add('calendar-day-hover')
-                day.setAttribute("onclick", `verificarFecha(${i - first_day.getDay() + 1},'${curr_month}',${year})`);
-            }else{
-                day.setAttribute("onclick", 'limpiarCampos()');
-                day.classList.add('day-inhabil')
-            }
-            day.innerHTML += `<span></span>
-                            <span></span>
-                            <span></span>
-                            <span></span>`
-            if (i - first_day.getDay() + 1 === currDate.getDate() && year === currDate.getFullYear() && month === currDate.getMonth()) {
-                day.classList.add('curr-date')
-            }
-        }
-        calendar_days.appendChild(day)
-    }
-}
-
-
-
-const monthNumber = mes => {
-    switch (mes) {
-        case 'Enero':
-            numero = '01';
-            break;
-        case 'Febrero':
-            numero = '02';
-            break;
-        case 'Marzo':
-            numero = '03';
-            break;
-        case 'Abril':
-            numero = '04';
-            break;
-        case 'Mayo':
-            numero = '05';
-            break;
-        case 'Junio':
-            numero = '06';
-            break;
-        case 'Julio':
-            numero = '07';
-            break;
-        case 'Agosto':
-            numero = '08';
-            break;
-        case 'Septiembre':
-            numero = '09';
-            break;
-        case 'Octubre':
-            numero = '10';
-            break;
-        case 'Noviembre':
-            numero = '11';
-            break;
-        case 'Diciembre':
-            numero = '12';
-            break;            
-        default:
-            break;
-    }
-    return numero;
-}
-const diasActuales = (dia, mes, anio) =>{
-    mes = monthNumber(mes)
-    fecha = `${anio}-${mes}-${dia}`
-    diaActual= new Date()
-    esteDia = new Date(fecha)
-    return (diaActual.getTime() <=esteDia.getTime()+60*60*24*1000);
-    
-}
-let month_list = calendar.querySelector('.month-list')
-
-month_names.forEach((e, index) => {
-    let month = document.createElement('div')
-    month.innerHTML = `<div data-month="${index}">${e}</div>`
-    month.querySelector('div').onclick = () => {
-        month_list.classList.remove('show')
-        curr_month.value = index
-        generateCalendar(index, curr_year.value)
-    }
-    month_list.appendChild(month)
-})
-
-let month_picker = calendar.querySelector('#month-picker')
-
-month_picker.onclick = () => {
-    month_list.classList.add('show')
-}
-
-let currDate = new Date()
-
-let curr_month = {value: currDate.getMonth()}
-let curr_year = {value: currDate.getFullYear()}
-
-generateCalendar(curr_month.value, curr_year.value)
-
-document.querySelector('#prev-year').onclick = () => {
-    --curr_year.value
-    generateCalendar(curr_month.value, curr_year.value)
-}
-
-document.querySelector('#next-year').onclick = () => {
-    ++curr_year.value
-    generateCalendar(curr_month.value, curr_year.value)
-}
-
-let dark_mode_toggle = document.querySelector('.dark-mode-switch')
-
-// dark_mode_toggle.onclick = () => {
-//     document.querySelector('body').classList.toggle('light')
-//     document.querySelector('body').classList.toggle('dark')
-// }

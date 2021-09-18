@@ -13,13 +13,20 @@
 		}
 
 		public function listNotifications() {
-			$lists = configModelo::listNotifications_m();
+			$listsToday = configModelo::listNotifications_m();
+			// $listsNetxs = configModelo::listNotifications_m();
 
 			$listHTML = '<li>
 				<h6 class="dropdown-header" > <a href="'.SERVERURL.'citas">Citas de hoy</a></h6>
 			</li>';
-			foreach ($lists as $list) {
+			foreach ($listsToday[0] as $list) {
 				$listHTML .= '<li><a class="dropdown-item">'.$list->nombre.' <span class="badge bg-info text-dark"><i class="far fa-clock"></i> '.$list->hora.'</span> '.$list->tipo.'</a></li>';
+			}
+			$listHTML .= '<li>
+				<h6 class="dropdown-header" > <a href="'.SERVERURL.'citas">Citas de proximos dias</a></h6>
+			</li>';
+			foreach ($listsToday[1] as $list) {
+				$listHTML .= '<li><a class="dropdown-item">'.$list->fecha.'-'.$list->nombre.' <span class="badge bg-info text-dark"><i class="far fa-clock"></i> '.$list->hora.'</span> '.$list->tipo.'</a></li>';
 			}
 			return $listHTML;
 		}

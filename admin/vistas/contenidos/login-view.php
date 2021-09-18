@@ -24,22 +24,22 @@ if (isset($_POST['usuario_log']) && isset($_POST['clave_log'])) {
 		<div class="col-lg-5 col-12">
 			<div id="auth-left">
 				<div class="auth-logo">
-					<a href="index.html"><img src="<?php echo SERVERURL ?>vistas/assets/images/logo/logo.png" alt="Logo"></a>
+					<a><img src="<?php echo SERVERURL ?>vistas/assets/images/logo/logo.png" alt="Logo"></a>
 				</div>
-				<h1 class="auth-title">Logs in.</h1>
-				<p class="auth-subtitle mb-5">Log in with your data that you entered during registration.</p>
+				<h1 class="auth-title">Iniciar Session</h1>
+				<p class="auth-subtitle mb-5">Ingrese para poder ver sus citas o reservarlas</p>
 	
 				<form action="" method="POST" autocomplete="off" >
 					<div class="form-group position-relative has-icon-left mb-4">
 						<input class="form-control" name="usuario_log" type="text"
-								placeholder="enter your username">
+								placeholder="Ingrese DNI">
 						<div class="form-control-icon">
 							<i class="bi bi-person"></i>
 						</div>
 					</div>
 					<div class="form-group position-relative has-icon-left mb-4">
 						<input class="form-control" name="clave_log" type="password"
-								placeholder="enter your password">
+								placeholder="Ingrese clave">
 						<div class="form-control-icon">
 							<i class="bi bi-shield-lock"></i>
 						</div>
@@ -47,7 +47,7 @@ if (isset($_POST['usuario_log']) && isset($_POST['clave_log'])) {
 					<div class="form-check form-check-lg d-flex align-items-end">
 						<input class="form-check-input me-2" type="checkbox" value="" id="flexCheckDefault">
 						<label class="form-check-label text-gray-600" for="flexCheckDefault">
-							Recordamelo
+							Recuerdamelo
 						</label>
 					</div>
 					<button type="submit" class="btn btn-block btn-dark">Iniciar</button>

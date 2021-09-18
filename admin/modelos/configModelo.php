@@ -22,12 +22,28 @@
 			exit(json_encode($datos));
 		}
 		protected static function listNotifications_m(){
-			$datoss = [
-				'citas' => configModelo::citasReservadas(),
-				'citas' => configModelo::citasReservadas(),
+			$datoss = [ configModelo::citasReservadas(), configModelo::citasReservadasNexs(),
 			];
-			$datos = configModelo::citasReservadas();
-			return $datos;
+			// $datos = configModelo::citasReservadas();
+			return $datoss;
+		}
+
+		protected static function citasReservadasNexs($fecha=''){
+			$dia = $fecha != '' ? $fecha : date('Y-m-d');
+			$sql = mainModelo::conexion()->prepare("SELECT c.id as idCita, c.estado, c.tipo_cita_id, 
+				c.horas_id as id, c.mensaje, p.nombre, p.dni, p.celular , h.hora, tc.nombre AS tipo, c.fecha FROM `citas` c
+				INNER JOIN `persona` p
+				ON p.id = c.paciente_id
+				INNER JOIN `horas` h
+				ON c.horas_id  = h.id
+				INNER JOIN `tipo_cita` tc
+				ON tc.id  = c.tipo_cita_id
+				WHERE c.fecha >:dia ORDER BY h.id ASC LIMIT 5" );
+			$sql->bindParam(":dia",$dia);
+            $sql -> execute();
+			$lista = $sql->fetchAll(PDO::FETCH_OBJ);
+			$sql = null;
+			return $lista;
 		}
 
 		protected static function listarTipoAtencion_m(){
@@ -187,7 +203,7 @@
 				ON c.horas_id  = h.id
 				INNER JOIN `tipo_cita` tc
 				ON tc.id  = c.tipo_cita_id
-				WHERE c.fecha =:dia");
+				WHERE c.fecha =:dia ORDER BY h.id ASC" );
 			$sql->bindParam(":dia",$dia);
             $sql -> execute();
 			$lista = $sql->fetchAll(PDO::FETCH_OBJ);

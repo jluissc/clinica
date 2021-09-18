@@ -1,4 +1,6 @@
-<nav class="navbar navbar-expand navbar-light ">
+<nav class="navbar navbar-expand navbar-light " style="
+    background-color: #82d3e6;
+">
     <div class="container-fluid">
         <a href="#" class="burger-btn d-block">
             <i class="bi bi-justify fs-3"></i>
@@ -20,7 +22,7 @@
                         <i class='bi bi-bell bi-sub fs-4 text-gray-600'></i>
                         
                     </a>
-                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton">
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton" style="background-color: #e1e6dc;">
                         <?php
                             require_once './controladores/configControlador.php';
                             $inst = new configControlador();
@@ -51,12 +53,12 @@
                         </div>
                     </div>
                 </a>
-                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton">
+                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton" style="background-color: #e1e6dc;">
                     <li> <h6 class="dropdown-header">Hola, <?php echo $_SESSION['nombre'] ?>!</h6> </li>
                     <li><a class="dropdown-item" href="#"><i class="icon-mid bi bi-person me-2"></i> Mi Perfil</a></li>
                     <li><a class="dropdown-item" href="#"><i class="icon-mid bi bi-gear me-2"></i> Configuraciones</a></li>
                     <li> <hr class="dropdown-divider"> </li>
-                    <li><a class="dropdown-item" href="#"><i class="icon-mid bi bi-box-arrow-left me-2"></i> Cerrar Session</a></li>
+                    <li class="btn-exit-system"><a class="dropdown-item" href="#"><i class="icon-mid bi bi-box-arrow-left me-2"></i> Cerrar Session</a></li>
                 </ul>
             </div>
         </div>
