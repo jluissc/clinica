@@ -10,7 +10,7 @@
                     <div class="row">
                         <div class="card">
                             <div class="card-header">
-                                <h4 class="card-title">SELECCIONAR LAS HORAS DE ATENCIÓN</h4>
+                                <h4 class="card-title">SELECCIONAR LAS HORAS DE ATENCIÓN POR DÍA</h4>
                             </div>
                             <div class="card-content">
                                 <div class="calendar" style="width: 100%;">
@@ -108,9 +108,15 @@
                             </div>
                             <div class="col-6 col-lg-6 col-md-6">
                                 <h5>Seleccionar los permisos </h5>
-                                <ul class="list-group" id="permisosUser">
-                                    
-                                </ul>
+                                <div class="card-content pb-4">
+                                    <ul class="list-group" id="permisosUser">
+                                        <li class="list-group-item">
+                                            <input class="form-check-input me-1"  type="checkbox" aria-label="..." disabled checked>
+                                            PERMISOS
+                                        </li>
+                                    </ul>
+                                </div>
+                                
                             </div>
 
                         </div>
@@ -169,7 +175,7 @@
 
 let calendar = document.querySelector('.calendar')
 
-const month_names = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Deciembre']
+const month_names = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre']
 
 isLeapYear = (year) => {
     return (year % 4 === 0 && year % 100 !== 0 && year % 400 !== 0) || (year % 100 === 0 && year % 400 ===0)
