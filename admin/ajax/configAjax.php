@@ -4,7 +4,7 @@
 
 	require_once '../config/app.php';
 
-	if (isset($_POST['horaAten']) || isset($_POST['estadoH']) || 
+	if (isset($_POST['horaAten']) || isset($_POST['saveConfig']) || isset($_POST['estadoH']) || 
     isset($_POST['fechaCita']) || isset($_POST['fecha']) || 
 	isset($_POST['fechaSelec']) || isset($_POST['hora_idHoraC']) ||
 	isset($_POST['cita_idCitaC']) || isset($_POST['user_idPerm']) ) {
@@ -12,13 +12,20 @@
 		require_once '../controladores/configControlador.php';
 		$inst = new configControlador();
 
-		// registro nueva products
+		// Listar al carga la pagina todo las config *****
 		if (isset($_POST['horaAten'])) {
-			echo $inst -> listarHoraAtencion();
+			$inst -> listarHoraAtencion();
 		}
+		// guardar las configuraciones de atencion *****
+		if (isset($_POST['saveConfig'])) {
+			$inst->saveConfig();			
+		}
+
+		
+
         // prod 
 		if (isset($_POST['estadoH'])) {
-			echo $inst -> estadoHoraAtenc();
+			
 		}
 
         if (isset($_POST['fecha'])) {

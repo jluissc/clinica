@@ -1,16 +1,18 @@
 // const URLD = "http://127.0.0.1/clinica/admin/";
 
+Lservicios = []
+pacienteId = 0 /* 0 si es nuevo / otro si ya existe */
+datosPacienteNuevo = []
+listConfig = [] /* DIA,HORA, TIPO configurados por el admin */
+listCitasReserv = [] /* CITAS YA RESERVADAS */
+const days = [7, 1 , 2, 3, 4, 5, 6]
+servicSelect =0;
+
 LhorasAtencion = []
 LcitasAtencion = []
-Lservicios = []
 seleccionFecha = false
 fechaSelecionada = ''
-pacienteId = 0
 idAppoint=0 /* Id Cita seleccionado */
-document.getElementById('nombre').disabled = true
-document.getElementById('apellido').disabled = true
-document.getElementById('celular').disabled = true
-document.getElementById('correo').disabled = true
 
 leerCondicionesAtencion()
 
@@ -26,9 +28,213 @@ function leerCondicionesAtencion(){
         LcitasAtencion = r.tipoAtencion
         LhorasAtencion = r.horaAtencion
         Lservicios = r.servicios
+        // filtrarConfig(r.listConfig)
+        mostrarListaServicios()
         
     })
 }
+// function filtrarConfig(datos){
+//     datos.forEach(confg => {        
+//         if (listConfig.find(conf => conf.diaId == confg.dias_id)) {            
+//             const confgList = listConfig.map( conff => {
+//                 if( conff.diaId == confg.dias_id ) {
+//                     conff.config.push({
+//                         'tipoId' : confg.tipo_cita_id,
+//                     })
+//                     return conff;
+//                 } 
+//                 else return conff;
+//             })
+//             listConfig = [...confgList];
+//         } else {
+//             listConfig.push({
+//                 'diaId' : confg.dias_id,
+//                 'horaI' : confg.horainicio,
+//                 'horaF' : confg.horafin,
+//                 'config' : [{
+//                     'tipoId' : confg.tipo_cita_id,
+                    
+//                 }]
+//             })
+//         }
+//     });
+//     console.log(listConfig);
+// }
+function statusCampos(estado){
+    document.getElementById('nombre').disabled = estado
+    document.getElementById('apellido').disabled = estado
+    document.getElementById('celular').disabled = estado
+    document.getElementById('correo').disabled = estado
+
+}
+function validarDni(){
+    dni = document.getElementById('dni').value
+    DATOS = new FormData()
+    DATOS.append('dni', dni)
+    fetch(URL+'ajax/citaAjax.php',{
+        method : 'post',
+        body : DATOS
+    })
+    .then( r => r.json())
+    .then( r => {
+        if(r != 0){
+            document.getElementById('nombre').value = r.nombre
+            document.getElementById('apellido').value = r.apellidos
+            document.getElementById('celular').value = r.celular
+            document.getElementById('correo').value = r.correo
+            pacienteId = r.id
+            datosPacienteNuevo = []
+            statusCampos(true)
+        }else{      
+            leerDni(dni)
+            pacienteId = 0
+            statusCampos(false)   
+            alertaToastify('Paciente nuevo, registrelo ','info',1500)
+        }
+    })
+}
+function leerDni(dni){
+    urlApi=`https://dniruc.apisperu.com/api/v1/dni/${dni}?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6Impsc2MuaGNvOTZAZ21haWwuY29tIn0.ysxMDCaGlMQRJen3msmMcniIx_Q-nuhjXjQ4RNkP31o`;
+    fetch(urlApi)
+    .then(r => r.json())
+    .then(r => {
+        datosPacienteNuevo = {
+            dni : r.dni,
+            nombre : r.nombres,
+            apellidos : r.apellidoPaterno+ ' ' +r.apellidoMaterno,
+        }
+        document.getElementById('nombre').value = datosPacienteNuevo.nombre
+        document.getElementById('apellido').value = datosPacienteNuevo.apellidos
+        document.getElementById('celular').value = ''
+        document.getElementById('correo').value = ''
+        
+    })
+    .catch(r => console.log(r))
+    
+    // *****************
+        // ,{    
+        //     mode: 'no-cors', // no-cors, *cors, same-origin
+        //     headers: {
+        //     'Content-Type': 'application/json',
+        //     'Access-Control-Allow-Origin': '*'
+        //     },
+        // }
+    // *****************
+
+    // var formData = new FormData();
+    // formData.append("token", "YccQhVMLEMGTxZC6cybJLSjoKUuLNiSssf9yvUOtdOZgwcJdzK9R6YOJBPcq");
+    // formData.append("dni",'48540264');
+
+    // var request = new XMLHttpRequest();
+
+    // request.open("POST", "https://api.migo.pe/api/v1/dni");
+    // request.setRequestHeader("Accept", "application/json");
+
+    // request.send(formData);
+    // request.onload = function() {
+    // var data = JSON.parse(this.response);
+    // console.log(data);
+    // };  
+    
+}
+function mostrarListaServicios(){
+
+    listS = '<option value="0" >SELECCIONE</option>'
+    Lservicios.forEach(servic => {
+        listS +=`<option value="${servic.id}" >${servic.nombre}</option>`
+    }); 
+    document.getElementById('select-servc').innerHTML = listS
+}
+function cambioServicio(servSelect){
+    servicSelect = document.getElementById(servSelect).value
+}
+function verificarFecha(dia, mes, anio){
+    if(servicSelect != 0){    
+        dia = ('0' +dia).slice(-2)
+        fecha = `${monthNumber(mes)}-${dia}-${anio}`;
+        fechaB = `${anio}-${monthNumber(mes)}-${dia}`;
+        document.getElementById('tipocitaSelect').innerHTML = ''
+        document.getElementById('fechaCita').innerHTML = fecha
+        document.getElementById('horasDisponibles').innerHTML = ''
+        // document.getElementById('spinner').innerHTML = `<div class="spinner-grow text-success" role="status">
+        //         <span class="sr-only"></span>
+        //     </div>` 
+        // seleccionFecha = true
+        // fechaSelecionada = fecha    
+        diaSelect = days[new Date(fecha).getDay()]
+        document.getElementById('tipocitaSelect').innerHTML = ''
+        document.getElementById('horasDisponibles').innerHTML = ''
+        buscarCitasReservadas(fechaB,diaSelect)
+    }else{
+        alertaToastify('Escoge tipo de servicio');
+    }
+    
+}
+function buscarCitasReservadas(dia,diaSelect){
+    DATOS = new FormData()
+    DATOS.append('fechaCita', dia)
+    DATOS.append('diaSelectsss', diaSelect)
+    DATOS.append('tipoServf', servicSelect)
+    fetch(URL+'ajax/citaAjax.php',{
+        method : 'post',
+        body : DATOS
+    })
+    .then( r => r.json())
+    .then( r => {   
+        if(r.dias != 0){
+            if(r.citas == 0){
+                listCitasReserv = []
+            }else{
+                listCitasReserv = r.citas 
+            }
+            filtrarFechasHorasDispo(diaSelect,r.tipoCita,r.dias,r.horas)/*dia en numero / tipo disponibles para esta servicio,  */
+        }else{
+            alertaToastify('Dia no disponibles, escoge otro dia por favor')
+        }
+        
+    })
+}
+function filtrarFechasHorasDispo(diaSelect,citaDispo,diass,horas){
+    aaaa = []
+    dispon = citaDispo.length > diass.length ? citaDispo : diass
+    statuss = citaDispo.length > diass.length ? diass : citaDispo
+    dispon.forEach(element => {
+        if(statuss.find(ff => ff.tipo_cita_id == element.tipo_cita_id)){
+            aaaa.push(diass.find(ff => ff.tipo_cita_id == element.tipo_cita_id)) 
+        }
+    });
+    inicio = aaaa[0].horainicio;
+    fin = aaaa[0].horafin;
+    list =''
+    LcitasAtencion.forEach((tipo,index) => {
+        if(aaaa.find(type => type.tipo_cita_id == tipo.id)){
+            list +=`<input type="radio" class="btn-check" name="tipoCitaUs" id="${tipo.nombre}" value="${tipo.id}">
+            <label class="btn btn-outline-success" for="${tipo.nombre}">${tipo.nombre}</label>`
+        }
+    });
+    document.getElementById('tipocitaSelect').innerHTML = list
+    tb = '<div class="row text-center ">'  
+    horas.forEach((hour,index) => {
+        if(hour.hora >= inicio && hour.hora < fin){
+            tb +=`<div class="col-6 hora-cita">
+                    <input type="radio" class="btn-check" name="horaAtenUs" id="${index}" value="${hour.id}" >
+                    <label class="btn btn-outline-success" for="${index}">${hour.hora}</label>
+                </div>`
+                
+        }
+    });
+    tb += '</div>'
+    document.getElementById('horasDisponibles').innerHTML = tb
+}
+
+/* ****************HASTA AQUI EL NUEVO CODIGO******************* */
+
+
+
+
+
+
+
 function datosTransf(idAppointd,showBtn){
     idAppoint = idAppointd
     if(showBtn){
@@ -214,28 +420,10 @@ function payAppoint(idAppoint){
 console.log(idAppoint);
 }
 
-function mostrarListaServicios(lista){
-    listS = '<option value="0">SELECCIONE</option>'
-    lista.forEach(servic => {
-        listS +=`<option value="${servic.id}">${servic.nombre}</option>`
-    }); 
-    document.getElementById('select-servc').innerHTML = listS
-}
 
-function verificarFecha(dia, mes, anio){
-    dia = ('0' +dia).slice(-2)
-    fecha = `${anio}-${monthNumber(mes)}-${dia}`;
-    document.getElementById('tipocitaSelect').innerHTML = ''
-    document.getElementById('fechaCita').innerHTML = fecha
-    document.getElementById('horasDisponibles').innerHTML = ''
-    document.getElementById('spinner').innerHTML = `<div class="spinner-grow text-success" role="status">
-            <span class="sr-only"></span>
-        </div>` 
-    seleccionFecha = true
-    fechaSelecionada = fecha
-    console.log(fecha);
-    buscarFechaDisponible(fecha)
-}
+
+
+
 
 function buscarFechaDisponible(dia){
     console.log(dia);
@@ -364,38 +552,7 @@ function limpiarCampos(){
     document.getElementById('fechaCita').innerHTML = ''
 }
 
-function validarDni(){
-    dni = document.getElementById('dni').value
-    // apiConsulta(dni)
-    // url = '../ajax/citaAjax.php'
-    DATOS = new FormData()
-    DATOS.append('dni', dni)
-    fetch(URL+'ajax/citaAjax.php',{
-        method : 'post',
-        body : DATOS
-    })
-    .then( r => r.json())
-    .then( r => {
-        if(r != 0){
-            document.getElementById('nombre').value = r.nombre
-            document.getElementById('nombre').disabled = true
-            document.getElementById('apellido').value = r.apellidos
-            document.getElementById('apellido').disabled = true
-            document.getElementById('celular').value = r.celular
-            document.getElementById('celular').disabled = true
-            document.getElementById('correo').value = r.correo
-            document.getElementById('correo').disabled = true
-            pacienteId = r.id 
-        }else{
-            idUser = 0
-            document.getElementById('nombre').value = ''
-            document.getElementById('apellido').value = ''
-            document.getElementById('celular').value = ''
-            document.getElementById('correo').value = ''
-            alertaToastify('Paciente nuevo, registrelo para continuar','info',1500)
-        }
-    })
-}
+
 function printListAppointments(datos=''){
     if(datos != '' || datos  != []){
         html = ''
@@ -472,46 +629,6 @@ function validarCita(){
     
 }
 
-function apiConsulta(dni){
-
-    url2 = `https://consulta.api-peru.com/api/dni/${dni}`
-    
-    fetch(url2)
-    .then(response => response.json())
-    .then(json => console.log(json))
-    .catch(error => console.log('Authorization failed : ' + error.message));
-}
-
-
-
-const cronometro = tiempo_final => {
-    let now = new Date(),
-        remainTime = (new Date(tiempo_final) - now + 1000) / 1000,
-        remainSeconds = ('0' + Math.floor(remainTime % 60)).slice(-2),
-        remainMinutes = ('0' + Math.floor(remainTime / 60 % 60)).slice(-2),
-        remainHours = ('0' + Math.floor(remainTime / 3660 % 24)).slice(-2);
-    
-    return {
-        remainTime,
-        remainSeconds,
-        remainMinutes,
-        remainHours,
-    }
-
-}
-
-function countDown (tiempo_final, elemt,  finallMensaje)  {
-    el = document.getElementById(elemt)
-    const timerUpdate = setInterval(() => {
-        t = cronometro(tiempo_final)
-        console.log(t.remainHours,t.remainMinutes,t.remainSeconds);
-        if(t.remainTime <= 1){
-            clearInterval(timerUpdate)
-            location.reload();
-        }   
-    }, 1000);
-    
-}
 
 
 

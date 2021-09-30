@@ -30,7 +30,9 @@
 
 		public function buscarFechaCita() {
             $fecha = $_POST['fechaCita'];
-			citaModelo::buscarFechaCita_m($fecha);
+            $tipoId = $_POST['tipoServf'];
+            $diaId = $_POST['diaSelectsss'];
+			citaModelo::buscarFechaCita_m($fecha,$tipoId,$diaId);
 		}
 
 		public function validarTransferencia() {

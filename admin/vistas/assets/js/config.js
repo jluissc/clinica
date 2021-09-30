@@ -1,10 +1,24 @@
 horasAtencion = []
+horasSelected = []
+
 citasAtencion = []
+citasSelected = []
+
+diasAtencion = []
+diasSelected = []
+
+listConfig = []
+// listConfigFilt = []
+
 users_permisos = []
 permisos = []
 fechaSelecionada = ''
+btnGuardarConfig = document.querySelector('#btn_savConf')
+myModalss = new bootstrap.Modal(document.getElementById('xlarge'))
+
 
 leerHorasAtencion()
+btnGuardarConfig.addEventListener('click',validarConfig)
 
 function leerHorasAtencion(){
     DATOS = new FormData()
@@ -14,17 +28,247 @@ function leerHorasAtencion(){
         body : DATOS
     })
     .then( r => r.json())
-    .then( r => {
+    .then( r => {        
+        console.log(r);
         citasAtencion = r.tipoAtencion
         horasAtencion = r.horaAtencion
-        permisos = r.permisos
+        diasAtencion = r.diasAtencion
+        filtrarConfig(r.listConfig)
+        // permisos = r.permisos
         // users_permisos = r.users
-        mostrarCrudHoras()
-        mostrarCrudCitas()
-        filtrarUsers(r.users)
+        
+        // filtrarUsers(r.users)
         
     })
 }
+function filtrarConfig(datos){
+    datos.forEach(confg => {        
+        if (listConfig.find(conf => conf.id == confg.config_id)) {            
+            const confgList = listConfig.map( conff => {
+                if( conff.id == confg.config_id ) {
+                    conff.lista.push({
+                        'id' : confg.id,
+                        'dias' : confg.dias_id,
+                        'horas' : confg.horas_id,
+                        'tipo' : confg.tipo_cita_id,
+                    })
+                    return conff;
+                } 
+                else return conff;
+            })
+            listConfig = [...confgList];
+        } else {
+            listConfig.push({
+                'id' : confg.config_id,
+                'lista' : [{
+                    'id' : confg.id,
+                    'dias' : confg.dias_id,
+                    'horas' : confg.horas_id,
+                    'tipo' : confg.tipo_cita_id,
+                }]
+            })
+        }
+    });
+    console.log(listConfig);
+    HtmlListConfig()
+}
+function HtmlListConfig(){
+    li = `<a class="" style="cursor:pointer" onclick="verConfig(0,1)" class="btn btn-outline-warning" data-bs-toggle="modal"
+    data-bs-target="#xlarge">Crear Fechas de atención</a>`
+    listConfig.forEach((confId,i) => {
+        li+=`<a class="" style="cursor:pointer" onclick="verConfig(${confId.id},2)" class="btn btn-outline-warning" data-bs-toggle="modal"
+        data-bs-target="#xlarge">config ${i+1} ID: ${confId.id}</a>`
+    });
+    document.getElementById('listarConfig').innerHTML = li
+}
+function verConfig(id,tipo){
+    console.log(id);
+    if(tipo == 1){
+        mostrarDias()
+        mostrarCrudHoras()
+        mostrarCrudCitas()
+    }else if(tipo == 2){
+        mostrarDias(id)
+        mostrarCrudHoras(id)
+        mostrarCrudCitas(id)
+        document.getElementById('showBTNConfig').innerHTML = ''
+    }
+}
+function mostrarDias(id=0){
+    diasConfir =[]
+    div = ''
+    if(id == 0){
+        diasAtencion.forEach((dia,index) => {
+            // estado = cita.estado == 1 ? 'checked' : '' 
+            div +=`<li class="list-group-item">
+            <input class="form-check-input me-1"  type="checkbox" id="diaId_${index}" onchange="updateDia(${dia.id},this.id)" aria-label="...">
+            ${dia.nombre}
+            </li>`
+        });
+    }else{
+        console.log('ddd');
+        listConfig.forEach(conff => {
+            if(conff.id == id){
+                console.log(conff);
+                conff.lista.forEach(day => {
+                    if(diasConfir.find(dii => dii.id == day.dias)){
+                        /* no hacer nada */
+                    }else{
+                        diasConfir.push({
+                            'id' : day.dias
+                        })
+                    }
+                });
+            }
+        });
+        console.log(diasConfir);
+        diasAtencion.forEach((dia,index) => {
+            estado = diasConfir.find(di => di.id == dia.id) ? 'checked' : '' 
+            div +=`<li class="list-group-item">
+            <input class="form-check-input me-1" ${estado} disabled type="checkbox" id="diaId_${index}" onchange="updateDia(${dia.id},this.id)" aria-label="...">
+            ${dia.nombre}
+            </li>`
+        });
+    }
+    document.getElementById('listarDiasA').innerHTML = div
+        
+}
+function mostrarCrudCitas(id=0){    
+    tipoConfir =[]
+    div = ''
+    if(id == 0){
+        citasAtencion.forEach((cita,index) => {
+            div +=`<li class="list-group-item">
+                    <input class="form-check-input me-1" type="checkbox" id="citaId_${index}" onchange="updateCita(${cita.id},this.id)" aria-label="...">
+                    ${cita.nombre}
+                </li>`
+        });
+    }else{
+        console.log('ddd');
+        listConfig.forEach(conff => {
+            if(conff.id == id){
+                console.log(conff);
+                conff.lista.forEach(type => {
+                    if(tipoConfir.find(typ => typ.id == type.tipo)){
+                        /* no hacer nada */
+                    }else{
+                        tipoConfir.push({
+                            'id' : type.tipo
+                        })
+                    }
+                });
+            }
+        });
+        console.log(tipoConfir);
+        citasAtencion.forEach((cita,index) => {
+            estado = tipoConfir.find(di => di.id == cita.id) ? 'checked' : '' 
+            div +=`<li class="list-group-item">
+                    <input class="form-check-input me-1" ${estado} disabled type="checkbox" id="citaId_${index}" onchange="updateCita(${cita.id},this.id)" aria-label="...">
+                    ${cita.nombre}
+                </li>`
+        });
+    }
+
+
+    document.getElementById('listaCitaCrud').innerHTML = div
+
+}
+function mostrarCrudHoras(id=0){
+    horaConfir = []
+    div = ''
+    if(id==0){
+
+        horasAtencion.forEach((hora,index) => {
+            // estado = hora.estado == 1 ? 'checked' : '' 
+            div +=`<li class="list-group-item">
+            <input class="form-check-input me-1" type="checkbox" id="horaId_${index}" onchange="updateHora(${hora.id},this.id)" aria-label="...">
+            ${hora.hora}
+            </li>`
+        });
+    }else{
+        console.log('ddd');
+        listConfig.forEach(conff => {
+            if(conff.id == id){
+                conff.lista.forEach(hour => {
+                    if(horaConfir.find(hou => hou.id == hour.horas)){
+                        /* no hacer nada */
+                    }else{
+                        horaConfir.push({
+                            'id' : hour.horas
+                        })
+                    }
+                });
+            }
+        });
+        console.log(horaConfir);
+        horasAtencion.forEach((hora,index) => {
+            estado = horaConfir.find(hour => hour.id == hora.id) ? 'checked' : '' 
+            div +=`<li class="list-group-item">
+            <input class="form-check-input me-1" ${estado} disabled type="checkbox" id="horaId_${index}" onchange="updateHora(${hora.id},this.id)" aria-label="...">
+            ${hora.hora}
+            </li>`
+        });
+    }
+    document.getElementById('listaHoraCrud').innerHTML = div
+}
+function updateDia(id, idInp){
+    if(diasSelected.find(dia=>dia.diaId == id)) diasSelected = diasSelected.filter(dia => dia.diaId != id)
+    else diasSelected.push({'diaId' : id })
+    console.log(diasSelected);
+}
+function updateHora(id, idInp){
+    if(horasSelected.find(hora=>hora.horaId == id)) horasSelected = horasSelected.filter(hora => hora.horaId != id)
+    else horasSelected.push({'horaId' : id })
+    console.log(horasSelected);
+}
+function updateCita(id, idInp){
+    if(citasSelected.find(cita=>cita.citaId == id)) citasSelected = citasSelected.filter(cita => cita.citaId != id)
+    else citasSelected.push({'citaId' : id })
+    console.log(citasSelected);    
+}
+function validarConfig(){
+    if(diasSelected.length>0 ){
+        if(horasSelected.length>0 ){
+            if(citasSelected.length>0) guardarConfig()
+            else alertaToastify('Seleccione al menos 1 tipo de cita')
+        }
+        else alertaToastify('Seleccione al menos 1 hora')
+    }
+    else alertaToastify('Seleccione al menos 1 dia')
+}
+function guardarConfig(){
+    DATOS = new FormData()
+    DATOS.append('saveConfig', 'saveConfig')
+    DATOS.append('diaSelect', JSON.stringify(diasSelected))
+    DATOS.append('horaSelect', JSON.stringify(horasSelected))
+    DATOS.append('tipoSelect', JSON.stringify(citasSelected))
+    fetch(URL+'ajax/configAjax.php',{
+        method : 'post',
+        body : DATOS
+    })
+    .then( r => r.text())
+    .then( r => {
+        mostrarCrudHoras()
+        mostrarCrudCitas()
+        mostrarDias()
+        horasSelected = []
+        citasSelected = []
+        diasSelected = []
+        alertaToastify('Se guardo configuración', 'green')
+        leerHorasAtencion()
+        myModalss.hide()
+
+    })
+}
+
+
+
+
+
+
+// **********************
+
+
 
 function filtrarUsers(users){
     users.forEach(user => {
@@ -57,66 +301,6 @@ function filtrarUsers(users){
     mostrarListaColaboradores()
 }
 
-function mostrarCrudHoras(){
-    div = ''
-    horasAtencion.forEach((hora,index) => {
-        estado = hora.estado == 1 ? 'checked' : '' 
-        div +=`<li class="list-group-item">
-                <input class="form-check-input me-1" ${estado} type="checkbox" id="horaId_${index}" onchange="updateHora(${hora.id},this.id)" aria-label="...">
-                ${hora.hora}
-            </li>`
-    });
-    document.getElementById('listaHoraCrud').innerHTML = div
-}
-
-function updateHora(id, idInp){
-    estado = document.getElementById(`${idInp}`).checked ? 1: 0
-    DATOS = new FormData()
-    DATOS.append('estadoHoraC', estado)
-    DATOS.append('hora_idHoraC', id)
-    fetch(URL+'ajax/configAjax.php',{
-        method : 'post',
-        body : DATOS
-    })
-    .then( r => r.json())
-    .then( r => {
-        citasAtencion = r.tipoAtencion
-        horasAtencion = r.horaAtencion
-        mostrarCrudHoras()
-        mostrarCrudCitas()
-    })
-}
-
-function updateCita(id, idInp){
-    estado = document.getElementById(`${idInp}`).checked ? 1: 0
-    DATOS = new FormData()
-    DATOS.append('estadoCitaC', estado)
-    DATOS.append('cita_idCitaC', id)
-    fetch(URL+'ajax/configAjax.php',{
-        method : 'post',
-        body : DATOS
-    })
-    .then( r => r.json())
-    .then( r => {
-        citasAtencion = r.tipoAtencion
-        horasAtencion = r.horaAtencion
-        mostrarCrudHoras()
-        mostrarCrudCitas()
-    })
-}
-
-function mostrarCrudCitas(){
-    div = ''
-    citasAtencion.forEach((cita,index) => {
-        estado = cita.estado == 1 ? 'checked' : '' 
-        div +=`<li class="list-group-item">
-                <input class="form-check-input me-1" ${estado} type="checkbox" id="citaId_${index}" onchange="updateCita(${cita.id},this.id)" aria-label="...">
-                ${cita.nombre}
-            </li>`
-    });
-    document.getElementById('listaCitaCrud').innerHTML = div
-
-}
 
 function mostrarListaColaboradores(){
     div = ''

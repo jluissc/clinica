@@ -18,9 +18,93 @@
 				'users' => configModelo::listarUsers_m(),
 				'permisos' => configModelo::listarPermisos_m(),
 				'servicios' => configModelo::listarServicios_m(),
+				'diasAtencion' => configModelo::listarDiasAtencion_m(),
+				'listConfig' => configModelo::listConfig_m(),
 			];
 			exit(json_encode($datos));
 		}
+		protected static function listarTipoAtencion_m(){
+			$sql = mainModelo::conexion()->prepare("SELECT * FROM tipo_cita");
+			$sql -> execute();
+			$tipoAtencion = $sql->fetchAll(PDO::FETCH_OBJ);
+			$sql = null;
+			return $tipoAtencion;
+		}
+		protected static function listarDiasAtencion_m(){
+			$sql = mainModelo::conexion()->prepare("SELECT * FROM dias");
+			$sql -> execute();
+			$tipoAtencion = $sql->fetchAll(PDO::FETCH_OBJ);
+			$sql = null;
+			return $tipoAtencion;
+		}
+		protected static function listarServicios_m(){
+			$sql = mainModelo::conexion()->prepare("SELECT * FROM servicios");
+			$sql -> execute();
+			$tipoAtencion = $sql->fetchAll(PDO::FETCH_OBJ);
+			$sql = null;
+			return $tipoAtencion;
+		}
+		protected static function listarUsers_m(){
+			$sql = mainModelo::conexion()->prepare("SELECT p.id, p.nombre,p.correo, p.tipo_user_id, pu.* FROM persona p
+				INNER JOIN permisos_user pu
+				ON p.id = pu.persona_id
+				WHERE p.tipo_user_id = 2 OR p.tipo_user_id = 3");
+			$sql -> execute();
+			$tipoAtencion = $sql->fetchAll(PDO::FETCH_OBJ);
+			$sql = null;
+			return $tipoAtencion;
+		}
+		protected static function listConfig_m(){
+			// $sql = mainModelo::conexion()->prepare("SELECT c.id as idConf, d.id as idDiaH, 
+			// 	d.horas_id, d.dias_id, d.tipo_cita_id FROM config c
+			// 	INNER JOIN dias_hora_atencion d
+			// 	ON c.id = d.config_id
+			// ");
+			$sql = mainModelo::conexion()->prepare("SELECT * FROM dias_hora_atencion");
+			$sql -> execute();
+			$permisos = $sql->fetchAll(PDO::FETCH_OBJ);
+			$sql = null;
+			return $permisos;
+		}
+		protected static function listarPermisos_m(){
+			$sql = mainModelo::conexion()->prepare("SELECT * FROM permisos");
+			$sql -> execute();
+			$permisos = $sql->fetchAll(PDO::FETCH_OBJ);
+			$sql = null;
+			return $permisos;
+		}
+		protected static function saveConfig_m($code){
+			$pdo =mainModelo::conexion();
+			$sql = $pdo->prepare("INSERT INTO `config` (`codigo`) VALUES (:code) ");
+			$sql->bindParam(":code",$code);
+            $sql -> execute();			
+			$sql = null;
+			return $pdo->lastInsertId();
+		}
+		protected static function saveConfigDiaHora_m($datos){
+			$sql = mainModelo::conexion()->prepare("INSERT INTO `dias_hora_atencion` (`horas_id`, `dias_id`, `tipo_cita_id`, `config_id`) 
+				VALUES (:hora, :dia, :tipo, :idConf) ");
+			$sql->bindParam(":hora",$datos['hora']);
+			$sql->bindParam(":dia",$datos['dia']);
+			$sql->bindParam(":tipo",$datos['tipo']);
+			$sql->bindParam(":idConf",$datos['idConfig']);
+            $sql -> execute();			
+			
+			if($sql -> rowCount() > 0){
+				$sql = null;
+				return 1;
+			}else{
+				$sql = null;
+				return 0;
+			}
+		}
+
+
+
+		// ************************
+
+
+		
 		protected static function listNotifications_m(){
 			$datoss = [ configModelo::citasReservadas(), configModelo::citasReservadasNexs(),
 			];
@@ -46,37 +130,7 @@
 			return $lista;
 		}
 
-		protected static function listarTipoAtencion_m(){
-			$sql = mainModelo::conexion()->prepare("SELECT * FROM tipo_cita");
-			$sql -> execute();
-			$tipoAtencion = $sql->fetchAll(PDO::FETCH_OBJ);
-			$sql = null;
-			return $tipoAtencion;
-		}
-		protected static function listarServicios_m(){
-			$sql = mainModelo::conexion()->prepare("SELECT * FROM servicios");
-			$sql -> execute();
-			$tipoAtencion = $sql->fetchAll(PDO::FETCH_OBJ);
-			$sql = null;
-			return $tipoAtencion;
-		}
-		protected static function listarUsers_m(){
-			$sql = mainModelo::conexion()->prepare("SELECT p.id, p.nombre,p.correo, p.tipo_user_id, pu.* FROM persona p
-				INNER JOIN permisos_user pu
-				ON p.id = pu.persona_id
-				WHERE p.tipo_user_id = 2 OR p.tipo_user_id = 3");
-			$sql -> execute();
-			$tipoAtencion = $sql->fetchAll(PDO::FETCH_OBJ);
-			$sql = null;
-			return $tipoAtencion;
-		}
-		protected static function listarPermisos_m(){
-			$sql = mainModelo::conexion()->prepare("SELECT * FROM permisos");
-			$sql -> execute();
-			$permisos = $sql->fetchAll(PDO::FETCH_OBJ);
-			$sql = null;
-			return $permisos;
-		}
+		
 		protected static function estadoHoraAtenc_m($datos){
 			$sql = mainModelo::conexion()->prepare("UPDATE horas_atencion SET estado =:estado  WHERE id =:id");
 			$sql->bindParam(":estado",$datos['estadoH']);

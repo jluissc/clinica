@@ -13,9 +13,13 @@
 		require_once '../controladores/citaControlador.php';
 		$inst = new citaControlador();
 
-		// registro nueva products
+		// BUSCAR USUARIO POR DNI
 		if (isset($_POST['dni'])) {
 			echo $inst -> verificarDni();
+		}
+		// BUSCAR CITAS YA RESERVADAS
+		if (isset($_POST['fechaCita'])) {
+			echo $inst -> buscarFechaCita();
 		}
 
 		if (isset($_POST['idPayDirect'])) {
@@ -34,9 +38,7 @@
 			echo $inst -> saveCita();
 		}
 
-        if (isset($_POST['fechaCita'])) {
-			echo $inst -> buscarFechaCita();
-		}
+       
 
         if (isset($_POST['estadoTransf'])) {
 			echo $inst -> validarTransferencia();
