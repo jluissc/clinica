@@ -9,7 +9,7 @@
                 <div class="col-6 col-lg-6 col-md-6" >
                     <div class="card">
                         <div class="card-header">
-                            <h4>Permisos Colaboradores</h4>
+                            <h4>Permisos Colaboradores</h4> <a class="" style="cursor:pointer"  data-bs-toggle="modal" data-bs-target="#large2">Crear usuario</a>
                         </div>
                         <div class="row">
                             <div class="col-6 col-lg-6 col-md-6">
@@ -20,19 +20,17 @@
                             <div class="col-6 col-lg-6 col-md-6">
                                 <h5>Seleccionar los permisos </h5>
                                 <div class="card-content pb-4">
-                                    <ul class="list-group" id="permisosUser">
-                                        <li class="list-group-item">
-                                            <input class="form-check-input me-1"  type="checkbox" aria-label="..." disabled checked>
-                                            PERMISOS
-                                        </li>
-                                    </ul>
-                                </div>
-                                
+                                    <div class="card-body">
+                                        <ul class="list-group" id="permisosUser">
+                                            <li class="list-group-item">
+                                                <input class="form-check-input me-1"  type="checkbox" aria-label="..." disabled checked>
+                                                PERMISOS
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>                                
                             </div>
-
                         </div>
-                        
-                        
                     </div>
                 </div>
                 

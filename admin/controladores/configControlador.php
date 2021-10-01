@@ -97,7 +97,6 @@
 
 		public function updatePermisoUser() {
 			$datos = [
-                'estado' => $_POST['estadoPerm'],
                 'tipo' => $_POST['tipoPerm'],
                 'user_id' => $_POST['user_idPerm'],
             ];
