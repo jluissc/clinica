@@ -6,7 +6,7 @@
 	require_once 'mainModelo.php';
 	class configModelo extends mainModelo
 	{
-		
+		 
 		protected static function listarHoraAtencion_m(){
 			$sql = mainModelo::conexion()->prepare("SELECT * FROM horas");
 			$sql -> execute();
@@ -60,7 +60,10 @@
 			// 	INNER JOIN dias_hora_atencion d
 			// 	ON c.id = d.config_id
 			// ");
-			$sql = mainModelo::conexion()->prepare("SELECT * FROM dias_hora_atencion");
+			$sql = mainModelo::conexion()->prepare("SELECT * FROM dias_hora_atencion dt
+				INNER JOIN config c
+				ON c.id = dt.config_id
+			");
 			$sql -> execute();
 			$permisos = $sql->fetchAll(PDO::FETCH_OBJ);
 			$sql = null;
@@ -73,21 +76,25 @@
 			$sql = null;
 			return $permisos;
 		}
-		protected static function saveConfig_m($code){
+		protected static function saveConfig_m($code,$name,$horaInicio, $horaFin){
 			$pdo =mainModelo::conexion();
-			$sql = $pdo->prepare("INSERT INTO `config` (`codigo`) VALUES (:code) ");
+			$sql = $pdo->prepare("INSERT INTO `config` (`codigo`, nombre,horaInicio,horaFin) VALUES (:code, :nombre, :ini, :fin) ");
 			$sql->bindParam(":code",$code);
+			$sql->bindParam(":nombre",$name);
+			$sql->bindParam(":ini",$horaInicio);
+			$sql->bindParam(":fin",$horaFin);
             $sql -> execute();			
 			$sql = null;
 			return $pdo->lastInsertId();
 		}
 		protected static function saveConfigDiaHora_m($datos){
-			$sql = mainModelo::conexion()->prepare("INSERT INTO `dias_hora_atencion` (`horas_id`, `dias_id`, `tipo_cita_id`, `config_id`) 
-				VALUES (:hora, :dia, :tipo, :idConf) ");
-			$sql->bindParam(":hora",$datos['hora']);
+			$sql = mainModelo::conexion()->prepare("INSERT INTO `dias_hora_atencion` (`dias_id`, `tipo_cita_id`, `config_id`, `horainicio`, `horafin`) 
+				VALUES (:dia, :tipo, :idConf, :inicio, :fin) ");
 			$sql->bindParam(":dia",$datos['dia']);
 			$sql->bindParam(":tipo",$datos['tipo']);
 			$sql->bindParam(":idConf",$datos['idConfig']);
+			$sql->bindParam(":inicio",$datos['inicio']);
+			$sql->bindParam(":fin",$datos['fin']);
             $sql -> execute();			
 			
 			if($sql -> rowCount() > 0){

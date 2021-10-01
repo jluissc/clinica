@@ -1,6 +1,3 @@
-horasAtencion = []
-horasSelected = []
-
 citasAtencion = []
 citasSelected = []
 
@@ -8,17 +5,13 @@ diasAtencion = []
 diasSelected = []
 
 listConfig = []
-// listConfigFilt = []
 
 users_permisos = []
 permisos = []
 fechaSelecionada = ''
-btnGuardarConfig = document.querySelector('#btn_savConf')
-myModalss = new bootstrap.Modal(document.getElementById('xlarge'))
-
+myModalss = new bootstrap.Modal(document.getElementById('xlarge')) 
 
 leerHorasAtencion()
-btnGuardarConfig.addEventListener('click',validarConfig)
 
 function leerHorasAtencion(){
     DATOS = new FormData()
@@ -31,7 +24,6 @@ function leerHorasAtencion(){
     .then( r => {        
         console.log(r);
         citasAtencion = r.tipoAtencion
-        horasAtencion = r.horaAtencion
         diasAtencion = r.diasAtencion
         filtrarConfig(r.listConfig)
         // permisos = r.permisos
@@ -49,7 +41,6 @@ function filtrarConfig(datos){
                     conff.lista.push({
                         'id' : confg.id,
                         'dias' : confg.dias_id,
-                        'horas' : confg.horas_id,
                         'tipo' : confg.tipo_cita_id,
                     })
                     return conff;
@@ -60,10 +51,12 @@ function filtrarConfig(datos){
         } else {
             listConfig.push({
                 'id' : confg.config_id,
+                'horainicio' : confg.horainicio,
+                'horafin' : confg.horafin,
+                'nombre' : confg.nombre,
                 'lista' : [{
                     'id' : confg.id,
                     'dias' : confg.dias_id,
-                    'horas' : confg.horas_id,
                     'tipo' : confg.tipo_cita_id,
                 }]
             })
@@ -73,26 +66,73 @@ function filtrarConfig(datos){
     HtmlListConfig()
 }
 function HtmlListConfig(){
+    console.log(listConfig);
     li = `<a class="" style="cursor:pointer" onclick="verConfig(0,1)" class="btn btn-outline-warning" data-bs-toggle="modal"
     data-bs-target="#xlarge">Crear Fechas de atención</a>`
     listConfig.forEach((confId,i) => {
         li+=`<a class="" style="cursor:pointer" onclick="verConfig(${confId.id},2)" class="btn btn-outline-warning" data-bs-toggle="modal"
-        data-bs-target="#xlarge">config ${i+1} ID: ${confId.id}</a>`
+        data-bs-target="#xlarge">config ${i+1}  ${confId.nombre}</a>`
     });
     document.getElementById('listarConfig').innerHTML = li
 }
 function verConfig(id,tipo){
-    console.log(id);
     if(tipo == 1){
         mostrarDias()
-        mostrarCrudHoras()
         mostrarCrudCitas()
+        document.getElementById('showBTNConfig').innerHTML = '<input type="button" class="btn btn-success" value="Guardar Config" onclick="validarConfig()">'
     }else if(tipo == 2){
         mostrarDias(id)
-        mostrarCrudHoras(id)
         mostrarCrudCitas(id)
         document.getElementById('showBTNConfig').innerHTML = ''
     }
+}
+function updateDia(id, idInp){
+    if(diasSelected.find(dia=>dia.diaId == id)) diasSelected = diasSelected.filter(dia => dia.diaId != id)
+    else diasSelected.push({'diaId' : id })
+    console.log(diasSelected);
+}
+function updateCita(id, idInp){
+    if(citasSelected.find(cita=>cita.citaId == id)) citasSelected = citasSelected.filter(cita => cita.citaId != id)
+    else citasSelected.push({'citaId' : id })
+    console.log(citasSelected);    
+}
+function validarConfig(){
+    console.log('jjj');
+    if(diasSelected.length>0 ){
+        if(citasSelected.length>0) guardarConfig()
+        else alertaToastify('Seleccione al menos 1 tipo de cita')
+    }
+    else alertaToastify('Seleccione al menos 1 dia')
+}
+function guardarConfig(){
+    nameConf =document.getElementById('nameConf').value
+    horaInicio =document.getElementById('horaInicio').value
+    horaFin =document.getElementById('horaFin').value
+    if(horaInicio != '' && horaFin != ''){
+        DATOS = new FormData()
+        DATOS.append('saveConfig', 'saveConfig')
+        DATOS.append('nameConf', nameConf)
+        DATOS.append('horaInicio', horaInicio)
+        DATOS.append('horaFin', horaFin)
+        DATOS.append('diaSelect', JSON.stringify(diasSelected))
+        DATOS.append('tipoSelect', JSON.stringify(citasSelected))
+        fetch(URL+'ajax/configAjax.php',{
+            method : 'post',
+            body : DATOS
+        })
+        .then( r => r.text())
+        .then( r => {
+            mostrarCrudCitas()
+            mostrarDias()
+            citasSelected = []
+            diasSelected = []
+            alertaToastify('Se guardo configuración', 'green')
+            leerHorasAtencion()
+            myModalss.hide()
+    
+        })
+    }else alertaToastify('Falta las horas')
+    
 }
 function mostrarDias(id=0){
     diasConfir =[]
@@ -106,10 +146,8 @@ function mostrarDias(id=0){
             </li>`
         });
     }else{
-        console.log('ddd');
         listConfig.forEach(conff => {
             if(conff.id == id){
-                console.log(conff);
                 conff.lista.forEach(day => {
                     if(diasConfir.find(dii => dii.id == day.dias)){
                         /* no hacer nada */
@@ -119,9 +157,17 @@ function mostrarDias(id=0){
                         })
                     }
                 });
+                /* MOSTRAR LAS HORAS */
+                a = document.getElementById('horaInicio')
+                a.value = conff.horainicio
+                a.disabled = true
+                b = document.getElementById('horaFin')
+                b.value = conff.horafin
+                b.disabled = true
+                /* MOSTRAR LAS HORAS */
+
             }
         });
-        console.log(diasConfir);
         diasAtencion.forEach((dia,index) => {
             estado = diasConfir.find(di => di.id == dia.id) ? 'checked' : '' 
             div +=`<li class="list-group-item">
@@ -144,10 +190,8 @@ function mostrarCrudCitas(id=0){
                 </li>`
         });
     }else{
-        console.log('ddd');
         listConfig.forEach(conff => {
             if(conff.id == id){
-                console.log(conff);
                 conff.lista.forEach(type => {
                     if(tipoConfir.find(typ => typ.id == type.tipo)){
                         /* no hacer nada */
@@ -159,7 +203,6 @@ function mostrarCrudCitas(id=0){
                 });
             }
         });
-        console.log(tipoConfir);
         citasAtencion.forEach((cita,index) => {
             estado = tipoConfir.find(di => di.id == cita.id) ? 'checked' : '' 
             div +=`<li class="list-group-item">
@@ -173,95 +216,6 @@ function mostrarCrudCitas(id=0){
     document.getElementById('listaCitaCrud').innerHTML = div
 
 }
-function mostrarCrudHoras(id=0){
-    horaConfir = []
-    div = ''
-    if(id==0){
-
-        horasAtencion.forEach((hora,index) => {
-            // estado = hora.estado == 1 ? 'checked' : '' 
-            div +=`<li class="list-group-item">
-            <input class="form-check-input me-1" type="checkbox" id="horaId_${index}" onchange="updateHora(${hora.id},this.id)" aria-label="...">
-            ${hora.hora}
-            </li>`
-        });
-    }else{
-        console.log('ddd');
-        listConfig.forEach(conff => {
-            if(conff.id == id){
-                conff.lista.forEach(hour => {
-                    if(horaConfir.find(hou => hou.id == hour.horas)){
-                        /* no hacer nada */
-                    }else{
-                        horaConfir.push({
-                            'id' : hour.horas
-                        })
-                    }
-                });
-            }
-        });
-        console.log(horaConfir);
-        horasAtencion.forEach((hora,index) => {
-            estado = horaConfir.find(hour => hour.id == hora.id) ? 'checked' : '' 
-            div +=`<li class="list-group-item">
-            <input class="form-check-input me-1" ${estado} disabled type="checkbox" id="horaId_${index}" onchange="updateHora(${hora.id},this.id)" aria-label="...">
-            ${hora.hora}
-            </li>`
-        });
-    }
-    document.getElementById('listaHoraCrud').innerHTML = div
-}
-function updateDia(id, idInp){
-    if(diasSelected.find(dia=>dia.diaId == id)) diasSelected = diasSelected.filter(dia => dia.diaId != id)
-    else diasSelected.push({'diaId' : id })
-    console.log(diasSelected);
-}
-function updateHora(id, idInp){
-    if(horasSelected.find(hora=>hora.horaId == id)) horasSelected = horasSelected.filter(hora => hora.horaId != id)
-    else horasSelected.push({'horaId' : id })
-    console.log(horasSelected);
-}
-function updateCita(id, idInp){
-    if(citasSelected.find(cita=>cita.citaId == id)) citasSelected = citasSelected.filter(cita => cita.citaId != id)
-    else citasSelected.push({'citaId' : id })
-    console.log(citasSelected);    
-}
-function validarConfig(){
-    if(diasSelected.length>0 ){
-        if(horasSelected.length>0 ){
-            if(citasSelected.length>0) guardarConfig()
-            else alertaToastify('Seleccione al menos 1 tipo de cita')
-        }
-        else alertaToastify('Seleccione al menos 1 hora')
-    }
-    else alertaToastify('Seleccione al menos 1 dia')
-}
-function guardarConfig(){
-    DATOS = new FormData()
-    DATOS.append('saveConfig', 'saveConfig')
-    DATOS.append('diaSelect', JSON.stringify(diasSelected))
-    DATOS.append('horaSelect', JSON.stringify(horasSelected))
-    DATOS.append('tipoSelect', JSON.stringify(citasSelected))
-    fetch(URL+'ajax/configAjax.php',{
-        method : 'post',
-        body : DATOS
-    })
-    .then( r => r.text())
-    .then( r => {
-        mostrarCrudHoras()
-        mostrarCrudCitas()
-        mostrarDias()
-        horasSelected = []
-        citasSelected = []
-        diasSelected = []
-        alertaToastify('Se guardo configuración', 'green')
-        leerHorasAtencion()
-        myModalss.hide()
-
-    })
-}
-
-
 
 
 

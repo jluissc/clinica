@@ -5,7 +5,7 @@
 	}else{
 		require_once './modelos/configModelo.php';
 	} 
-
+ 
 	class configControlador extends configModelo	{
 		
 		public function listarHoraAtencion() {
@@ -14,18 +14,20 @@
 
 		public function saveConfig() {
 			$code = rand(10001, 99999);
-			$idConfig = configModelo::saveConfig_m($code);
-			foreach (json_decode($_POST['diaSelect']) as $dia) {
-				foreach (json_decode($_POST['horaSelect']) as $hora) {
-					foreach (json_decode($_POST['tipoSelect']) as $tipo) {
-						$datos = [
-							'dia' => $dia->diaId,
-							'hora' => $hora->horaId,
-							'tipo' => $tipo->citaId,
-							'idConfig' => $idConfig,
-						];
-						configModelo::saveConfigDiaHora_m($datos);
-					}
+			$name = $_POST['nameConf'];
+			$horaInicio = $_POST['horaInicio'];
+			$horaFin = $_POST['horaFin'];
+			$idConfig = configModelo::saveConfig_m($code,$name,$horaInicio, $horaFin);
+			foreach (json_decode($_POST['diaSelect']) as $dia) { 
+				foreach (json_decode($_POST['tipoSelect']) as $tipo) {
+					$datos = [
+						'dia' => $dia->diaId,
+						'tipo' => $tipo->citaId,
+						'idConfig' => $idConfig,
+						'inicio' => $_POST['horaInicio'],
+						'fin' => $_POST['horaFin'],
+					];
+					configModelo::saveConfigDiaHora_m($datos);
 				}
 			}
 			return 1;
