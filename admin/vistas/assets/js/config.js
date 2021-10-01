@@ -249,7 +249,7 @@ function filtrarUsers(users){
 function mostrarListaColaboradores(){
     div = ''
     users_permisos.forEach(user => {
-        div+= `<div class="recent-message d-flex px-4 py-3 colaborador" onclick="listaPermiso(${user.persona_id})" >
+        div+= `<div class="recent-message d-flex px-4 py-3 colaborador" onclick="listaPermiso(${user.persona_id})"id="jjdjdj" >
                 <div class="avatar avatar-lg">
                     <img src="${URL}vistas/assets/images/faces/4.jpg">
                 </div>
@@ -266,7 +266,7 @@ function listaPermiso(user_id){
     div = ''
     permisos.forEach(permiso => {
         estado = user.permisos.some( permisoInt => permisoInt.permisos_id == permiso.id) ? 'checked' : ''
-        div += `<li class="list-group-item">
+        div += `<li class="list-group-item" >
             <input class="form-check-input me-1" ${estado}  type="checkbox" 
                 id="${permiso.id}" onchange="updatePermisUser(this.id,${user.persona_id})" aria-label="...">
             ${permiso.nombre}

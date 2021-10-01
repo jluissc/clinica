@@ -60,48 +60,7 @@
         </div>
     </section>
 
-    <!-- MODAL -->
-    <div class="modal fade text-left" id="large" tabindex="-1" role="dialog"
-        aria-labelledby="myModalLabel17" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg"
-            role="document">
-            <div class="modal-content" id="showServc">
-                <div class="modal-header">
-                    <h4 class="modal-title" id="myModalLabel17">CONFIGURACIÓN DE CITAS POR DÍA <div id="fechaSelec"></div></h4>
-                    <button type="button" class="close" data-bs-dismiss="modal"
-                        aria-label="Close">
-                        <i data-feather="x"></i>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <div class="modal-body">
-                        
-                        <div class="row">
-                            <div class="col-6 col-lg-6 col-md-6 " >
-                                <ul class="list-group" id="listaHoraAten">
-                                        
-                                </ul>
-                            </div>
-                            <div class="col-6 col-lg-6 col-md-6 " >
-                                <ul class="list-group" id="listaTipoAtenc">
-                                        
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-light-secondary"
-                        data-bs-dismiss="modal">Cerrar
-                    </button>
-                    <!-- <button type="button" class="btn btn-primary ml-1"
-                        onclick="guardarServicio()">Guardar
-                    </button> -->
-                </div>
-            </div>
-        </div>
-    </div>
-
+    
     <div class="modal fade text-left w-100" id="xlarge" tabindex="-1" role="dialog"
         aria-labelledby="myModalLabel16" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl"
@@ -201,7 +160,7 @@
     </div>
     <div class="modal fade text-left" id="large2" tabindex="-1" role="dialog"
         aria-labelledby="myModalLabel17" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg"
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl"
             role="document">
             <div class="modal-content" >
                 <div class="modal-header">
@@ -259,6 +218,14 @@
             </div>
         </div>
     </div>
+    <style>
+        #jjdjdj{
+            cursor: pointer;
+        }
+        #jjdjdj:hover{
+            background-color: #93d85e;
+        }
+    </style>
 <?php } 
 
 else{
