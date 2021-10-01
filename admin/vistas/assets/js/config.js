@@ -8,6 +8,7 @@ listConfig = []
 
 users_permisos = []
 permisos = []
+permisosTempo = []
 fechaSelecionada = ''
 myModalss = new bootstrap.Modal(document.getElementById('xlarge')) 
 
@@ -27,8 +28,6 @@ function leerHorasAtencion(){
         diasAtencion = r.diasAtencion
         filtrarConfig(r.listConfig)
         permisos = r.permisos
-        // users_permisos = r.users
-        
         filtrarUsers(r.users)
         
     })
@@ -299,8 +298,21 @@ function updatePermisUser(idInput, user_id){
         console.log(r);
     })
 }
-
-
+// permisosTempo
+function selectPermis(id){
+    console.log(id);
+    if(document.getElementById(`permi_${id}`).checked){
+        console.log('dd');
+    }
+    if (permisosTempo.find(perTem => perTem.id == id )) {
+        permisosTempo = permisosTempo.filter(perT => perT.id != id)
+    } else {
+       permisosTempo.push({
+           'id' : id
+       }) 
+    }
+    console.log(permisosTempo);
+}
 
 
 

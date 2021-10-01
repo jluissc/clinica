@@ -199,4 +199,70 @@
             </div>
         </div>
     </div>
-<?php } ?>
+    <div class="modal fade text-left" id="large2" tabindex="-1" role="dialog"
+        aria-labelledby="myModalLabel17" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg"
+            role="document">
+            <div class="modal-content" >
+                <div class="modal-header">
+                    <h4 class="modal-title" id="myModalLabel17">Crear Usuario y permisos</h4>
+                    <button type="button" class="close" data-bs-dismiss="modal"
+                        aria-label="Close">
+                        <i data-feather="x"></i>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                            <div class="col-6 col-lg-6 col-md-6">
+                                <?php 
+                                    include "./vistas/inc/form-user.php";  
+                                ?>    
+                                
+                            </div>
+                            <div class="col-6 col-lg-6 col-md-6">
+                                <h5>Seleccionar los permisos </h5>
+                                <div class="card-content pb-4">
+                                    <div class="card-body">
+                                        <ul class="list-group" id="permisoTemporal" >
+                                            <li class="list-group-item">
+                                                <input class="form-check-input me-1"  type="checkbox" id="permi_1" onchange="selectPermis(1)"  > PAGOS
+                                            </li>
+                                            <li class="list-group-item">
+                                                <input class="form-check-input me-1"  type="checkbox" id="permi_2" onchange="selectPermis(2)" > GASTOS
+                                            </li>
+                                            <li class="list-group-item">
+                                                <input class="form-check-input me-1"  type="checkbox" id="permi_3" onchange="selectPermis(3)" > CITAS
+                                            </li>
+                                            <li class="list-group-item">
+                                                <input class="form-check-input me-1"  type="checkbox" id="permi_4" onchange="selectPermis(4)" > SERVICIOS
+                                            </li>
+                                            <li class="list-group-item">
+                                                <input class="form-check-input me-1"  type="checkbox" id="permi_5" onchange="selectPermis(5)" > MATERIALES
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-light-secondary"
+                        data-bs-dismiss="modal">
+                        <i class="bx bx-x d-block d-sm-none"></i>
+                        <span class="d-none d-sm-block">Cancelar</span>
+                    </button>
+                    <button type="button" class="btn btn-primary ml-1 "  onclick="saveUsuario()">
+                        <i class="bx bx-check d-block d-sm-none"></i>
+                        <span class="d-none d-sm-block">Guardar</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+<?php } 
+
+else{
+    include "./vistas/contenidos/404-view.php"; 
+}
+
+?>
