@@ -23,7 +23,6 @@ function leerHorasAtencion(){
     })
     .then( r => r.json())
     .then( r => {        
-        console.log(r);
         citasAtencion = r.tipoAtencion
         diasAtencion = r.diasAtencion
         filtrarConfig(r.listConfig)
@@ -61,11 +60,9 @@ function filtrarConfig(datos){
             })
         }
     });
-    console.log(listConfig);
     HtmlListConfig()
 }
 function HtmlListConfig(){
-    console.log(listConfig);
     li = `<a class="" style="cursor:pointer" onclick="verConfig(0,1)" class="btn btn-outline-warning" data-bs-toggle="modal"
     data-bs-target="#xlarge">Crear Fechas de atención</a>`
     listConfig.forEach((confId,i) => {
@@ -88,15 +85,12 @@ function verConfig(id,tipo){
 function updateDia(id, idInp){
     if(diasSelected.find(dia=>dia.diaId == id)) diasSelected = diasSelected.filter(dia => dia.diaId != id)
     else diasSelected.push({'diaId' : id })
-    console.log(diasSelected);
 }
 function updateCita(id, idInp){
     if(citasSelected.find(cita=>cita.citaId == id)) citasSelected = citasSelected.filter(cita => cita.citaId != id)
     else citasSelected.push({'citaId' : id })
-    console.log(citasSelected);    
 }
 function validarConfig(){
-    console.log('jjj');
     if(diasSelected.length>0 ){
         if(citasSelected.length>0) guardarConfig()
         else alertaToastify('Seleccione al menos 1 tipo de cita')
@@ -251,7 +245,6 @@ function filtrarUsers(users){
         }
     }); 
     mostrarListaColaboradores()
-    console.log(users_permisos);
 }
 function mostrarListaColaboradores(){
     div = ''
@@ -269,9 +262,7 @@ function mostrarListaColaboradores(){
     document.getElementById('listaColabor').innerHTML = div
 }
 function listaPermiso(user_id){
-    console.log(user_id);
     user = users_permisos.find( userInt => userInt.persona_id == user_id)
-    console.log(user);
     div = ''
     permisos.forEach(permiso => {
         estado = user.permisos.some( permisoInt => permisoInt.permisos_id == permiso.id) ? 'checked' : ''
@@ -295,14 +286,11 @@ function updatePermisUser(idInput, user_id){
     .then( r => {
         users_permisos = []
         leerHorasAtencion()
-        console.log(r);
     })
 }
 // permisosTempo
 function selectPermis(id){
-    console.log(id);
     if(document.getElementById(`permi_${id}`).checked){
-        console.log('dd');
     }
     if (permisosTempo.find(perTem => perTem.id == id )) {
         permisosTempo = permisosTempo.filter(perT => perT.id != id)
@@ -311,10 +299,48 @@ function selectPermis(id){
            'id' : id
        }) 
     }
-    console.log(permisosTempo);
 }
 
+function saveUsuario(){
+    myModallarge2 = new bootstrap.Modal(document.getElementById('large2'))
+    datos = new FormData()
+    datos.append('dni_appoint',document.getElementById('dni').value)
+    datos.append('name_appoint',document.getElementById('nombre').value)
+    datos.append('last_appoint',document.getElementById('apellido').value)
+    datos.append('celphone_appoint',document.getElementById('celular').value)
+    datos.append('email_appoint',document.getElementById('correo').value)
+    datos.append('permisosTemp',JSON.stringify(permisosTempo))
 
+    fetch(URL+'ajax/configAjax.php',{
+        method : 'POST',
+        body : datos
+    })
+    .then( r => r.json())
+    .then( r => {
+        console.log(r);
+        // if(r == 1){
+        alertaToastify('Se guardo usuario','green',1500)
+        document.getElementById('dni').value = ''
+        document.getElementById('nombre').value = ''
+        document.getElementById('apellido').value = ''
+        document.getElementById('celular').value = ''
+        document.getElementById('correo').value = ''
+        permisosTempo.forEach(element => {
+            document.getElementById(`permi_${element.id}`).checked = false
+        });
+        leerHorasAtencion()
+        permisosTempo = []
+        setTimeout(() => {
+            myModallarge2.hide()
+            location.reload()
+        }, 1500);
+
+        // }
+    })
+    .catch(e => alertaToastify('Probablemente tu dni ya existe en nuestros datos','red',1500))
+
+    
+}
 
 
 

@@ -105,7 +105,35 @@
 				return 0;
 			}
 		}
+		protected static function saveUsuario_m($datos){
+			$sql = mainModelo::conexion()->prepare('INSERT INTO persona (`nombre`, `apellidos`, `dni`,
+				`celular`, `correo`,  `user`,`password`, `tipo_user_id`, `estado`) 
+				VALUES(:nombre, :apellidos, :dni, :celular, :correo,
+				 :user, :pass, :tipo, :estado)');				
+			$sql->bindParam(":dni",$datos['dni_appoint']);	
+			$sql->bindParam(":user",$datos['dni_appoint']);	
+			$sql->bindParam(":pass",$datos['dni_appoint']);
+			$sql->bindParam(":tipo",$datos['tipo']);
+			$sql->bindParam(":estado",$datos['estado']);
+			$sql->bindParam(":nombre",$datos['name_appoint']);
+			$sql->bindParam(":apellidos",$datos['last_appoint']);
+			$sql->bindParam(":celular",$datos['celphone_appoint']);
+			$sql->bindParam(":correo",$datos['email_appoint']);
 
+			if($sql -> execute()){
+				if($sql->rowCount()== 1){
+					$consult = mainModelo::ejecutar_consulta_simple('SELECT id FROM persona WHERE dni = '.$datos["dni_appoint"].'');
+					$IdInsert = $consult->fetch(PDO::FETCH_OBJ);
+					return $IdInsert;				
+				}else{
+					$sql = null;
+					return 0;
+				}	
+			}else{
+				$sql = null;
+				return 0;
+			}
+		}
 
 
 		// ************************
