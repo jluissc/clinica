@@ -120,14 +120,48 @@
 
 			$idInsert = configModelo::saveUsuario_m($datos);
 			foreach (json_decode($_POST['permisosTemp']) as $permi) {
-				$datos = [
+				$datos2 = [
 					'user_id' => $idInsert->id,
 					'tipo' => $permi->id,
 				];
-				configModelo::insertPermisoUser_m($datos);
+				configModelo::insertPermisoUser_m($datos2);
 			}
 			
 			exit(json_encode(1));
+		}
+		public function saveServics() {
+			$datos= [
+				'nameserv' => $_POST['nameserv'],
+				'descripserv' => $_POST['descripserv'],
+				'precNserv' => $_POST['precNserv'],
+				'precOserv' => $_POST['precOserv'],
+				'prectiemserv' => $_POST['prectiemserv'],
+				'estado' => 1,
+			];
+
+			
+
+			$idInsert = configModelo::saveServics_m($datos);
+			if($idInsert){
+				foreach (json_decode($_POST['citaSelectt']) as $cita) {
+					$datos2 = [
+						'servicios' => $idInsert,
+						'tipo_cita' => $cita->citaId,
+					];
+					configModelo::insertServicTypes_m($datos2);
+				}
+				foreach (json_decode($_POST['horasSelect']) as $hora) {
+					$datos2 = [
+						'hora' => $hora->hora,
+						'estado' => 1,
+						'servicios_id' => $idInsert,
+					];
+					configModelo::insertHoraServc_m($datos2);
+				}
+				exit(json_encode(1));
+			}else{
+				exit(json_encode('error'));
+			}
 		}
 
 	} 

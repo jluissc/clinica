@@ -20,6 +20,7 @@
 				'servicios' => configModelo::listarServicios_m(),
 				'diasAtencion' => configModelo::listarDiasAtencion_m(),
 				'listConfig' => configModelo::listConfig_m(),
+				'listServics' => configModelo::listServics_m(),
 			];
 			exit(json_encode($datos));
 		}
@@ -55,11 +56,6 @@
 			return $tipoAtencion;
 		}
 		protected static function listConfig_m(){
-			// $sql = mainModelo::conexion()->prepare("SELECT c.id as idConf, d.id as idDiaH, 
-			// 	d.horas_id, d.dias_id, d.tipo_cita_id FROM config c
-			// 	INNER JOIN dias_hora_atencion d
-			// 	ON c.id = d.config_id
-			// ");
 			$sql = mainModelo::conexion()->prepare("SELECT * FROM dias_hora_atencion dt
 				INNER JOIN config c
 				ON c.id = dt.config_id
@@ -68,6 +64,13 @@
 			$permisos = $sql->fetchAll(PDO::FETCH_OBJ);
 			$sql = null;
 			return $permisos;
+		}
+		protected static function listServics_m(){
+			$sql = mainModelo::conexion()->prepare("SELECT * FROM servicios WHERE estado = 1");
+			$sql -> execute();
+			$servics = $sql->fetchAll(PDO::FETCH_OBJ);
+			$sql = null;
+			return $servics;
 		}
 		protected static function listarPermisos_m(){
 			$sql = mainModelo::conexion()->prepare("SELECT * FROM permisos");
@@ -133,6 +136,23 @@
 				$sql = null;
 				return 0;
 			}
+		}
+		protected static function saveServics_m($datos){
+			$pdo=mainModelo::conexion();
+			$sql = $pdo->prepare('INSERT INTO `servicios`(`nombre`, `descripcion`, `precio_normal`, `precio_venta`, `estado`, `tiempo`)
+				VALUES(:nombre, :descr, :precnor, :precofer, :estado, :timme)');				
+			$sql->bindParam(":nombre",$datos['nameserv']);	
+			$sql->bindParam(":descr",$datos['descripserv']);	
+			$sql->bindParam(":precnor",$datos['precNserv']);
+			$sql->bindParam(":precofer",$datos['precOserv']);
+			$sql->bindParam(":estado",$datos['estado']);
+			$sql->bindParam(":timme",$datos['prectiemserv']);
+			$sql -> execute();
+			if ($sql->rowCount()>0) {
+				return $pdo->lastInsertId();
+			} else {
+				return false;
+			}	
 		}
 
 
@@ -235,6 +255,23 @@
 				VALUES (:persona_id, :permisos_id) ");
 			$sql->bindParam(":persona_id",$datos['user_id']);
 			$sql->bindParam(":permisos_id",$datos['tipo']);
+            $sql -> execute();			
+			$sql = null;
+		}		
+		protected static function insertServicTypes_m($datos){
+			$sql = mainModelo::conexion()->prepare("INSERT INTO `servicios_tipo` (`servicios_id`, `tipo_cita_id`) 
+				VALUES (:servicios, :tipo_cita) ");
+			$sql->bindParam(":servicios",$datos['servicios']);
+			$sql->bindParam(":tipo_cita",$datos['tipo_cita']);
+            $sql -> execute();			
+			$sql = null;
+		}		
+		protected static function insertHoraServc_m($datos){
+			$sql = mainModelo::conexion()->prepare("INSERT INTO `horas` (`hora`, `estado`,`servicios_id`) 
+				VALUES (:hora, :estado, :serviId) ");
+			$sql->bindParam(":hora",$datos['hora']);
+			$sql->bindParam(":estado",$datos['estado']);
+			$sql->bindParam(":serviId",$datos['servicios_id']);
             $sql -> execute();			
 			$sql = null;
 		}		

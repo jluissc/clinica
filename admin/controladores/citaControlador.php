@@ -30,8 +30,8 @@
 
 		public function buscarFechaCita() {
             $fecha = $_POST['fechaCita'];
-            $tipoId = $_POST['tipoServf'];
             $diaId = $_POST['diaSelectsss'];
+            $tipoId = $_POST['tipoServf'];
 			citaModelo::buscarFechaCita_m($fecha,$tipoId,$diaId);
 		}
 
@@ -85,7 +85,7 @@
 						<td>'.$appoint->celular.'</td>
 						<td>'.$appoint->fecha.'</td>
 						<td>'.$appoint->hora.'</td>';
-						/* if($_SESSION['tipo']== 1) */ $html .='<td>S/. '.$appoint->precio.'.00</td>';
+						/* if($_SESSION['tipo']== 1) */ $html .='<td>S/. .00</td>';
 				$html .='<td>'.$pago.'</td>
 						<td>'.$acciones.'</td>							
 					</tr>';
@@ -94,17 +94,92 @@
 		}
 
 		public function saveCita() {
-			$datos = [
-				'idUser' => $_POST['idUser'],
-				'idServic' => $_POST['idServic'],
-				'idHora' => $_POST['idHora'],
-				'fecha' => $_POST['fechaf'],
-				'tiempo' => 30,
-				'estado' => 1,
-				'tipo' => $_POST['tipoCita'],
-
-			];
-			citaModelo::saveCita_m($datos);
+			$user = json_decode($_POST['guardCitaUs']);
+			if($user->iduser != 0){
+				$datos = [
+					'fecha' => $user->fecha,
+					'tiempo' => 30,
+					'mensaje' => '',
+					'estado' => 1,
+					'atentido' => 1,
+					'paciente' => $user->iduser,
+					'horas' => $user->hora,	
+					'servicio' => $user->servicSelect,
+				];
+				$idCita = citaModelo::saveCita_m($datos,'new');
+				if($user->servicSelect == 17){/* CAMBIAR el id de CONSULTAS */
+					if( $idCita != 0){
+						$datosr = [
+							'nombre' => $user->nameHist,
+							'persona_id' => $user->iduser,
+							'code' => rand(1000,9999),
+						];
+						$idHist = citaModelo::saveHistorial_m($datosr);
+						if( $idHist != 0){
+							$datosr = [
+								'historial_id' => $idHist,
+								'tratamientos_id' => $idCita,
+							];
+							citaModelo::saveDetallHistorial_m($datosr);
+						}else{
+							exit(json_encode(0));
+						}
+					}else{
+						exit(json_encode(0));
+					}
+				}else{
+					$datosr = [
+						'historial_id' =>  $user->listHistt,
+						'tratamientos_id' => $idCita,
+					];
+					citaModelo::saveDetallHistorial_m($datosr);
+				}
+				
+			}else{
+				$datos = [
+					'nombre' => $user->nombre,
+					'apellidos' => $user->apellidos,
+					'dni' => $user->dni,
+					'celular' => $user->celular,
+					'correo' => $user->correo,
+					'user' => $user->dni,
+					'pass' => $user->dni,
+					'tipo' => 4,
+					'estado' => 1,
+				];
+				$idUser = citaModelo::saveUsuario_m($datos);
+				$datosc = [
+					'fecha' => $user->fecha,
+					'tiempo' => 30,
+					'mensaje' => '',
+					'estado' => 1,
+					'atentido' => 1,
+					'paciente' => $idUser->id,
+					'horas' => $user->hora,	
+					'servicio' => $user->servicSelect,
+				];
+				$idCita = citaModelo::saveCita_m($datosc,'new');
+				if( $idCita != 0){
+					$datosr = [
+						'nombre' => $user->nameHist,
+						'persona_id' => $idUser->id,
+						'code' => rand(1000,9999),
+					];
+					$idHist = citaModelo::saveHistorial_m($datosr);
+					if( $idHist != 0){
+						$datosr = [
+							'historial_id' => $idHist,
+							'tratamientos_id' => $idCita,
+						];
+						citaModelo::saveDetallHistorial_m($datosr);
+					}else{
+						exit(json_encode(0));
+					}
+				}else{
+					exit(json_encode(0));
+				}
+			}
+			
 		}
 		
 		public function reedListPayAppoint(){

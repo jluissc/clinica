@@ -12,11 +12,25 @@
 			$sql -> execute();
             if($sql -> rowCount() > 0){
                 $resutl = $sql->fetch(PDO::FETCH_OBJ);
-				exit(json_encode($resutl));
+				$datos = [
+					'user' => $resutl,
+					'listHist' => citaModelo::ListHIstorial_m($resutl->id),
+				];
+				exit(json_encode($datos));
 			}else{
 				exit(json_encode(0));
 			}
 			$sql = null;
+		}
+
+		protected static function ListHIstorial_m($idPers){
+			$sql = mainModelo::conexion()->prepare("SELECT id, code, nombre FROM historial WHERE persona_id = $idPers");
+			$sql -> execute();
+            if($sql -> rowCount() > 0){
+                return  $sql->fetchAll(PDO::FETCH_OBJ);
+			}else{
+				return 0;
+			}
 		}
 		/* ************** */
 		protected static function buscarFechaCita_m($fecha,$tipoId,$diaId){
@@ -56,9 +70,10 @@
 		}
 		/* ************** */
 		protected static function listardiaHoraAtencion($diaId,$tipoId){
-			$sql = mainModelo::conexion()->prepare('SELECT * FROM dias_hora_atencion WHERE dias_id =:dia and tipo_cita_id=:tipo');
+			$sql = mainModelo::conexion()->prepare('SELECT * FROM dias_hora_atencion 
+			WHERE dias_id =:dia');
 			$sql->bindParam(":dia",$diaId);
-			$sql->bindParam(":tipo",$tipoId);
+			// $sql->bindParam(":tipo",$tipoId);
 			$sql -> execute();  
 			if($sql -> rowCount() > 0){
 				$resutl = $sql->fetchAll(PDO::FETCH_OBJ);	
@@ -106,24 +121,20 @@
 			// session_start(['name' => 'bot']);
 			$idPaciente = $tipo ? $idPaciente = $_SESSION['id'] : '';
 			if($tipo){
-				$sql = mainModelo::conexion()->prepare("SELECT p.nombre, p.apellidos, p.celular, p.correo, c.id, c.fecha, c.tipo_cita_id, h.hora, tc.precio FROM citas c 
+				$sql = mainModelo::conexion()->prepare("SELECT * FROM tratamientos c 
 					INNER JOIN persona p
 					ON p.id = c.paciente_id
 					INNER JOIN horas h
 					ON h.id = c.horas_id 
-					INNER JOIN tipo_cita tc
-					ON tc.id = c.tipo_cita_id
 					WHERE p.id=:id
 					ORDER BY c.id DESC");
 				$sql->bindParam(":id",$idPaciente);
 			}else{
-				$sql = mainModelo::conexion()->prepare("SELECT p.nombre, p.apellidos, p.celular, p.correo, c.id, c.fecha, c.tipo_cita_id, h.hora, tc.precio FROM citas c 
+				$sql = mainModelo::conexion()->prepare("SELECT * FROM tratamientos c 
 					INNER JOIN persona p
 					ON p.id = c.paciente_id
 					INNER JOIN horas h
 					ON h.id = c.horas_id
-					INNER JOIN tipo_cita tc
-					ON tc.id = c.tipo_cita_id
 					ORDER BY c.id DESC");
 			}
 			$sql -> execute();
@@ -157,7 +168,7 @@
 			$sql = null;
 		}
 		protected static function statusPayAppoint($idAppoint){
-			$sql = mainModelo::conexion()->prepare('SELECT tipo_pago_id, estado FROM cita_pagos WHERE citas_id = '.$idAppoint.'');
+			$sql = mainModelo::conexion()->prepare('SELECT tipo_pago_id1, estado FROM cita_pagos WHERE citas_id = '.$idAppoint.'');
 			$sql -> execute();
             if($sql -> rowCount() == 1){
 				$resutl = $sql->fetch(PDO::FETCH_OBJ);
@@ -275,30 +286,93 @@
 		}
 
 		
-		protected static function saveCita_m($datos){
-			$sql = mainModelo::conexion()->prepare("INSERT INTO citas (`fecha`, `horas_id`, `tiempo`,  `estado`, `paciente_id`, `producto_id`, `tipo_cita_id`) 
-				VALUES (:fecha, :idHora, :tiempo, :estado, :idUser, :idServic, :tipo)");
+		protected static function saveCita_m($datos,$tipo =''){
+			$pdo = mainModelo::conexion();
+			$sql = $pdo->prepare("INSERT INTO tratamientos (`fecha`, `tiempo`, `mensaje`, `estado`, `atentido`, `paciente_id`, `horas_id`, `servicios_id`) 
+				VALUES (:fecha, :tiempo, :mensaje, :estado, :atentido, :paciente, :horas, :servicio)");
 			$sql->bindParam(":fecha",$datos['fecha']);
-			$sql->bindParam(":idHora",$datos['idHora']);
 			$sql->bindParam(":tiempo",$datos['tiempo']);
+			$sql->bindParam(":mensaje",$datos['mensaje']);
 			$sql->bindParam(":estado",$datos['estado']);
-			$sql->bindParam(":idUser",$datos['idUser']);
-			$sql->bindParam(":idServic",$datos['idServic']);
-			$sql->bindParam(":tipo",$datos['tipo']);
+			$sql->bindParam(":atentido",$datos['atentido']);
+			$sql->bindParam(":paciente",$datos['paciente']);
+			$sql->bindParam(":horas",$datos['horas']);
+			$sql->bindParam(":servicio",$datos['servicio']);
 			$sql -> execute();
 			if($sql -> rowCount() > 0){
-				// session_start(['name' => 'bot']);
-				// if($_SESSION['tipo']==1 || in_array(3, $_SESSION['permisos']) ){
-				// 	citaModelo::reedListAppointment_m(false);
-				// }
-				// elseif ($_SESSION['tipo']==4) {
-				// 	citaModelo::reedListAppointment_m(true);
-				// }
-				exit(json_encode(1));
+				if($tipo != ''){
+					return $pdo->lastInsertId();
+				}else{
+					// $sql = null;
+					exit(json_encode(1));
+				}
 			}else{
-				exit(json_encode(0));
+				if($tipo != ''){
+					return 0;
+				}else{
+					// $sql = null;
+					exit(json_encode(0));
+				}
 			}
-			$sql = null;
+		}
+		protected static function saveHistorial_m($datos){
+			$pdo = mainModelo::conexion();
+			$sql = $pdo->prepare("INSERT INTO historial (`code`, `persona_id`, `nombre`) 
+				VALUES (:code, :persona_id, :nombre)");
+			$sql->bindParam(":code",$datos['code']);
+			$sql->bindParam(":persona_id",$datos['persona_id']);
+			$sql->bindParam(":nombre",$datos['nombre']);
+			$sql -> execute();
+			if($sql -> rowCount() > 0){
+				return $pdo->lastInsertId();
+				
+			}else{
+				return 0;				
+			}
+		}
+
+		protected static function saveDetallHistorial_m($datos){
+			$pdo = mainModelo::conexion();
+			$sql = $pdo->prepare("INSERT INTO `historial_detalle`(`historial_id`, `tratamientos_id`)
+				VALUES (:historial_id, :tratamientos_id)");
+			$sql->bindParam(":historial_id",$datos['historial_id']);
+			$sql->bindParam(":tratamientos_id",$datos['tratamientos_id']);
+			$sql -> execute();
+			if($sql -> rowCount() > 0){
+				exit(json_encode(1));				
+			}else{
+				exit(json_encode(0));			
+			}
+		}
+
+		protected static function saveUsuario_m($datos){
+			$sql = mainModelo::conexion()->prepare('INSERT INTO persona (`nombre`, `apellidos`, `dni`,
+				`celular`, `correo`,  `user`,`password`, `tipo_user_id`, `estado`) 
+				VALUES(:nombre, :apellidos, :dni, :celular, :correo,
+				 :user, :pass, :tipo, :estado)');				
+			$sql->bindParam(":nombre",$datos['nombre']);
+			$sql->bindParam(":apellidos",$datos['apellidos']);
+			$sql->bindParam(":dni",$datos['dni']);	
+			$sql->bindParam(":celular",$datos['celular']);
+			$sql->bindParam(":correo",$datos['correo']);
+			$sql->bindParam(":user",$datos['user']);	
+			$sql->bindParam(":pass",$datos['pass']);
+			$sql->bindParam(":tipo",$datos['tipo']);
+			$sql->bindParam(":estado",$datos['estado']);
+
+			if($sql -> execute()){
+				if($sql->rowCount()== 1){
+					$consult = mainModelo::ejecutar_consulta_simple('SELECT id FROM persona WHERE dni = '.$datos["dni"].'');
+					$IdInsert = $consult->fetch(PDO::FETCH_OBJ);
+					return $IdInsert;				
+				}else{
+					$sql = null;
+					return 0;
+				}	
+			}else{
+				$sql = null;
+				return 0;
+			}
 		}
 
 		

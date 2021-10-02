@@ -5,6 +5,7 @@ diasAtencion = []
 diasSelected = []
 
 listConfig = []
+listServicss = []
 
 users_permisos = []
 permisos = []
@@ -27,7 +28,9 @@ function leerHorasAtencion(){
         diasAtencion = r.diasAtencion
         filtrarConfig(r.listConfig)
         permisos = r.permisos
+        listServicss = r.listServics
         filtrarUsers(r.users)
+        listarServiciosss(r.listServics)
         
     })
 }
@@ -70,6 +73,15 @@ function HtmlListConfig(){
         data-bs-target="#xlarge">config ${i+1}  ${confId.nombre}</a>`
     });
     document.getElementById('listarConfig').innerHTML = li
+    
+}
+function listarServiciosss(listServi){
+    lir = ''
+    listServi.forEach(servc => {
+        lir+=`<a class="" style="cursor:pointer"  class="btn btn-outline-warning" data-bs-toggle="modal"
+        data-bs-target="#xlarge">${servc.nombre}</a>`
+    });
+    document.getElementById('listServcsss').innerHTML = lir
 }
 function verConfig(id,tipo){
     if(tipo == 1){
@@ -89,6 +101,7 @@ function updateDia(id, idInp){
 function updateCita(id, idInp){
     if(citasSelected.find(cita=>cita.citaId == id)) citasSelected = citasSelected.filter(cita => cita.citaId != id)
     else citasSelected.push({'citaId' : id })
+    console.log(citasSelected);
 }
 function validarConfig(){
     if(diasSelected.length>0 ){
@@ -172,7 +185,7 @@ function mostrarDias(id=0){
     document.getElementById('listarDiasA').innerHTML = div
         
 }
-function mostrarCrudCitas(id=0){    
+function mostrarCrudCitas(id=0,idSelect='listaCitaCrud'){    
     tipoConfir =[]
     div = ''
     if(id == 0){
@@ -206,16 +219,13 @@ function mostrarCrudCitas(id=0){
     }
 
 
-    document.getElementById('listaCitaCrud').innerHTML = div
+    document.getElementById(idSelect).innerHTML = div
+    // document.getElementById('listaCitaCrudT').innerHTML = div
 
 }
-// hoalallalalala
-
-
-
-// **********************
-
-
+function mostrarTipoC(){
+    mostrarCrudCitas(0,'listaCitaCrudT')
+}
 function filtrarUsers(users){
     users.forEach(user => {
         if(users_permisos.some( userInt => userInt.persona_id == user.persona_id)){
@@ -288,7 +298,6 @@ function updatePermisUser(idInput, user_id){
         leerHorasAtencion()
     })
 }
-// permisosTempo
 function selectPermis(id){
     if(document.getElementById(`permi_${id}`).checked){
     }
@@ -301,6 +310,111 @@ function selectPermis(id){
     }
 }
 
+ 
+function horaEnSegundos(q){
+    return q * 60 * 60;
+}
+ 
+function minutosEnSegundos(q=60){
+    return q * 60;
+}
+horasSeleccionadas =[{'id':1,'hora':'08:00:00'}]
+function hhhhhh(inicio, fin, tiempo,cont,initt){
+    var hora = 3600;
+    var horaInicio = horaEnSegundos(inicio);
+    var horaFin = horaEnSegundos(fin);
+    var progresion = minutosEnSegundos(tiempo);
+    horasSeleccionadas.push(initt)
+    cant = cont;
+    while(horaInicio < horaFin){
+        horaInicio = horaInicio + progresion;
+    
+        var hora = parseInt( horaInicio / 3600 ) % 24;
+        var minutos = parseInt( horaInicio / 60 ) % 60;
+        var segundos = horaInicio % 60;
+    
+        var resultado = (hora < 10 ? "0" + hora : hora) + ":" + (minutos < 10 ? "0" + minutos : minutos) + ":" + (segundos  < 10 ? "0" + segundos : segundos);
+        horasSeleccionadas.push({'id':cant,'hora':resultado})
+        cant ++
+    }
+}
+function filtrarHours(){
+    horasSeleccionadas = []
+    tiempo = parseInt(document.getElementById('prectiemserv').value)
+    hhhhhh(8, 13, tiempo, 2,{'id':1,'hora':'08:00:00'})
+    hhhhhh(15, 20, tiempo, 31,{'id':30,'hora':'15:00:00'})
+    
+    horasSeleccionadas = horasSeleccionadas.filter(hour => hour.hora >='08:00:00' && hour.hora < '19:00:00')
+    console.log(horasSeleccionadas);
+    li = ''
+    horasSeleccionadas.forEach(hora => {
+        li += `<li class="list-group-item">
+        <input class="form-check-input me-1" checked  type="checkbox" id="horaId_${hora.id}" onchange="quitarHoraAtenc(${hora.id},'${hora.hora}')" aria-label="...">
+        ${hora.hora}
+        </li>`
+    });
+    document.getElementById('listHoursDisp').innerHTML = li
+}
+function quitarHoraAtenc(id, hora){
+    if(horasSeleccionadas.find(hour => hour.id == id)){
+        horasSeleccionadas = horasSeleccionadas.filter(hour => hour.id != id)
+    }else{
+        horasSeleccionadas.push({'id':id,'hora':hora})        
+    }
+    console.log(horasSeleccionadas);
+}
+ 
+
+function saveServicio(){
+    myModallarge3 = new bootstrap.Modal(document.getElementById('large3'))
+    datos = new FormData()
+    datos.append('nameserv',document.getElementById('nameserv').value)
+    datos.append('descripserv',document.getElementById('descripserv').value)
+    datos.append('precNserv',document.getElementById('precNserv').value)
+    datos.append('precOserv',document.getElementById('precOserv').value)
+    datos.append('prectiemserv',document.getElementById('prectiemserv').value)
+    datos.append('citaSelectt',JSON.stringify(citasSelected))
+    datos.append('horasSelect',JSON.stringify(horasSeleccionadas))
+
+    /*  */
+    /*  */
+
+    fetch(URL+'ajax/configAjax.php',{
+        method : 'POST',
+        body : datos
+    })
+    .then( r => r.json())
+    .then( r => {
+        console.log(r);
+        // if(r == 1){
+        alertaToastify('Se guardo servicio','green',1500)
+        document.getElementById('nameserv').value = ''
+        document.getElementById('descripserv').value = ''
+        document.getElementById('precNserv').value = ''
+        document.getElementById('precOserv').value = ''
+        document.getElementById('prectiemserv').value = ''
+        leerHorasAtencion()
+        document.getElementById('citaId_0').checked = false            
+        document.getElementById('citaId_1').checked = false            
+        document.getElementById('citaId_2').checked = false
+        citasSelected = []
+        horasSeleccionadas.forEach(hora => {
+            document.getElementById(`horaId_${hora.id}`).checked = false
+        });
+        citasAtencion.forEach((hora,index) => {
+            document.getElementById(`citaId_${index}`).checked = false
+        });
+        horasSeleccionadas = []
+        // setTimeout(() => {
+            myModallarge3.hide()
+        // }, 1500);
+
+        // }
+    })
+    .catch(e => alertaToastify('Comunicate con soporte','red',1500))
+
+    
+}
 function saveUsuario(){
     myModallarge2 = new bootstrap.Modal(document.getElementById('large2'))
     datos = new FormData()
@@ -332,7 +446,6 @@ function saveUsuario(){
         permisosTempo = []
         setTimeout(() => {
             myModallarge2.hide()
-            location.reload()
         }, 1500);
 
         // }

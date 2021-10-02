@@ -33,33 +33,6 @@ function leerCondicionesAtencion(){
         
     })
 }
-// function filtrarConfig(datos){
-//     datos.forEach(confg => {        
-//         if (listConfig.find(conf => conf.diaId == confg.dias_id)) {            
-//             const confgList = listConfig.map( conff => {
-//                 if( conff.diaId == confg.dias_id ) {
-//                     conff.config.push({
-//                         'tipoId' : confg.tipo_cita_id,
-//                     })
-//                     return conff;
-//                 } 
-//                 else return conff;
-//             })
-//             listConfig = [...confgList];
-//         } else {
-//             listConfig.push({
-//                 'diaId' : confg.dias_id,
-//                 'horaI' : confg.horainicio,
-//                 'horaF' : confg.horafin,
-//                 'config' : [{
-//                     'tipoId' : confg.tipo_cita_id,
-                    
-//                 }]
-//             })
-//         }
-//     });
-//     console.log(listConfig);
-// }
 function statusCampos(estado){
     document.getElementById('nombre').disabled = estado
     document.getElementById('apellido').disabled = estado
@@ -67,6 +40,7 @@ function statusCampos(estado){
     document.getElementById('correo').disabled = estado
 
 }
+listHist =[]
 function validarDni(){
     dni = document.getElementById('dni').value
     DATOS = new FormData()
@@ -76,37 +50,41 @@ function validarDni(){
         body : DATOS
     })
     .then( r => r.json())
-    .then( r => {
+    .then( r => {        
         if(r != 0){
-            document.getElementById('nombre').value = r.nombre
-            document.getElementById('apellido').value = r.apellidos
-            document.getElementById('celular').value = r.celular
-            document.getElementById('correo').value = r.correo
-            pacienteId = r.id
+            console.log(r);
+            document.getElementById('nombre').value = r.user.nombre
+            document.getElementById('apellido').value = r.user.apellidos
+            document.getElementById('celular').value = r.user.celular
+            document.getElementById('correo').value = r.user.correo
+            pacienteId = r.user.id
             datosPacienteNuevo = []
+            listHist = r.listHist
             statusCampos(true)
         }else{      
-            leerDni(dni)
-            pacienteId = 0
+            leerDni(dni)            
             statusCampos(false)   
-            alertaToastify('Paciente nuevo, registrelo ','info',1500)
+            alertaToastify('Paciente nuevo, rellene sus datos  ','info',1500)
         }
     })
 }
+/*  */
 function leerDni(dni){
-    urlApi=`https://dniruc.apisperu.com/api/v1/dni/${dni}?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6Impsc2MuaGNvOTZAZ21haWwuY29tIn0.ysxMDCaGlMQRJen3msmMcniIx_Q-nuhjXjQ4RNkP31o`;
+    console.log(dni);
+    // urlApi=`https://dniruc.apisperu.com/api/v1/dni/${dni}?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6Impsc2MuaGNvOTZAZ21haWwuY29tIn0.ysxMDCaGlMQRJen3msmMcniIx_Q-nuhjXjQ4RNkP31o`;
+    urlApi=`https://dniruc.apisperu.com/api/v1/dni/${dni}?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6InBlcGJvdC5wZUBnbWFpbC5jb20ifQ.8dxeu7zAz1x7u3S29WytfSuybE9fdPg_T8-kW087Mqw`;
     fetch(urlApi)
     .then(r => r.json())
     .then(r => {
-        datosPacienteNuevo = {
-            dni : r.dni,
-            nombre : r.nombres,
-            apellidos : r.apellidoPaterno+ ' ' +r.apellidoMaterno,
+        console.log(r);
+        if(r.nombres != null){            
+            document.getElementById('nombre').value = r.nombres
+            document.getElementById('apellido').value = r.apellidoPaterno + ' ' +r.apellidoMaterno
+        }else{
+            document.getElementById('nombre').value = ''
+            document.getElementById('apellido').value = ''
+
         }
-        document.getElementById('nombre').value = datosPacienteNuevo.nombre
-        document.getElementById('apellido').value = datosPacienteNuevo.apellidos
-        document.getElementById('celular').value = ''
-        document.getElementById('correo').value = ''
         
     })
     .catch(r => console.log(r))
@@ -147,6 +125,24 @@ function mostrarListaServicios(){
 }
 function cambioServicio(servSelect){
     servicSelect = document.getElementById(servSelect).value
+    console.log(servicSelect);
+    if(servicSelect == 17){/* DEPENDE QUE ID TIENE EL CONSULTAS */
+        div = `<div class="form-group">
+            <label for="nameHist">Dale un nombre a tu consulta</label>
+            <input type="text" placeholder="Nombre(opcional)" id="nameHist" class="form-control">
+        </div>`
+        document.getElementById('historialNew').innerHTML = div
+    }else if(servicSelect == 0)
+        document.getElementById('historialNew').innerHTML = ''
+    else{
+        div ='<div class="container btn-group"  aria-label="Basic radio toggle button group">'
+        listHist.forEach(h => {
+            div +=`<input type="radio" class="btn-check" id="${h.id}" value="${h.id}" name="listHHHH">
+                    <label class="btn btn-outline-success" for="${h.id}" >${h.code}-${h.nombre}</label>`
+        });
+        div +='</div>'
+        document.getElementById('historialNew').innerHTML = div
+    } 
 }
 function verificarFecha(dia, mes, anio){
     if(servicSelect != 0){    
@@ -164,6 +160,7 @@ function verificarFecha(dia, mes, anio){
         diaSelect = days[new Date(fecha).getDay()]
         document.getElementById('tipocitaSelect').innerHTML = ''
         document.getElementById('horasDisponibles').innerHTML = ''
+        fechaSelecionada = fechaB
         buscarCitasReservadas(fechaB,diaSelect)
     }else{
         alertaToastify('Escoge tipo de servicio');
@@ -175,6 +172,7 @@ function buscarCitasReservadas(dia,diaSelect){
     DATOS.append('fechaCita', dia)
     DATOS.append('diaSelectsss', diaSelect)
     DATOS.append('tipoServf', servicSelect)
+    
     fetch(URL+'ajax/citaAjax.php',{
         method : 'post',
         body : DATOS
@@ -182,6 +180,7 @@ function buscarCitasReservadas(dia,diaSelect){
     .then( r => r.json())
     .then( r => {   
         if(r.dias != 0){
+
             if(r.citas == 0){
                 listCitasReserv = []
             }else{
@@ -203,28 +202,110 @@ function filtrarFechasHorasDispo(diaSelect,citaDispo,diass,horas){
             aaaa.push(diass.find(ff => ff.tipo_cita_id == element.tipo_cita_id)) 
         }
     });
-    inicio = aaaa[0].horainicio;
-    fin = aaaa[0].horafin;
-    list =''
-    LcitasAtencion.forEach((tipo,index) => {
-        if(aaaa.find(type => type.tipo_cita_id == tipo.id)){
-            list +=`<input type="radio" class="btn-check" name="tipoCitaUs" id="${tipo.nombre}" value="${tipo.id}">
-            <label class="btn btn-outline-success" for="${tipo.nombre}">${tipo.nombre}</label>`
-        }
-    });
-    document.getElementById('tipocitaSelect').innerHTML = list
-    tb = '<div class="row text-center ">'  
-    horas.forEach((hour,index) => {
-        if(hour.hora >= inicio && hour.hora < fin){
-            tb +=`<div class="col-6 hora-cita">
-                    <input type="radio" class="btn-check" name="horaAtenUs" id="${index}" value="${hour.id}" >
-                    <label class="btn btn-outline-success" for="${index}">${hour.hora}</label>
-                </div>`
-                
-        }
-    });
-    tb += '</div>'
-    document.getElementById('horasDisponibles').innerHTML = tb
+    if(aaaa.length>0){
+        inicio = aaaa[0].horainicio;
+        fin = aaaa[0].horafin;
+        list =''
+        LcitasAtencion.forEach((tipo,index) => {
+            if(aaaa.find(type => type.tipo_cita_id == tipo.id)){
+                list +=`<input type="radio" class="btn-check" name="tipoCitaUs" id="${tipo.nombre}" value="${tipo.id}">
+                <label class="btn btn-outline-success" for="${tipo.nombre}">${tipo.nombre}</label>`
+            }
+        });
+        document.getElementById('tipocitaSelect').innerHTML = list
+        tb = '<div class="row text-center ">'
+        horas.forEach(hour => {
+            if(listCitasReserv.find(cita=> cita.horas_id == hour.id)){
+                horas = horas.filter(hou => hou.id != hour.id)
+            }
+        });  
+        horas.forEach((hour,index) => {
+            if(hour.hora >= inicio && hour.hora < fin){
+                tb +=`<div class="col-6 col-md-6 col-lg-4 hora-cita">
+                        <input type="radio" class="btn-check" name="horaAtenUs" id="${index}" value="${hour.id}" >
+                        <label class="btn btn-outline-success" for="${index}">${hour.hora}</label>
+                    </div>`
+                    
+            }
+        });
+        tb += '</div>'
+        document.getElementById('horasDisponibles').innerHTML = tb
+    }else{
+        alertaToastify('Fecha no disponible')
+    }
+    
+}
+
+function validarCita(){
+    dni = document.getElementById('dni').value
+    nombre = document.getElementById('nombre').value
+    apellido = document.getElementById('apellido').value
+    celular = document.getElementById('celular').value
+    correo = document.getElementById('correo').value
+    nameHist = servicSelect == 17 ? document.getElementById('nameHist').value : ''
+    cita = document.querySelector('input[name="tipoCitaUs"]:checked')
+    listHistt = servicSelect != 17 ? document.querySelector('input[name="listHHHH"]:checked') : 0
+    hora = document.querySelector('input[name="horaAtenUs"]:checked')
+    
+    // b = document.querySelector('input[name="horaAtenUs"]:checked').value
+    // console.log(a);
+    // console.log(b);
+    if(dni.length == 8){
+        if(nombre != '' && apellido != ''){
+            if (celular != '') {
+                if(cita) {
+                    if(hora) {
+                        datosPacienteNuevo = {
+                            dni : dni,
+                            nombre : nombre,
+                            apellidos :apellido,
+                            celular :celular,
+                            correo :correo,
+                            cita :cita.value,
+                            hora :hora.value,
+                            iduser : pacienteId,
+                            fecha : fechaSelecionada,
+                            servicSelect : servicSelect,
+                            nameHist : nameHist,
+                            listHistt : listHistt.value,
+                        }
+                        guardarCita(datosPacienteNuevo)
+                        console.log(listHistt);
+                    }
+                    else  alertaToastify('Escoge la hora de atención')
+                }else alertaToastify('Escoge el tipo de atención')
+            } else alertaToastify('Rellene celular')
+        }else alertaToastify('Completa nombre del paciente')
+    }else alertaToastify('Dni incompleto ')
+}
+
+function guardarCita(user){
+
+    console.log(fechaSelecionada);
+    dat = new FormData()
+    dat.append('guardCitaUs',JSON.stringify(user))
+    fetch(URL+'ajax/citaAjax.php',{
+        method : 'post',
+        body : dat
+    })
+    .then( r => r.json())
+    .then( r => {  
+        if(r == 1){
+            alertaToastify('Se grabo tu reserva','green',1500) 
+            console.log(r);
+            datosPacienteNuevo = []
+            document.getElementById('dni').value = ''
+            document.getElementById('nombre').value = ''
+            document.getElementById('apellido').value = ''
+            document.getElementById('celular').value = ''
+            document.getElementById('correo').value = ''
+            document.getElementById('fechaCita').innerHTML = ''
+            document.getElementById('tipocitaSelect').innerHTML = ''
+            document.getElementById('horasDisponibles').innerHTML = ''
+            document.getElementById('historialNew').innerHTML = ''
+            fechaSelecionada = ''
+        }else alertaToastify('Error al grabar la reserva')
+    })
 }
 
 /* ****************HASTA AQUI EL NUEVO CODIGO******************* */
@@ -245,7 +326,6 @@ function datosTransf(idAppointd,showBtn){
     }else{
         document.getElementById('estadoPay').innerHTML = ''
     }
-    console.log(idAppoint);
 }
 
 function validarTransf(idAppointd){
@@ -257,7 +337,6 @@ function validarTransf(idAppointd){
     })
     .then( result => result.json())
     .then( result => {
-        console.log(result)
         document.getElementById('aasda').value = result.detalles
         document.getElementById('name_bank').value = result.medio_pago
         document.getElementById('total_pay').value = result.total
@@ -271,7 +350,6 @@ function validarTransf(idAppointd){
 }
 
 function validarTRansfern(idAppointPay){
-    console.log(idAppointPay);
     document.getElementById('checkValidTransf').disabled = true
     estado = document.getElementById('checkValidTransf').checked
     datos = new FormData()
@@ -283,7 +361,6 @@ function validarTRansfern(idAppointPay){
     })
     .then( result => result.json())
     .then( result => {
-        console.log(result)
         if(result == 1){
             alertaToastify('Se verifico transferencia', 'green')
             setTimeout(() => {
@@ -321,7 +398,6 @@ function payDirect(idAppointPay){
             })
             .then( result => result.json())
             .then( result => {
-                console.log(result)
                 if(result == 1){
                     alertaToastify('Se guardo el pago', 'green',2000)
                     Swal.fire({
@@ -349,7 +425,6 @@ function mandarDatosPago(){
     if(numb_pay != ''){
         if(name_bank != ''){
             if (total_pay != '') {
-                console.log(idAppoint);
                 datos = new FormData()
                 datos.append('numb_pay',numb_pay)
                 datos.append('name_bank',name_bank)
@@ -361,7 +436,6 @@ function mandarDatosPago(){
                 })
                 .then(result => result.json())
                 .then(result => {
-                    console.log(result)
                     if(result){
                         alertaToastify('Se mando tus datos de transferencia','green')
                         setTimeout(() => {

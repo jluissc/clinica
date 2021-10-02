@@ -42,7 +42,7 @@
                         <tbody id="listAppointment"  data-typeUser="false">
                             
                             <?php 
-                                // echo $inst->reedListAppointment()
+                                echo $inst->reedListAppointment()
                             
                             ?>
                             
@@ -90,7 +90,7 @@
                 <div id="alertaCita" class="text-center"></div>
                 
                 <div class="row">
-                    <div class="col-6 col-lg-6 col-md-6" >
+                    <div class="col-12 col-md-6 col-lg-4" >
                         <?php 
                             include "./vistas/inc/form-user.php"; 
                         ?>
@@ -100,75 +100,80 @@
                                 <option value="0">SIN SERVICIOS</option>
                             </select>
                         </fieldset>
+                        <div id="historialNew">
+                        </div>
                     </div>
-                    <div class="col-6 col-lg-6 col-md-6" >
+                    <div class="col-12 col-md-6 col-lg-4" >
                         <!-- ************* -->
                         <div class="content">
-                            <div class="row">
-                                <div class="col-12 col-lg-6 col-md-12 " >
-                                    <div class="card-content">
-                                        <div class="calendar" >
-                                            <div class="calendar-header">
-                                                <span class="month-picker" id="month-picker">February</span>
-                                                <div class="year-picker">
-                                                    <span class="year-change" id="prev-year">
-                                                        <pre><</pre>
-                                                    </span>
-                                                    <span id="year">2021</span>
-                                                    <span class="year-change" id="next-year">
-                                                        <pre>></pre>
-                                                    </span>
-                                                </div>
-                                            </div>
-                                            <div class="calendar-body">
-                                                <div class="calendar-week-day">
-                                                    <div>Dom</div>
-                                                    <div>Lun</div>
-                                                    <div>Mar</div>
-                                                    <div>Mie</div>
-                                                    <div>Jue</div>
-                                                    <div>Vie</div>
-                                                    <div>Sab</div>
-                                                </div>
-                                                <div class="calendar-days"></div>
-                                            </div>
-                                            <!-- <div class="calendar-footer">
-                                                <div class="toggle">
-                                                    <span>Dark Mode</span>
-                                                    <div class="dark-mode-switch">
-                                                        <div class="dark-mode-switch-ident"></div>
-                                                    </div>
-                                                </div>
-                                            </div> -->
-                                            <div class="month-list"></div>
+                            <div class="card-content">
+                                <div class="calendar" >
+                                    <div class="calendar-header">
+                                        <span class="month-picker" id="month-picker">February</span>
+                                        <div class="year-picker">
+                                            <span class="year-change" id="prev-year">
+                                                <pre><</pre>
+                                            </span>
+                                            <span id="year">2021</span>
+                                            <span class="year-change" id="next-year">
+                                                <pre>></pre>
+                                            </span>
                                         </div>
                                     </div>
-                                </div>
-                                <div class="col-12 col-lg-6 col-md-12 " id="limpiarCita" >
-                                    <div id="fechaCita" class="fecha-cita">
-
-                                    </div>
-                                    <div class="text-center tipo-cita" >
-                                        <div class="btn-group" role="group" aria-label="Basic radio toggle button group" id="tipocitaSelect">
-                                            
+                                    <div class="calendar-body">
+                                        <div class="calendar-week-day">
+                                            <div>Dom</div>
+                                            <div>Lun</div>
+                                            <div>Mar</div>
+                                            <div>Mie</div>
+                                            <div>Jue</div>
+                                            <div>Vie</div>
+                                            <div>Sab</div>
                                         </div>
+                                        <div class="calendar-days"></div>
                                     </div>
-                                    <div id="spinner" class="text-center">
-                                        
-                                    </div>
-                                    <div class="container btn-group" id="horasDisponibles" role="group" aria-label="Basic radio toggle button group">  
-                                    
-                                    </div>
+                                    <!-- <div class="calendar-footer">
+                                        <div class="toggle">
+                                            <span>Dark Mode</span>
+                                            <div class="dark-mode-switch">
+                                                <div class="dark-mode-switch-ident"></div>
+                                            </div>
+                                        </div>
+                                    </div> -->
+                                    <div class="month-list"></div>
                                 </div>
                             </div>
                         </div>
                         <!-- ************* -->
                     </div>
+                    <div class="col-12 col-md-12 col-lg-4 " id="limpiarCita" >
+                        <div class="content">
+                            <div class="card-content">
+                                <div id="fechaCita" class="fecha-cita">
+
+                                </div>
+                                <div class="text-center tipo-cita" >
+                                    <div class="row">
+                                        <div class="btn-group" role="group" aria-label="Basic radio toggle button group" id="tipocitaSelect">
+
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <div id="spinner" class="text-center">
+                                    
+                                </div>
+                                <div class="container btn-group" id="horasDisponibles" role="group" aria-label="Basic radio toggle button group">  
+                                
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
             <button type="button" class="btn btn-primary ml-1 "  onclick="validarCita()">
                 <i class="bx bx-check d-block d-sm-none"></i>
-                <span class="d-none d-sm-block">Guardar</span>
+                Guardar Reserva
             </button>
         </div>
         <!-- <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">

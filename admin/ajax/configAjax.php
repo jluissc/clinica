@@ -4,7 +4,7 @@
 
 	require_once '../config/app.php';
 
-	if (isset($_POST['horaAten']) || isset($_POST['saveConfig']) || isset($_POST['estadoH']) || 
+	if (isset($_POST['horaAten']) || isset($_POST['saveConfig']) || isset($_POST['prectiemserv']) || 
     isset($_POST['fechaCita']) || isset($_POST['fecha']) || 
 	isset($_POST['fechaSelec']) || isset($_POST['hora_idHoraC']) ||
 	isset($_POST['cita_idCitaC']) || isset($_POST['permisosTemp']) || 
@@ -21,12 +21,20 @@
 		if (isset($_POST['saveConfig'])) {
 			$inst->saveConfig();			
 		}
-
+		// Para editar los permisos de un usuario
+        if (isset($_POST['user_idPerm'])) {
+			echo $inst -> updatePermisoUser();
+		}
+		// para guardar  permisos de user
+		if (isset($_POST['permisosTemp'])) {
+			$inst -> saveUsuario();
+		}
 		
 
         // prod 
-		if (isset($_POST['estadoH'])) {
-			
+		if (isset($_POST['prectiemserv'])) {
+			// exit(json_encode($_POST['prectiemserv']));
+			$inst->saveServics();
 		}
 
         if (isset($_POST['fecha'])) {
@@ -47,16 +55,7 @@
         if (isset($_POST['cita_idCitaC'])) {
 			echo $inst -> updateCitaCrud();
 		}
-		// Para editar los permisos de un usuario
-        if (isset($_POST['user_idPerm'])) {
-			echo $inst -> updatePermisoUser();
-		}
-		if (isset($_POST['permisosTemp'])) {
-			// foreach (json_decode($_POST['permisosTemp']) as $key => $value) {
-			// 	exit(json_encode($value->id));
-			// }
-			$inst -> saveUsuario();
-		}
+		
 
 	} else {
 		session_start(['name' => 'bot']);

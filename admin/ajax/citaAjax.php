@@ -8,7 +8,8 @@
     isset($_POST['listaServ']) || isset($_POST['idUser']) ||
 	isset($_POST['listAppoint']) || isset($_POST['fechaCita'])||
 	isset($_POST['numb_pay']) ||  isset($_POST['idAppointdV']) ||
-	isset($_POST['estadoTransf']) || isset($_POST['idPayDirect'])) {
+	isset($_POST['estadoTransf']) || isset($_POST['idPayDirect']) || 
+	isset($_POST['guardCitaUs'])) {
 		
 		require_once '../controladores/citaControlador.php';
 		$inst = new citaControlador();
@@ -33,8 +34,8 @@
 		if (isset($_POST['listaServ'])) {
 			echo $inst -> listaServic();
 		}
-
-        if (isset($_POST['idUser'])) {
+		/* ¨¨¨¨¨¨¨¨¨¨¨¨ */
+        if (isset($_POST['guardCitaUs'])) {
 			echo $inst -> saveCita();
 		}
 
