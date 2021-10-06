@@ -1,0 +1,30 @@
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.min.css">
+
+<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+<script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
+function HTMLCursos(datos){
+
+            console.log(datos);
+            table = $('#example').DataTable()
+            table.destroy();
+            if(datos.length>0){
+                lists = ''
+                datos.forEach(dat => {
+                    lists +=`
+                    <tr>
+                    <td> ${dat.idcurso}</td>
+                    <td> ${dat.curso}</td>
+                    <td> ${dat.pay}</td>
+                    <td> ${dat.free}</td>
+                    </tr>
+                    `
+                });
+                document.getElementById('listsCourses').innerHTML = lists
+                $('#example').DataTable()
+
+            }else {
+                console.log('no hay datos');
+                
+            }
+            
+        }

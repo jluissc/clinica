@@ -117,28 +117,34 @@
 			}
 		}
 
-		protected static function reedListAppointment_m($tipo){
-			// session_start(['name' => 'bot']);
-			$idPaciente = $tipo ? $idPaciente = $_SESSION['id'] : '';
-			if($tipo){
+		protected static function reedListAppointment_m(){
+			// echo $tipo;
+			session_start(['name' => 'bot']);
+			// $idPaciente = $tipo ? $_SESSION['id'] : '';
+			if($_SESSION['tipo'] == 4){
 				$sql = mainModelo::conexion()->prepare("SELECT * FROM tratamientos c 
 					INNER JOIN persona p
 					ON p.id = c.paciente_id
 					INNER JOIN horas h
 					ON h.id = c.horas_id 
-					WHERE p.id=:id
+					INNER JOIN servicios s
+					ON s.id = c.servicios_id
+					WHERE p.id=:iss
 					ORDER BY c.id DESC");
-				$sql->bindParam(":id",$idPaciente);
+				$sql->bindParam(":iss",$_SESSION['id']);
 			}else{
 				$sql = mainModelo::conexion()->prepare("SELECT * FROM tratamientos c 
 					INNER JOIN persona p
 					ON p.id = c.paciente_id
 					INNER JOIN horas h
 					ON h.id = c.horas_id
+					INNER JOIN servicios s
+					ON s.id = c.servicios_id
 					ORDER BY c.id DESC");
 			}
 			$sql -> execute();
-			$resutl = $sql->fetchAll(PDO::FETCH_OBJ);				
+			$resutl = $sql->fetchAll(PDO::FETCH_OBJ);
+			// array_push($resutl, ['id'=>$tipo]);
 			$sql = null;
 			return $resutl;
 			// exit(json_encode($resutl));
@@ -176,7 +182,7 @@
                 return [true,$resutl];
 			}else{
 				$sql = null;
-                return false;
+                return [false,0];
 			}
 		}
 

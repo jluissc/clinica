@@ -12,10 +12,10 @@
             <a class="nav-link" id="profile-tab" data-bs-toggle="tab" href="#profile" role="tab"
                 aria-controls="profile" aria-selected="false">Crear Cita</a>
         </li>
-        <!-- <li class="nav-item" role="presentation">
+        <li class="nav-item" role="presentation">
             <a class="nav-link" id="contact-tab" data-bs-toggle="tab" href="#contact" role="tab"
-                aria-controls="contact" aria-selected="false">Contact</a>
-        </li> -->
+                aria-controls="contact" aria-selected="false">Historial</a>
+        </li>
     </ul>
     <div class="tab-content" id="myTabContent">
         <!-- LISTAR CITAS -->
@@ -30,8 +30,7 @@
                             <tr>
                                 <th>Nombres</th>
                                 <th>Correo</th>
-                                <th>Celular</th>
-                                <!-- <th>Servicio</th> -->
+                                <th>Celular</th> 
                                 <th>Fecha</th>
                                 <th>Hora</th>
                                 <th>Monto</th>
@@ -39,14 +38,10 @@
                                 <th>Acciones</th>
                             </tr>
                         </thead>
-                        <tbody id="listAppointment"  data-typeUser="false">
-                            
+                        <tbody id="listAppointment"  data-typeUser="false">                           
                             <?php 
-                                echo $inst->reedListAppointment()
-                            
+                                // echo $inst->reedListAppointment();
                             ?>
-                            
-                            
                         </tbody>
                     </table>
                 </div>
@@ -62,7 +57,6 @@
                                 <th>Nombres</th>
                                 <th>Correo</th>
                                 <th>Celular</th> 
-                                <!-- <th>Servicio</th> -->
                                 <th>Fecha</th>
                                 <th>Hora</th>
                                 <th>Monto</th>
@@ -72,12 +66,8 @@
                         </thead>
                         <tbody id="listAppointment" data-typeUser="true">
                             <?php 
-                                echo $inst->reedListAppointment(true)
-                            
+                                // echo $inst->reedListAppointment(true);
                             ?>
-
-                            
-                            
                         </tbody>
                     </table>
                 </div>
@@ -92,7 +82,10 @@
                 <div class="row">
                     <div class="col-12 col-md-6 col-lg-4" >
                         <?php 
-                            include "./vistas/inc/form-user.php"; 
+                            if($_SESSION['tipo'] == 1 ){
+
+                                include "./vistas/inc/form-user.php"; 
+                            }
                         ?>
                         <label>SELECCIONE SERVICIO: </label>
                         <fieldset class="form-group">
@@ -176,14 +169,9 @@
                 Guardar Reserva
             </button>
         </div>
-        <!-- <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
-            <p class="mt-2">Duis ultrices purus non eros fermentum hendrerit. Aenean ornare interdum
-                viverra. Sed ut odio velit. Aenean eu diam
-                dictum nibh rhoncus mattis quis ac risus. Vivamus eu congue ipsum. Maecenas id
-                sollicitudin ex. Cras in ex vestibulum,
-                posuere orci at, sollicitudin purus. Morbi mollis elementum enim, in cursus sem
-                placerat ut.</p>
-        </div> -->
+        <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
+            Mostrar historial de un paciente
+        </div>
     </div>
 </section>
 
@@ -270,6 +258,11 @@
 
 
 <script>
+
+    tipoUser = '<?php echo $_SESSION["tipo"]?>'
+    idUPaci = '<?php echo $_SESSION["id"]?>'
+
+
     // / calendario
     let calendar = document.querySelector('.calendar')
 
@@ -327,8 +320,6 @@
             calendar_days.appendChild(day)
         }
     }
-
-
 
     const monthNumber = mes => {
         switch (mes) {
@@ -418,10 +409,4 @@
     }
 
     let dark_mode_toggle = document.querySelector('.dark-mode-switch')
-
-    // dark_mode_toggle.onclick = () => {
-    //     document.querySelector('body').classList.toggle('light')
-    //     document.querySelector('body').classList.toggle('dark')
-    // }
-
 </script>

@@ -4,12 +4,13 @@
 
 	require_once '../config/app.php';
 
-	if (isset($_POST['dni']) || isset($_POST['fecha']) || 
+	if (isset($_POST['dni']) || isset($_POST['tipoUserH']) ||
+	isset($_POST['fecha']) || 
     isset($_POST['listaServ']) || isset($_POST['idUser']) ||
 	isset($_POST['listAppoint']) || isset($_POST['fechaCita'])||
 	isset($_POST['numb_pay']) ||  isset($_POST['idAppointdV']) ||
 	isset($_POST['estadoTransf']) || isset($_POST['idPayDirect']) || 
-	isset($_POST['guardCitaUs'])) {
+	isset($_POST['guardCitaUs']) || isset($_POST['searcHistUser'])) {
 		
 		require_once '../controladores/citaControlador.php';
 		$inst = new citaControlador();
@@ -17,6 +18,10 @@
 		// BUSCAR USUARIO POR DNI
 		if (isset($_POST['dni'])) {
 			echo $inst -> verificarDni();
+		}
+		// BUSCAR USUARIO POR DNI
+		if (isset($_POST['tipoUserH'])) {
+			$inst->reedListAppointment();
 		}
 		// BUSCAR CITAS YA RESERVADAS
 		if (isset($_POST['fechaCita'])) {
@@ -37,6 +42,11 @@
 		/* ¨¨¨¨¨¨¨¨¨¨¨¨ */
         if (isset($_POST['guardCitaUs'])) {
 			echo $inst -> saveCita();
+		}
+		/* ¨¨¨¨¨¨¨¨¨¨¨¨ */
+        if (isset($_POST['searcHistUser'])) {
+			// exit($_POST['searcHistUser']);
+			$inst -> searchHistUser();
 		}
 
        

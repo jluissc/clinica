@@ -15,6 +15,45 @@ fechaSelecionada = ''
 idAppoint=0 /* Id Cita seleccionado */
 
 leerCondicionesAtencion()
+buscarHistCitas()
+leerListaTratamientos()
+
+// table.destroy();
+function leerListaTratamientos(){
+    // $('#table1').DataTable()
+    // console.log(tipoUser == 4 ? true : false);
+    // dat = new FormData()
+    // dat.append('tipoUserH',tipoUser == 4 ? true : false)
+    // fetch(URL+'ajax/citaAjax.php',{
+    //     method : 'post',
+    //     body : dat
+    // })
+    // .then( r => r.json())
+    // .then( r => {
+        
+    //     document.getElementById('listAppointment').innerHTML = r
+    // })
+    console.log(tipoUser == 4 ? true : false);
+    tablaUsuarios = $('#table1').DataTable({  
+        "ajax":{            
+            "url": URL+'ajax/citaAjax.php', 
+            "method": 'POST', //usamos el metodo POST
+            "data":{tipoUserH:tipoUser == 4 ? true : false}, //enviamos opcion 4 para que haga un SELECT
+            "dataSrc":""
+        },
+        
+        "columns":[
+            {"data": "nombre"},
+            {"data": "correo"},
+            {"data": "celular"},
+            {"data": "fecha"},
+            {"data": "hora"},
+            {"data": "monto"},
+            {"data": "pago"},
+            {"data": "acciones"}
+        ]
+    });     
+}
 
 function leerCondicionesAtencion(){
     DATOS = new FormData()
@@ -124,6 +163,7 @@ function mostrarListaServicios(){
     document.getElementById('select-servc').innerHTML = listS
 }
 function cambioServicio(servSelect){
+    
     servicSelect = document.getElementById(servSelect).value
     console.log(servicSelect);
     if(servicSelect == 17){/* DEPENDE QUE ID TIENE EL CONSULTAS */
@@ -143,6 +183,19 @@ function cambioServicio(servSelect){
         div +='</div>'
         document.getElementById('historialNew').innerHTML = div
     } 
+}
+function buscarHistCitas(){
+    dat = new FormData()
+    dat.append('searcHistUser','user')
+    fetch(URL+'ajax/citaAjax.php',{
+        method : 'post',
+        body : dat
+    })
+    .then( r => r.json())
+    .then( r => {
+        listHist =r
+        console.log(listHist);
+    })
 }
 function verificarFecha(dia, mes, anio){
     if(servicSelect != 0){    
@@ -236,26 +289,32 @@ function filtrarFechasHorasDispo(diaSelect,citaDispo,diass,horas){
     
 }
 
-function validarCita(){
-    dni = document.getElementById('dni').value
-    nombre = document.getElementById('nombre').value
-    apellido = document.getElementById('apellido').value
-    celular = document.getElementById('celular').value
-    correo = document.getElementById('correo').value
+function validarCita(){   
+    
+    dni = tipoUser == '4' ? 12345678 :parseInt(document.getElementById('dni').value)
+    nombre = tipoUser == 4 ? 'login' :document.getElementById('nombre').value
+    apellido = tipoUser == 4 ? 'login' :document.getElementById('apellido').value
+    celular = tipoUser == 4 ? 'login' :document.getElementById('celular').value
+    correo = tipoUser == 4 ? 'login' :document.getElementById('correo').value
     nameHist = servicSelect == 17 ? document.getElementById('nameHist').value : ''
     cita = document.querySelector('input[name="tipoCitaUs"]:checked')
     listHistt = servicSelect != 17 ? document.querySelector('input[name="listHHHH"]:checked') : 0
     hora = document.querySelector('input[name="horaAtenUs"]:checked')
     
+    
     // b = document.querySelector('input[name="horaAtenUs"]:checked').value
     // console.log(a);
     // console.log(b);
-    if(dni.length == 8){
+    console.log(dni.length > 1);
+    console.log(dni);
+    if(dni != ''){
         if(nombre != '' && apellido != ''){
             if (celular != '') {
                 if(cita) {
                     if(hora) {
                         datosPacienteNuevo = {
+                            tipoUse : tipoUser,
+                            idUPaci : idUPaci,
                             dni : dni,
                             nombre : nombre,
                             apellidos :apellido,
@@ -263,7 +322,7 @@ function validarCita(){
                             correo :correo,
                             cita :cita.value,
                             hora :hora.value,
-                            iduser : pacienteId,
+                            iduser : tipoUser == 4 ? idUPaci : pacienteId,
                             fecha : fechaSelecionada,
                             servicSelect : servicSelect,
                             nameHist : nameHist,
@@ -294,11 +353,13 @@ function guardarCita(user){
             alertaToastify('Se grabo tu reserva','green',1500) 
             console.log(r);
             datosPacienteNuevo = []
-            document.getElementById('dni').value = ''
-            document.getElementById('nombre').value = ''
-            document.getElementById('apellido').value = ''
-            document.getElementById('celular').value = ''
-            document.getElementById('correo').value = ''
+            if(tipoUser != 4){
+                document.getElementById('dni').value = ''
+                document.getElementById('nombre').value = ''
+                document.getElementById('apellido').value = ''
+                document.getElementById('celular').value = ''
+                document.getElementById('correo').value = ''
+            }
             document.getElementById('fechaCita').innerHTML = ''
             document.getElementById('tipocitaSelect').innerHTML = ''
             document.getElementById('horasDisponibles').innerHTML = ''
