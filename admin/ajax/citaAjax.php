@@ -58,11 +58,11 @@
         if (isset($_POST['idAppointdV'])) {
 			echo $inst -> searchAppointPay();
 		}
-
+		// pago de transferencia *************
         if (isset($_POST['numb_pay'])) {
 			// echo $inst -> buscarFechaCita();
 			$inst -> saveDatosPayAppoint();
-			exit(json_encode($_POST['numb_pay']));
+			// exit(json_encode($_POST['numb_pay']));
 		}
 
         if (isset($_POST['listAppoint'])) {

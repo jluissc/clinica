@@ -67,48 +67,32 @@
 		}
 
 		public function reedListAppointment() {
-			$tipo = $_POST['tipoUserH'];
+			session_start(['name' => 'bot']);
+			$tipo = $_SESSION['tipo'];
 			$datos =[];
 			$listAppointm = citaModelo::reedListAppointment_m();
-			$html ='';
 			foreach ($listAppointm as $appoint) {
-				$btnPagar = '<button class="btn btn-outline-primary" onclick="payAppoint('.$appoint->id.')">Pagar Tarjeta</button><button class="btn btn-outline-info" data-bs-toggle="modal" data-bs-target="#info" onclick="datosTransf('.$appoint->id.',true)"> Mandar Transf.</button>';
-				$btnsAcc = $tipo ? $btnPagar : '<div class="form-check form-switch">
-				<input class="form-check-input" type="checkbox" id="pagoDirecto_'.$appoint->id.'" onchange="payDirect('.$appoint->id.')">
-				<label class="form-check-label" for="pagoDirecto_'.$appoint->id.'">Pagó directo?</label>
-			  </div>' ; 
-				$btnPago = $tipo ? '<button class="btn btn-outline-info" data-bs-toggle="modal" data-bs-target="#info" onclick="datosTransf('.$appoint->id.',false)"> Datos Transf.</button>' : '<button class="btn btn-outline-info" data-bs-toggle="modal" data-bs-target="#info" onclick="validarTransf('.$appoint->id.')"> Validar Transf.</button>'; 
-				$result = citaModelo::statusPayAppoint($appoint->id);
-				// $pago = $result ? ($result[1]->tipo_pago_id == 1 ? '<span class="badge bg-success">Pago Tarjeta</span>' : ($result[1]->estado == 1 ? '<span class="badge bg-success">Transf. Verificado</span>' :'<span class="badge bg-danger">Transf. NO Verif.</span>')) : 'Falta Pagar';
-				$pago = $result[0] ? ($result[1]->tipo_pago_id == 1 ? '<span class="badge bg-warning">Pago Tarjeta</span>' : ($result[1]->tipo_pago_id == 3 ? '<span class="badge bg-info">Pago Directo</span>': ($result[1]->estado == 1 ? '<span class="badge bg-success">Transf. Verificado</span>' :'<span class="badge bg-danger">Transf. NO Verif.</span>'))) : '<strong>Falta Pagar</strong>';
-				// $acciones = $result ? ($result[1]->tipo_pago_id == 2 && $result[1]->estado == 0 ? $btnPago: 'PAGADO') : $btnsAcc;
-				$acciones = $result[0] ? ($result[1]->tipo_pago_id == 2 && $result[1]->estado == 0 ? $btnPago: ($result[1]->tipo_pago_id == 3? 'PAGO DIRECTO' : ($result[1]->tipo_pago_id == 1 ? 'Pago Tarjeta' : 'Pago Transferencia'))) : ($btnsAcc);
+				$nn = $appoint->usuario.' '.$appoint->apellidos;
+				$pagoDirecto = '<div class="form-check form-switch">
+					<input class="form-check-input" type="checkbox" id="pagoDirecto_'.$appoint->idcita.'" onchange="payDirect('.$appoint->idcita.')">
+					<label class="form-check-label" for="pagoDirecto_'.$appoint->idcita.'">Pagó directo?</label>
+					</div>' ; 
+				$result = citaModelo::statusPayAppoint($appoint->idcita);
+				$pago = $result[0] ? ($result[1]->tipo_pago_id1 == 1 ? ($result[1]->estado ? 'Pago Tarjeta/Aceptado' : 'Pago Tarjeta/No Aceptado'): ($result[1]->tipo_pago_id1 == 2 ? ($result[1]->estado ? 'Transferencia/Aceptado' : 'Transferencia/No Aceptado') : ($result[1]->estado ? 'Pago Directo/Aceptado' : 'Pago Directo/No Aceptado'))) : 'Falta Pagar';
+				$acciones = $tipo == 1 ? ($result[0] ? ($result[1]->tipo_pago_id1 == 1 ? 'Pago Tarjeta' : ($result[1]->tipo_pago_id1 == 2 ? ($result[1]->estado ? 'Pago Transferencia Activo' :'<button class="btn btn-outline-info" data-bs-toggle="modal" data-bs-target="#info" onclick="validarTransf('.$appoint->idcita.')"> Validar Transf.</button>') : 'Pago Directo') ) : $pagoDirecto) : 
+					($result[0] ? ($result[1]->tipo_pago_id1 == 2 ? ($result[1]->estado ? 'Aceptado' : 'Falta Verificar'): 'Pagado' ) : '<button class="btn btn-outline-primary" onclick="payAppoint('.$appoint->idcita.')">Pagar Tarjeta</button><button class="btn btn-outline-info" data-bs-toggle="modal" data-bs-target="#info" onclick="datosTransf('.$appoint->idcita.',true)"> Mandar Transf.</button>');
 				array_push($datos,[
-					'nombre' => $appoint->nombre,
+					'nombre' => $nn,
 					'correo' => $appoint->correo,
 					'celular' => $appoint->celular,
 					'fecha' => $appoint->fecha,
 					'hora' => $appoint->hora, 
 					'monto' => 'S/. '.$appoint->precio_venta ,
-					'pago' => $pago,
-					'acciones' =>$acciones,
+					'pago' =>  $pago,
+					'acciones' => $acciones,
 				]);
-				// $html .='<tr>
-				// 		<td>'.$appoint->nombre.' '.$appoint->apellidos.'</td>
-				// 		<td>'..'</td>
-				// 		<td>'.$appoint->celular.'</td>
-				// 		<td>'.$$appoint->celular.'</td>
-				// 		<td>'.$appoint->hora.'</td>';
-				// 		/* if($_SESSION['tipo']== 1) */ $html .='<td>S/. .00</td>';
-				// $html .='<td>'.$pago.'</td>
-				// 		<td>'.$acciones.'</td>							
-				// 	</tr>';
 			}
-			// return $html; 
-			// echo $html;
-			// exit(json_encode($html));
-			exit(json_encode($datos, JSON_UNESCAPED_UNICODE));//envio el array final el formato json a AJAX
-			// $conexion=null;
+			exit(json_encode($datos));//envio el array final el formato json a AJAX
 		}
 		public function searchHistUser(){
 			session_start(['name' => 'bot']);

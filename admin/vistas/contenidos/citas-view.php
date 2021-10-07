@@ -207,7 +207,7 @@
                 ?>
                  <div class="form-group">
                     <div class="col-12">
-                        <input type="text" id="aasda" class="form-control font-bold" placeholder="Nombre de banco" autocomplete="false">
+                        <input type="text" id="numbTrans" class="form-control font-bold" placeholder="Número de transacción" autocomplete="false">
                     </div>
                     
                 </div>

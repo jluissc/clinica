@@ -398,7 +398,7 @@ function validarTransf(idAppointd){
     })
     .then( result => result.json())
     .then( result => {
-        document.getElementById('aasda').value = result.detalles
+        document.getElementById('numbTrans').value = result.detalles
         document.getElementById('name_bank').value = result.medio_pago
         document.getElementById('total_pay').value = result.total
         estado = result.estado == 1 ? 'checked disabled' : '' 
@@ -480,7 +480,7 @@ function payDirect(idAppointPay){
 }
 
 function mandarDatosPago(){
-    numb_pay = document.getElementById('aasda').value
+    numb_pay = document.getElementById('numbTrans').value
     name_bank = document.getElementById('name_bank').value
     total_pay = document.getElementById('total_pay').value
     if(numb_pay != ''){
