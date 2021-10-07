@@ -103,7 +103,7 @@
 
 
 		protected static function idPayDirect_m($idAppoint, $monto=50){
-			$sql = mainModelo::conexion()->prepare('INSERT INTO cita_pagos (`tipo_pago_id`, `detalles`, `medio_pago`, `fecha`, `total`, `estado`, `citas_id`)
+			$sql = mainModelo::conexion()->prepare('INSERT INTO cita_pagos (`tipo_pago_id1`, `detalles`, `medio_pago`, `fecha`, `total`, `estado`, `citas_id`)
 				VALUES (3, "PAGO DIRECTO", "FISICO", now(), :monto, 1, :cita_id)');
 			$sql->bindParam(":monto",$monto);
 			$sql->bindParam(":cita_id",$idAppoint);
@@ -235,7 +235,7 @@
 		}
 
 		protected static function saveDatosPayAppoint_m($datos){
-			$sql = mainModelo::conexion()->prepare('INSERT INTO `cita_pagos`(`tipo_pago_id`, `detalles`, `medio_pago`, `fecha`, `total`, `estado`, `citas_id`) 
+			$sql = mainModelo::conexion()->prepare('INSERT INTO `cita_pagos`(`tipo_pago_id1`, `detalles`, `medio_pago`, `fecha`, `total`, `estado`, `citas_id`) 
 				VALUES (2, :numPago, :medioPago, now(), :total, 0 , :citaId)');
 			$sql->bindParam(":numPago",$datos['numb_pay']);
 			$sql->bindParam(":medioPago",$datos['name_bank']);

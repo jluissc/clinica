@@ -17,22 +17,10 @@ idAppoint=0 /* Id Cita seleccionado */
 leerCondicionesAtencion()
 buscarHistCitas()
 leerListaTratamientos()
+leerListaHistorial()
 
 // table.destroy();
 function leerListaTratamientos(){
-    // $('#table1').DataTable()
-    // console.log(tipoUser == 4 ? true : false);
-    // dat = new FormData()
-    // dat.append('tipoUserH',tipoUser == 4 ? true : false)
-    // fetch(URL+'ajax/citaAjax.php',{
-    //     method : 'post',
-    //     body : dat
-    // })
-    // .then( r => r.json())
-    // .then( r => {
-        
-    //     document.getElementById('listAppointment').innerHTML = r
-    // })
     console.log(tipoUser == 4 ? true : false);
     tablaUsuarios = $('#table1').DataTable({  
         "ajax":{            
@@ -53,6 +41,10 @@ function leerListaTratamientos(){
             {"data": "acciones"}
         ]
     });     
+}
+function leerListaHistorial(){
+    console.log(tipoUser == 4 ? true : false);
+         
 }
 
 function leerCondicionesAtencion(){
@@ -444,7 +436,8 @@ function payDirect(idAppointPay){
           autocapitalize: 'off'
         },
         showCancelButton: true,
-        confirmButtonText: 'Look up',
+        confirmButtonText: 'Pagar',
+        cancelButtonText: 'Cancelar',
         showLoaderOnConfirm: true,
     }).then((result) => {
         if (result.isConfirmed) {
