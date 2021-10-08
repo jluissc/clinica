@@ -44,7 +44,49 @@ function leerListaTratamientos(){
 }
 function leerListaHistorial(){
     console.log(tipoUser == 4 ? true : false);
-         
+    tablaUsuarios2 = $('#table2').DataTable({  
+        "ajax":{            
+            "url": URL+'ajax/citaAjax.php', 
+            "method": 'POST', //usamos el metodo POST
+            "data":{tipoUserHist:tipoUser == 4 ? true : false}, //enviamos opcion 4 para que haga un SELECT
+            "dataSrc":""
+        },        
+        "columns":[
+            {"data": "nombre"},
+            {"data": "dni"},
+            {"data": "correo"},
+            {"data": "celular"},
+            {"data": "name"},
+            {"data": "code"},
+            {"data": "acciones"},
+        ],
+    });   
+}
+
+function showHistorial(idHistorial){
+    DATOS = new FormData()
+    DATOS.append('idHistorial', idHistorial)
+    fetch(URL+'ajax/citaAjax.php',{
+        method : 'post',
+        body : DATOS
+    })
+    .then( r => r.json())
+    .then( r => {
+        HTMLHistorial(r)
+        console.log(r);        
+    })
+}
+function HTMLHistorial(datos){
+    lista = ''
+    datos.forEach(tratam => {
+        lista+=`<li>
+                <div>
+                    <time>${tratam.fecha} ${tratam.hora}</time> 
+                    <hr><p>SERVICIO : ${tratam.nombre}</p>
+                </div>
+            </li>`
+    });
+    document.getElementById('historialPacient').innerHTML = lista 
 }
 
 function leerCondicionesAtencion(){

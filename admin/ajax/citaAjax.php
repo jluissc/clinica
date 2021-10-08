@@ -5,7 +5,8 @@
 	require_once '../config/app.php';
 
 	if (isset($_POST['dni']) || isset($_POST['tipoUserH']) ||
-	isset($_POST['fecha']) || 
+	isset($_POST['fecha']) || isset($_POST['tipoUserHist']) || 
+	isset($_POST['idHistorial']) || 
     isset($_POST['listaServ']) || isset($_POST['idUser']) ||
 	isset($_POST['listAppoint']) || isset($_POST['fechaCita'])||
 	isset($_POST['numb_pay']) ||  isset($_POST['idAppointdV']) ||
@@ -19,9 +20,17 @@
 		if (isset($_POST['dni'])) {
 			echo $inst -> verificarDni();
 		}
-		// BUSCAR USUARIO POR DNI
+		// Listar la lista de personas con citas o tratamientos
 		if (isset($_POST['tipoUserH'])) {
 			$inst->reedListAppointment();
+		}
+		// Listar la lista de personas historial
+		if (isset($_POST['tipoUserHist'])) {
+			$inst->reedListHistorialAppointment();
+		}
+		// Listar la lista de personas historial
+		if (isset($_POST['idHistorial'])) {
+			$inst->reedHistorialApoointId();
 		}
 		// BUSCAR CITAS YA RESERVADAS
 		if (isset($_POST['fechaCita'])) {

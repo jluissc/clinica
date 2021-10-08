@@ -35,6 +35,10 @@
 			citaModelo::buscarFechaCita_m($fecha,$tipoId,$diaId);
 		}
 
+		public function reedHistorialApoointId() {
+			citaModelo::reedHistorialApoointId_m($_POST['idHistorial']);
+		}
+
 		public function validarTransferencia() {
             $estado = $_POST['estadoTransf'];
             $id = $_POST['idPayAppoint'];
@@ -89,6 +93,26 @@
 					'hora' => $appoint->hora, 
 					'monto' => 'S/. '.$appoint->precio_venta ,
 					'pago' =>  $pago,
+					'acciones' => $acciones,
+				]);
+			}
+			exit(json_encode($datos));//envio el array final el formato json a AJAX
+		}
+		public function reedListHistorialAppointment() {
+			session_start(['name' => 'bot']);
+			$datos =[];
+			$listAppointm = citaModelo::reedListHistorialAppointment_m();
+			foreach ($listAppointm as $appoint) {
+				$acciones = '<button class="btn btn-outline-primary" onclick="showHistorial('.$appoint->idHis.')">Ver Historial</button>';
+				$nn = $appoint->usuario.' '.$appoint->apellidos;
+				
+				array_push($datos,[
+					'nombre' => $nn,
+					'dni' => $appoint->dni,
+					'correo' => $appoint->correo,
+					'celular' => $appoint->celular,
+					'name' => $appoint->nameC,
+					'code' => $appoint->code,
 					'acciones' => $acciones,
 				]);
 			}

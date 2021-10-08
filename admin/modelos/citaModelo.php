@@ -56,6 +56,25 @@
 				exit(json_encode($datos));			
 			}
 		}
+		// **********************************
+		protected static function reedHistorialApoointId_m($idHistorial){
+			$sql = mainModelo::conexion()->prepare('SELECT * FROM historial_detalle hd
+				INNER JOIN tratamientos t
+				ON hd.tratamientos_id = t.id
+				INNER JOIN servicios s
+				ON t.servicios_id = s.id
+				INNER JOIN horas h
+				ON t.horas_id = h.id
+				WHERE historial_id =:id ORDER BY hd.id');
+			$sql->bindParam(":id",$idHistorial);
+			$sql -> execute();
+            if($sql -> rowCount() > 0){
+                $resutl = $sql->fetchAll(PDO::FETCH_OBJ);					
+				exit(json_encode($resutl));			
+			}else{
+				exit(json_encode(0));
+			}
+		}
 		/* ************** */
 		protected static function listarTipoCitas($tipoId){
 			$sql = mainModelo::conexion()->prepare('SELECT * FROM servicios_tipo WHERE servicios_id =:tipo');
@@ -148,6 +167,26 @@
 			$sql = null;
 			return $resutl;
 			// exit(json_encode($resutl));
+		}
+		protected static function reedListHistorialAppointment_m(){
+			
+			if($_SESSION['tipo'] == 4){
+				$sql = mainModelo::conexion()->prepare("SELECT p.nombre AS usuario,p.dni, p.apellidos, p.celular, p.correo, h.code, h.nombre AS nameC, h.id AS idHis  FROM historial h
+					INNER JOIN persona p
+					ON p.id = h.persona_id
+					WHERE p.id=:iss
+					ORDER BY h.id DESC");
+				$sql->bindParam(":iss",$_SESSION['id']);
+			}else{
+				$sql = mainModelo::conexion()->prepare("SELECT p.nombre AS usuario,p.dni, p.apellidos, p.celular, p.correo, h.code, h.nombre AS nameC, h.id AS idHis FROM historial h 
+					INNER JOIN persona p
+					ON p.id = h.persona_id
+					ORDER BY h.id DESC");
+			}
+			$sql -> execute();
+			$resutl = $sql->fetchAll(PDO::FETCH_OBJ);
+			$sql = null;
+			return $resutl;
 		}
 
 		protected static function verificarFecha_m($fecha){

@@ -170,7 +170,37 @@
             </button>
         </div>
         <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
-            Mostrar historial de un paciente
+            <div class="row">
+                <div class="col-8">
+                    <table class="table table-striped" id="table2" style="width:100%">
+                        <thead>
+                            <tr>
+                                <th class="col-sm-3">Nombres</th>
+                                <th  class="col-sm-1">DNI</th>
+                                <th  class="col-sm-1">Correo</th>
+                                <th  class="col-sm-2">Celular</th> 
+                                <th  class="col-sm-2">Cita Nombre</th> 
+                                <th  class="col-sm-1">Cita Codigo</th> 
+                                <th  class="col-sm-2">Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody id="DDD">
+                        </tbody>
+                    </table>
+                </div>
+                <div class="col-4">
+                    <h3 class="text-center">Historial de un paciente</h3>
+                    <section class="timeline">
+                        <ul id="historialPacient">
+                            <li>
+                                <div>
+                                    <time>1934</time> At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium At vero 
+                                </div>
+                            </li>
+                        </ul>
+                        </section>
+                </div>
+            </div>
         </div>
     </div>
 </section>
@@ -255,7 +285,65 @@
         </div>
     </div>
 </div>
+<style>
+    .timeline ul li {
+  list-style-type: none;
+  position: relative;
+  width: 6px;
+  margin: 0 auto;
+  padding-top: 10px;
+  background: #2be345;
+}
 
+.timeline ul li::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  transform: translateX(-50%);
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: inherit;
+}
+
+.timeline ul li div {
+  position: relative;
+  bottom: 0;
+  width: 200px;
+  padding: 1px;
+  background: #5bf4cc;
+}
+
+.timeline ul li div::before {
+  content: '';
+  position: absolute;
+  bottom: 7px;
+  width: 0;
+  height: 0;
+  border-style: solid;
+}
+
+.timeline ul li:nth-child(odd) div {
+  left: 45px;
+}
+
+.timeline ul li:nth-child(odd) div::before {
+  left: -15px;
+  border-width: 8px 16px 8px 0;
+  border-color: transparent #5bf4cc transparent transparent;
+}
+
+.timeline ul li:nth-child(even) div {
+  left: -230px;
+}
+
+.timeline ul li:nth-child(even) div::before {
+  right: -15px;
+  border-width: 8px 0 8px 16px;
+  border-color: transparent transparent transparent #5bf4cc;
+}
+</style>
 
 <script>
 
