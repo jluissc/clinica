@@ -76,11 +76,13 @@ function HtmlListConfig(){
     
 }
 function listarServiciosss(listServi){
-    lir = ''
+    lir = '<div class="list-group">'
     listServi.forEach(servc => {
-        lir+=`<a class="" style="cursor:pointer"  class="btn btn-outline-warning" data-bs-toggle="modal"
-        data-bs-target="#xlarge">${servc.nombre}</a>`
+        // lir+=`<a class="" style="cursor:pointer"  class="btn btn-outline-warning" data-bs-toggle="modal"
+        // data-bs-target="#xlarge"></a>`
+        lir+=`<a class="list-group-item list-group-item-action">${servc.nombre}  <button class="btn btn-info"><i class="fas fa-edit"></i></button><button class="btn btn-danger"><i class="fas fa-trash-alt"></i></button></a>`
     });
+    lir+=`</div>`
     document.getElementById('listServcsss').innerHTML = lir
 }
 function verConfig(id,tipo){

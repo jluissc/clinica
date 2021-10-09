@@ -200,7 +200,7 @@
                                 </div>
                             </li>
                         </ul>
-                        </section>
+                    </section>
                 </div>
             </div>
         </div>
@@ -287,64 +287,66 @@
         </div>
     </div>
 </div>
+
+
 <style>
     .timeline ul li {
-  list-style-type: none;
-  position: relative;
-  width: 6px;
-  margin: 0 auto;
-  padding-top: 10px;
-  background: #2be345;
-}
+        list-style-type: none;
+        position: relative;
+        width: 6px;
+        margin: 0 auto;
+        padding-top: 10px;
+        background: #2be345;
+    }
 
-.timeline ul li::after {
-  content: '';
-  position: absolute;
-  left: 50%;
-  bottom: 0;
-  transform: translateX(-50%);
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
-  background: inherit;
-}
+    .timeline ul li::after {
+        content: '';
+        position: absolute;
+        left: 50%;
+        bottom: 0;
+        transform: translateX(-50%);
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        background: inherit;
+    }
 
-.timeline ul li div {
-  position: relative;
-  bottom: 0;
-  width: 200px;
-  padding: 1px;
-  background: #5bf4cc;
-}
+    .timeline ul li div {
+        position: relative;
+        bottom: 0;
+        width: 200px;
+        padding: 1px;
+        background: #5bf4cc;
+    }
 
-.timeline ul li div::before {
-  content: '';
-  position: absolute;
-  bottom: 7px;
-  width: 0;
-  height: 0;
-  border-style: solid;
-}
+    .timeline ul li div::before {
+        content: '';
+        position: absolute;
+        bottom: 7px;
+        width: 0;
+        height: 0;
+        border-style: solid;
+    }
 
-.timeline ul li:nth-child(odd) div {
-  left: 45px;
-}
+    .timeline ul li:nth-child(odd) div {
+        left: 45px;
+    }
 
-.timeline ul li:nth-child(odd) div::before {
-  left: -15px;
-  border-width: 8px 16px 8px 0;
-  border-color: transparent #5bf4cc transparent transparent;
-}
+    .timeline ul li:nth-child(odd) div::before {
+        left: -15px;
+        border-width: 8px 16px 8px 0;
+        border-color: transparent #5bf4cc transparent transparent;
+    }
 
-.timeline ul li:nth-child(even) div {
-  left: -230px;
-}
+    .timeline ul li:nth-child(even) div {
+        left: -230px;
+    }
 
-.timeline ul li:nth-child(even) div::before {
-  right: -15px;
-  border-width: 8px 0 8px 16px;
-  border-color: transparent transparent transparent #5bf4cc;
-}
+    .timeline ul li:nth-child(even) div::before {
+        right: -15px;
+        border-width: 8px 0 8px 16px;
+        border-color: transparent transparent transparent #5bf4cc;
+    }
 </style>
 
 <script>

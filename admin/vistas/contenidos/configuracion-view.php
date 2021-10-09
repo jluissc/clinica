@@ -14,10 +14,7 @@
                         <div class="row">
                             <div class="card-body">
                                 <ul class="list-group" id="listServcsss">
-                                    <li class="list-group-item">
-                                        <input class="form-check-input me-1"  type="checkbox" aria-label="..." disabled checked>
-                                        Lista de Servicios
-                                    </li>
+                                    LISTA DE SERVICIOS
                                 </ul>
                             </div>
                         </div>
