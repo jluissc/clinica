@@ -9,12 +9,15 @@
 		
 		protected static function readAppointmentToday_m(){
             $fechaActual = date('Y-m-d');
-			$sql = mainModelo::conexion()->prepare("SELECT c.id, p.nombre, p.apellidos, p.celular, 
-				c.tipo_cita_id, h.hora FROM citas c 
+			$sql = mainModelo::conexion()->prepare("SELECT c.id, c.tipo_cita_id, p.nombre, p.apellidos, p.celular, p.dni, h.hora FROM tratamientos c 
 				INNER JOIN persona p
 				ON p.id = c.paciente_id
-                INNER JOIN horas h
-                ON h.id = c.horas_id
+				INNER JOIN horas h
+				ON h.id = c.horas_id
+				INNER JOIN servicios s
+				ON s.id = c.servicios_id
+				INNER JOIN tipo_cita tc
+				ON tc.id = c.tipo_cita_id
 				
 				WHERE c.fecha =:fecha ORDER BY h.id ASC");
             // $sql->bindParameters(':fecha',$fechaActual);
@@ -25,10 +28,24 @@
             return $appointments;			
 		}
 
+		protected static function estadoDetalleTratam_m($tipo=0,$idAppoint){
+			$sql = mainModelo::conexion()->prepare("SELECT id FROM cita_detalle				
+				WHERE citas_id = :idcita");
+            // $sql->bindParameters(':fecha',$fechaActual);
+            $sql->bindParam(":idcita",$idAppoint);
+			$sql -> execute();
+			if($sql->rowCount() > 0){
+				return true;
+			}else{
+				return false;
+			}
+				
+		}
+
 		protected static function readAppointmentNexts_m(){
 			$idPaciente = $_SESSION['id'];
             $fechaActual = date('Y-m-d');
-			$sql = mainModelo::conexion()->prepare("SELECT c.fecha, c.tipo_cita_id, h.hora FROM citas c 
+			$sql = mainModelo::conexion()->prepare("SELECT c.fecha, c.tipo_cita_id, h.hora FROM tratamientos c 
 				INNER JOIN persona p
 				ON p.id = c.paciente_id
                 INNER JOIN horas h
@@ -58,6 +75,23 @@
 			exit(json_encode($appointment));
 		}
 
+		protected static function saveDetalleTratam_m($datos){
+			$sql = mainModelo::conexion()->prepare("INSERT INTO cita_detalle (`descripcion`, `recetas`, `otros`, `citas_id`) VALUES 
+				(:descr, :rece, :otr, :cita_id)");
+			$sql->bindParam(":descr",$datos->descripDet);
+			$sql->bindParam(":rece",$datos->recetDet);
+			$sql->bindParam(":otr",$datos->otroDet);
+			$sql->bindParam(":cita_id",$datos->idAppoint);
+			$sql -> execute();
+			if($sql->rowCount()>0){
+				$sql = null;
+				exit(json_encode(1));
+			}else{
+				$sql = null;
+				exit(json_encode(0));
+			}
+		}
+
 		protected static function dateQuantity_m(){
 			// $patients = homeModelo::quantityPatients();
 			$dates = [
@@ -76,7 +110,7 @@
 		}
 
 		protected static function quantityAppoints(){
-			$sql = mainModelo::conexion()->prepare("SELECT COUNT(id) AS quant FROM `citas`");
+			$sql = mainModelo::conexion()->prepare("SELECT COUNT(id) AS quant FROM `tratamientos`");
 			$sql -> execute();
 			$date = $sql->fetch(PDO::FETCH_OBJ);
 			$sql = null;

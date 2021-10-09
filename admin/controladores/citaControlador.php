@@ -36,7 +36,23 @@
 		}
 
 		public function reedHistorialApoointId() {
-			citaModelo::reedHistorialApoointId_m($_POST['idHistorial']);
+
+			// citaModelo::reedHistorialApoointId_m($_POST['idHistorial']);
+			$div = '';
+			$lista = citaModelo::reedHistorialApoointId_m($_POST['idHistorial']);
+			foreach ($lista as $listt) {
+				$list = citaModelo::listaDescr($listt->id);
+				$descrip = $list[0] ? $list[1]->descripcion : '';
+				$div .='<li>
+					<div>
+						<time>'.$listt->fecha.' '.$listt->hora.'</time> 
+						<hr><p>SERVICIO : '.$listt->servicio.'</p>
+						<hr><p>DESCRIPCIÓN : '.$descrip .'</p>
+					</div>
+				</li>';
+			}
+			exit(json_encode($div));
+
 		}
 
 		public function validarTransferencia() {
@@ -138,6 +154,7 @@
 					'paciente' => $user->tipoUse == 4 ? $user->idUPaci : $user->iduser,
 					'horas' => $user->hora,	
 					'servicio' => $user->servicSelect,
+					'tipo_cita_id' => $user->cita,
 				];
 				$idCita = citaModelo::saveCita_m($datos,'new');
 				if($user->servicSelect == 17){/* CAMBIAR el id de CONSULTAS */
@@ -190,6 +207,7 @@
 					'paciente' => $idUser->id,
 					'horas' => $user->hora,	
 					'servicio' => $user->servicSelect,
+					'tipo_cita_id' => $user->cita,
 				];
 				$idCita = citaModelo::saveCita_m($datosc,'new');
 				if( $idCita != 0){

@@ -21,7 +21,7 @@
 
         $color = ($appointment->tipo_cita_id == 2) ? 'success': 'warning';
         $typeColor = ($appointment->tipo_cita_id == 1) ? 'info': $color;
-        
+        $btn = homeModelo::estadoDetalleTratam_m(1, $appointment->id) ? '<h3>ATENTIDO</h3>' : '<button class="btn btn-success" onclick="showDetalleTrat('.$appointment->id.')" data-bs-toggle="modal" data-bs-target="#large3">Detalles</button>';
         $hmtl .= '<div class="col-sm-3 ">
           <div class="card">
             <div class="card-body appoint-'.$typeColor.'">
@@ -29,7 +29,7 @@
               <h6 class="card-text">CELULAR : '.$appointment->celular.' </h6>
               <h6 class="card-text">HORA : '.$appointment->hora.' </h6>
               <h6 class="card-text">TIPO CITA : '.$typeAppoint.' </h6>
-              
+              '.$btn.'
             </div>
           </div>
         </div>';
@@ -70,6 +70,11 @@
     public function showDetailAppoint(){
       $idAppoint = $_POST['idAppoint'];
       homeModelo::showDetailAppoint_m($idAppoint);
+    }	
+
+    public function saveDetalleTratam(){
+      $datos = json_decode($_POST['savedetaTrat']);
+      homeModelo::saveDetalleTratam_m($datos);
     }	
 
     public function dateQuantity(){

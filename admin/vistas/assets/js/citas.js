@@ -77,16 +77,17 @@ function showHistorial(idHistorial){
     })
 }
 function HTMLHistorial(datos){
-    lista = ''
-    datos.forEach(tratam => {
-        lista+=`<li>
-                <div>
-                    <time>${tratam.fecha} ${tratam.hora}</time> 
-                    <hr><p>SERVICIO : ${tratam.nombre}</p>
-                </div>
-            </li>`
-    });
-    document.getElementById('historialPacient').innerHTML = lista 
+    // lista = ''
+    // datos.forEach(tratam => {
+    //     lista+=`<li>
+    //             <div>
+    //                 <time>${tratam.fecha} ${tratam.hora}</time> 
+    //                 <hr><p>SERVICIO : ${tratam.nombre}</p>
+    //                 <hr><p>DESCRIPCIÓN : ${tratam.descripcion }</p>
+    //             </div>
+    //         </li>`
+    // });
+    document.getElementById('historialPacient').innerHTML = datos 
 }
 
 function leerCondicionesAtencion(){

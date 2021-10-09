@@ -225,17 +225,57 @@
         </div>
     </div>
 </section>
-
+<!-- MODAL DETALLES CITA -->
+<div class="modal fade text-left" id="large3" tabindex="-1" role="dialog"
+    aria-labelledby="myModalLabel17" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg"
+        role="document">
+        <div class="modal-content" >
+            <div class="modal-header">
+                <h4 class="modal-title" id="myModalLabel17">Crear Usuario y permisos</h4>
+                <button type="button" class="close" data-bs-dismiss="modal"
+                    aria-label="Close">
+                    <i data-feather="x"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                        <div class="col-12 col-lg-12 col-md-12">
+                            <div class="card">
+                                <div class="form-group">
+                                    <label for="descripDet">Detalle de la cita/tratamientos</label>
+                                    <textarea type="text" class="form-control" placeholder="Detalle de la cita/tratamientos" id="descripDet" rows="4"></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label for="recetDet">Recetas / Tratamientos</label>
+                                    <textarea type="number" class="form-control" placeholder="Recetas / Tratamientos" id="recetDet" rows="4"></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label for="otroDet">Otros detalles</label>
+                                    <input type="text" class="form-control" placeholder="Otros detalles" id="otroDet">
+                                </div>
+                            </div>
+                        </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-light-secondary"
+                    data-bs-dismiss="modal">
+                    <i class="bx bx-x d-block d-sm-none"></i>
+                    <span class="d-none d-sm-block">Cancelar</span>
+                </button>
+                <button type="button" class="btn btn-primary ml-1 "  onclick="saveDetalle()">
+                    <i class="bx bx-check d-block d-sm-none"></i>
+                    <span class="d-none d-sm-block">Guardar</span>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
 
 <script>
     const urlPrincipal = '<?php echo SERVERURL?>';
-    // var el = document.getElementById("showDetailAppoint");   
-    // el.addEventListener("click", modifyText);   
-
-    // function modifyText(){
-    //     console.log('diste click pendejo');        
-    // }
-
+    idAppointDetalle = 0
     function showDetailAppoint(idAppoint){
         url = urlPrincipal+'ajax/homeAjax.php'
         // let datos = {
@@ -251,6 +291,34 @@
         })
         .then( result => result.json())
         .then( result => appointmentHTML(result))
+    }
+
+    function showDetalleTrat(idAppoint){
+        console.log(idAppoint);
+        idAppointDetalle = idAppoint
+    }
+    function saveDetalle(){
+        descripDet = document.getElementById('descripDet').value
+        recetDet = document.getElementById('recetDet').value
+        otroDet = document.getElementById('otroDet').value
+        datos = {
+            'descripDet' : descripDet,
+            'recetDet' : recetDet,
+            'otroDet' : otroDet,
+            'idAppoint' : idAppointDetalle,
+        }
+        if(descripDet != ''){
+            url = urlPrincipal+'ajax/homeAjax.php'
+            data = new FormData()
+            data.append('savedetaTrat' , JSON.stringify(datos))
+
+            fetch(url, {
+                method : 'POST',
+                body : data
+            })
+            .then( result => result.json())
+            .then( result => result == 1 ? location.reload() : alertaToastify('Error al guardar'))
+        }else alertaToastify('Ingrese detalles')
     }
 
     function appointmentHTML(appointDate){

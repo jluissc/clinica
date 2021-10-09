@@ -4,7 +4,7 @@
 
 	require_once '../config/app.php';
 
-	if (isset($_POST['idAppoint']) || isset($_POST['estadoH'])) {
+	if (isset($_POST['idAppoint']) || isset($_POST['savedetaTrat'])) {
 		
 		require_once '../controladores/homeControlador.php';
 		$inst = new homeControlador();
@@ -12,6 +12,10 @@
 		// detail appointment
 		if (isset($_POST['idAppoint'])) {
 			echo $inst -> showDetailAppoint();
+		}
+		// detail appointment
+		if (isset($_POST['savedetaTrat'])) {
+			echo $inst -> saveDetalleTratam();
 		}
 
 	} else {

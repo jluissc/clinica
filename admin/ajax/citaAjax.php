@@ -35,7 +35,7 @@
 		// BUSCAR CITAS YA RESERVADAS
 		if (isset($_POST['fechaCita'])) {
 			echo $inst -> buscarFechaCita();
-		}
+		} 
 
 		if (isset($_POST['idPayDirect'])) {
 			$inst -> idPayDirect();

@@ -58,7 +58,7 @@
 		}
 		// **********************************
 		protected static function reedHistorialApoointId_m($idHistorial){
-			$sql = mainModelo::conexion()->prepare('SELECT * FROM historial_detalle hd
+			$sql = mainModelo::conexion()->prepare('SELECT t.id, t.fecha, h.hora, s.nombre AS servicio FROM historial_detalle hd
 				INNER JOIN tratamientos t
 				ON hd.tratamientos_id = t.id
 				INNER JOIN servicios s
@@ -70,12 +70,24 @@
 			$sql -> execute();
             if($sql -> rowCount() > 0){
                 $resutl = $sql->fetchAll(PDO::FETCH_OBJ);					
-				exit(json_encode($resutl));			
+				// exit(json_encode($resutl));			
+				return $resutl;	
 			}else{
 				exit(json_encode(0));
 			}
 		}
 		/* ************** */
+		protected static function listaDescr($idTrat){
+			$sql = mainModelo::conexion()->prepare('SELECT descripcion FROM cita_detalle WHERE citas_id =:id');
+			$sql->bindParam(":id",$idTrat);
+			$sql -> execute();  
+			if($sql -> rowCount() > 0){
+				$resutl = $sql->fetch(PDO::FETCH_OBJ);	
+				return [true,$resutl];
+			}else{
+				return [false];          
+			}
+		}
 		protected static function listarTipoCitas($tipoId){
 			$sql = mainModelo::conexion()->prepare('SELECT * FROM servicios_tipo WHERE servicios_id =:tipo');
 			$sql->bindParam(":tipo",$tipoId);
@@ -333,8 +345,8 @@
 		
 		protected static function saveCita_m($datos,$tipo =''){
 			$pdo = mainModelo::conexion();
-			$sql = $pdo->prepare("INSERT INTO tratamientos (`fecha`, `tiempo`, `mensaje`, `estado`, `atentido`, `paciente_id`, `horas_id`, `servicios_id`) 
-				VALUES (:fecha, :tiempo, :mensaje, :estado, :atentido, :paciente, :horas, :servicio)");
+			$sql = $pdo->prepare("INSERT INTO tratamientos (`fecha`, `tiempo`, `mensaje`, `estado`, `atentido`, `paciente_id`, `horas_id`, `servicios_id`,`tipo_cita_id`) 
+				VALUES (:fecha, :tiempo, :mensaje, :estado, :atentido, :paciente, :horas, :servicio, :tipo_cita)");
 			$sql->bindParam(":fecha",$datos['fecha']);
 			$sql->bindParam(":tiempo",$datos['tiempo']);
 			$sql->bindParam(":mensaje",$datos['mensaje']);
@@ -343,6 +355,7 @@
 			$sql->bindParam(":paciente",$datos['paciente']);
 			$sql->bindParam(":horas",$datos['horas']);
 			$sql->bindParam(":servicio",$datos['servicio']);
+			$sql->bindParam(":tipo_cita",$datos['tipo_cita_id']);
 			$sql -> execute();
 			if($sql -> rowCount() > 0){
 				if($tipo != ''){
