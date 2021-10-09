@@ -9,7 +9,7 @@
 		
 		protected static function readAppointmentToday_m(){
             $fechaActual = date('Y-m-d');
-			$sql = mainModelo::conexion()->prepare("SELECT c.id, c.tipo_cita_id, p.nombre, p.apellidos, p.celular, p.dni, h.hora FROM tratamientos c 
+			$sql = mainModelo::conexion()->prepare("SELECT c.id, c.tipo_cita_id, p.nombre, p.apellidos, p.celular, p.dni, h.hora, s.nombre AS servic FROM tratamientos c 
 				INNER JOIN persona p
 				ON p.id = c.paciente_id
 				INNER JOIN horas h
@@ -85,7 +85,10 @@
 			$sql -> execute();
 			if($sql->rowCount()>0){
 				$sql = null;
-				exit(json_encode(1));
+				$sql2 = mainModelo::conexion()->prepare("UPDATE tratamientos SET atentido = 1 WHERE id = $datos->idAppoint");
+				$sql2 -> execute();
+				if($sql2->rowCount() >0 ) exit(json_encode(1));
+				else exit(json_encode(0));
 			}else{
 				$sql = null;
 				exit(json_encode(0));

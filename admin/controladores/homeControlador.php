@@ -11,7 +11,7 @@
     public function clave(){
       return mainModelo::encryption('22510467');
     }
-		
+		/* ****************** */
 		public function readAppointmentToday() {
       $appointments = homeModelo::readAppointmentToday_m();
       $hmtl = '';
@@ -29,17 +29,15 @@
               <h6 class="card-text">CELULAR : '.$appointment->celular.' </h6>
               <h6 class="card-text">HORA : '.$appointment->hora.' </h6>
               <h6 class="card-text">TIPO CITA : '.$typeAppoint.' </h6>
+              <h6 class="card-text">SERVICIO: '.$appointment->servic.' </h6>
               '.$btn.'
             </div>
           </div>
         </div>';
-        // <button type="button" class="btn btn-outline-'.$typeColor.'" id="showDetailAppoint" data-bs-toggle="modal"
-        //           data-bs-target="#info" onclick="showDetailAppoint('.$appointment->id.')">Ver Detalles
-        //       </button>
       }
       return $hmtl;
 		}
-
+    /* ****************** */
 		public function readAppointmentNexts() {
       $appointments = homeModelo::readAppointmentNexts_m();
       $hmtl = '';
@@ -60,9 +58,6 @@
             </div>
           </div>
         </div>';
-        // <button type="button" class="btn btn-outline-'.$typeColor.'" id="showDetailAppoint" data-bs-toggle="modal"
-        //           data-bs-target="#info" onclick="showDetailAppoint('.$appointment->id.')">Ver Detalles
-        //       </button>
       }
       return $hmtl != '' ? $hmtl : '<h4>No tienes cita proxima</h4>';
 		}

@@ -98,6 +98,7 @@
 					<label class="form-check-label" for="pagoDirecto_'.$appoint->idcita.'">Pagó directo?</label>
 					</div>' ; 
 				$result = citaModelo::statusPayAppoint($appoint->idcita);
+				$montopago = $result[0] ? $result[1]->total : 0.0;
 				$pago = $result[0] ? ($result[1]->tipo_pago_id1 == 1 ? ($result[1]->estado ? 'Pago Tarjeta/Aceptado' : 'Pago Tarjeta/No Aceptado'): ($result[1]->tipo_pago_id1 == 2 ? ($result[1]->estado ? 'Transferencia/Aceptado' : 'Transferencia/No Aceptado') : ($result[1]->estado ? 'Pago Directo/Aceptado' : 'Pago Directo/No Aceptado'))) : 'Falta Pagar';
 				$acciones = $tipo == 1 ? ($result[0] ? ($result[1]->tipo_pago_id1 == 1 ? 'Pago Tarjeta' : ($result[1]->tipo_pago_id1 == 2 ? ($result[1]->estado ? 'Pago Transferencia Activo' :'<button class="btn btn-outline-info" data-bs-toggle="modal" data-bs-target="#info" onclick="validarTransf('.$appoint->idcita.')"> Validar Transf.</button>') : 'Pago Directo') ) : $pagoDirecto) : 
 					($result[0] ? ($result[1]->tipo_pago_id1 == 2 ? ($result[1]->estado ? 'Aceptado' : 'Falta Verificar'): 'Pagado' ) : '<button class="btn btn-outline-primary" onclick="payAppoint('.$appoint->idcita.')">Pagar Tarjeta</button><button class="btn btn-outline-info" data-bs-toggle="modal" data-bs-target="#info" onclick="datosTransf('.$appoint->idcita.',true)"> Mandar Transf.</button>');
@@ -108,6 +109,7 @@
 					'fecha' => $appoint->fecha,
 					'hora' => $appoint->hora, 
 					'monto' => 'S/. '.$appoint->precio_venta ,
+					'total' => 'S/. '.$montopago,
 					'pago' =>  $pago,
 					'acciones' => $acciones,
 				]);
@@ -150,7 +152,7 @@
 					'tiempo' => 30,
 					'mensaje' => '',
 					'estado' => 1,
-					'atentido' => 1,
+					'atentido' => 0,
 					'paciente' => $user->tipoUse == 4 ? $user->idUPaci : $user->iduser,
 					'horas' => $user->hora,	
 					'servicio' => $user->servicSelect,
@@ -203,7 +205,7 @@
 					'tiempo' => 30,
 					'mensaje' => '',
 					'estado' => 1,
-					'atentido' => 1,
+					'atentido' => 0,
 					'paciente' => $idUser->id,
 					'horas' => $user->hora,	
 					'servicio' => $user->servicSelect,

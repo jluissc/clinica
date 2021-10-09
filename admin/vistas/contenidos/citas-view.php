@@ -34,6 +34,7 @@
                                 <th>Fecha</th>
                                 <th>Hora</th>
                                 <th>Monto</th>
+                                <th>Total</th>
                                 <th>Estado Pago</th>
                                 <th>Acciones</th>
                             </tr>
@@ -60,6 +61,7 @@
                                 <th>Fecha</th>
                                 <th>Hora</th>
                                 <th>Monto</th>
+                                <th>Total</th>
                                 <th>Estado Pago</th>
                                 <th>Acciones</th>
                             </tr>
@@ -194,7 +196,7 @@
                         <ul id="historialPacient">
                             <li>
                                 <div>
-                                    <time>1934</time> At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium At vero 
+                                    <time>FECHA ::</time> DESCRIPCIÓN 
                                 </div>
                             </li>
                         </ul>

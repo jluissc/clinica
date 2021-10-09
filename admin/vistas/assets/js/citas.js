@@ -37,6 +37,7 @@ function leerListaTratamientos(){
             {"data": "fecha"},
             {"data": "hora"},
             {"data": "monto"},
+            {"data": "total"},
             {"data": "pago"},
             {"data": "acciones"}
         ]
