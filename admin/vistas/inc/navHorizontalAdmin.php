@@ -14,7 +14,7 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             
             <ul class="navbar-nav ms-auto mb-2 mb-lg-0"> 
-                <?php if($_SESSION['tipo']==1 || in_array(3, $_SESSION['permisos']) ){ ?><!-- ADMIN o CAJERO -->
+                <?php if($_SESSION['tipo']==1 || $_SESSION['tipo']==2 ){ ?><!-- ADMIN o CAJERO -->
                 
                 <li class="nav-item dropdown me-3">
                     <a class="nav-link active dropdown-toggle" href="#" data-bs-toggle="dropdown"
@@ -44,7 +44,7 @@
                     <div class="user-menu d-flex">
                         <div class="user-name text-end me-3">
                             <h6 class="mb-0 text-gray-600"><?php echo $_SESSION['nombre'].' '.$_SESSION['apellido'] ?></h6>
-                            <p class="mb-0 text-sm text-gray-600"><?php echo $_SESSION['tipo'] == 1 ? 'ADMINISTRADOR' : 'PACIENTE'  ?></p>
+                            <p class="mb-0 text-sm text-gray-600"><?php echo $_SESSION['tipo'] == 1 ? 'ADMINISTRADOR' : ($_SESSION['tipo'] == 2 ? 'COLABORADOR' :'PACIENTE')  ?></p>
                         </div>
                         <div class="user-img d-flex align-items-center">
                             <div class="avatar avatar-md">

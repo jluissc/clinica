@@ -7,22 +7,39 @@
             <span>Home</span>
         </a>
     </li>                       
-    
+    <?php if($_SESSION['tipo'] == 1 || $_SESSION['tipo'] == 2 || $_SESSION['tipo'] == 4 || in_array(3, $_SESSION['permisos'])){ ?>
     <li class="sidebar-item <?php echo $_GET['ruta'] == 'citas' ? 'active' : '' ?> ">
         <a href="<?php echo SERVERURL ?>citas" class='sidebar-link'>
             <i class="bi bi-grid-1x2-fill"></i>
             <span>Citas</span>
         </a>
     </li> 
-    
-    <?php if($_SESSION['tipo'] == 1){ ?>
+    <?php } ?>
+    <?php if($_SESSION['tipo'] == 1 || in_array(6, $_SESSION['permisos'])){ ?>
     <li class="sidebar-item <?php echo $_GET['ruta'] == 'clientes' ? 'active' : '' ?> ">
         <a href="<?php echo SERVERURL ?>clientes" class='sidebar-link'>
             <i class="bi bi-grid-1x2-fill"></i>
             <span>Clientes</span>
         </a>
     </li> 
-
+    <?php } ?>
+    <?php if($_SESSION['tipo'] == 1 || in_array(2, $_SESSION['permisos'])){ ?>
+    <li class="sidebar-item <?php echo $_GET['ruta'] == 'gastos' ? 'active' : '' ?> ">
+        <a href="<?php echo SERVERURL ?>gastos" class='sidebar-link'>
+            <i class="bi bi-grid-1x2-fill"></i>
+            <span>Gastos</span>
+        </a>
+    </li> 
+    <?php } ?>
+    <?php if($_SESSION['tipo'] == 1 || in_array(5, $_SESSION['permisos'])){ ?>
+    <li class="sidebar-item <?php echo $_GET['ruta'] == 'materiales' ? 'active' : '' ?> ">
+        <a href="<?php echo SERVERURL ?>materiales" class='sidebar-link'>
+            <i class="bi bi-grid-1x2-fill"></i>
+            <span>Materiales</span>
+        </a>
+    </li> 
+    <?php } ?>
+    <?php if($_SESSION['tipo'] == 1){ ?>
     <li class="sidebar-item <?php echo $_GET['ruta'] == 'configuracion' ? 'active' : '' ?> ">
         <a href="<?php echo SERVERURL ?>configuracion" class='sidebar-link'>
             <i class="bi bi-grid-1x2-fill"></i>

@@ -41,7 +41,7 @@
 				<h6 class="dropdown-header" > <a href="'.SERVERURL.'citas">Citas de hoy</a></h6>
 			</li>';
 			foreach ($listsToday[0] as $list) {
-				$listHTML .= '<li><a class="dropdown-item">'.$list->nombre.' <span class="badge bg-info text-dark"><i class="far fa-clock"></i> '.$list->hora.'</span> </a> <br>'.$list->namC .'</li><hr>';
+				$listHTML .= '<li><p class="text-center">'.$list->nombre.' ::: '.$list->namC .'</p><a class="dropdown-item">'.$list->fecha.' <span class="badge bg-info text-dark"><i class="far fa-clock"></i> </span> '.$list->hora.'  </a> </li><hr>';
 			}
 			$listHTML .= '<li>
 				<h6 class="dropdown-header" > <a href="'.SERVERURL.'citas">Citas de proximos dias</a></h6>
