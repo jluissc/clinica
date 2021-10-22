@@ -6,7 +6,7 @@
 	class clienteModelo extends mainModelo
 	{
 		protected static function reedListCustomers_m(){			
-            $sql = mainModelo::conexion()->prepare("SELECT p.id, p.nombre, p.apellidos, p.celular, p.correo FROM persona p
+            $sql = mainModelo::conexion()->prepare("SELECT p.id, p.nombre, p.apellidos, p.celular, p.correo,p.dni FROM persona p
                 WHERE tipo_user_id= 4 AND estado = 1
                 ORDER BY p.id DESC");
 			$sql -> execute();

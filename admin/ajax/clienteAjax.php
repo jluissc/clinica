@@ -5,7 +5,7 @@
 	require_once '../config/app.php';
 
 	if (isset($_POST['idCustomer']) || isset($_POST['idDelete']) || 
-		isset($_POST['dni_appoint'])) {
+		isset($_POST['dni_appoint']) || isset($_POST['listsCustomers'])) {
 		
 		require_once '../controladores/clientesControlador.php';
 		$inst = new clienteControlador();
@@ -16,6 +16,10 @@
 		}
 		if (isset($_POST['dni_appoint'])) {
 			$inst -> insertAppoint();
+		}
+
+		if (isset($_POST['listsCustomers'])) {
+            $inst -> listsCustomers();
 		}
 
 		if (isset($_POST['idDelete'])) {

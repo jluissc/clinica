@@ -11,8 +11,13 @@ users_permisos = []
 permisos = []
 permisosTempo = []
 fechaSelecionada = ''
-myModalss = new bootstrap.Modal(document.getElementById('xlarge')) 
 
+horasQuitar =[]
+updateTipCita = []
+
+
+myModalss = new bootstrap.Modal(document.getElementById('xlarge')) 
+myModallarge3 = new bootstrap.Modal(document.getElementById('large3'))
 leerHorasAtencion()
 
 function leerHorasAtencion(){
@@ -66,24 +71,160 @@ function filtrarConfig(datos){
     HtmlListConfig()
 }
 function HtmlListConfig(){
-    li = `<a class="" style="cursor:pointer" onclick="verConfig(0,1)" class="btn btn-outline-warning" data-bs-toggle="modal"
-    data-bs-target="#xlarge">Crear Fechas de atención</a>`
+    console.log(listConfig);
+    li = `<div class="list-group"> `
     listConfig.forEach((confId,i) => {
-        li+=`<a class="" style="cursor:pointer" onclick="verConfig(${confId.id},2)" class="btn btn-outline-warning" data-bs-toggle="modal"
-        data-bs-target="#xlarge">config ${i+1}  ${confId.nombre}</a>`
+        li+=`<a class="list-group-item list-group-item-action" style="cursor:pointer" onclick="verConfig(${confId.id},2)" >
+            Config ${i+1}:  ${confId.nombre} <button class="btn btn-info" data-bs-toggle="modal"  data-bs-target="#xlarge"><i class="far fa-eye"></i></button></a>`
     });
+    li+=`</div>`
     document.getElementById('listarConfig').innerHTML = li
     
 }
 function listarServiciosss(listServi){
+    console.log(listServi);
     lir = '<div class="list-group">'
     listServi.forEach(servc => {
         // lir+=`<a class="" style="cursor:pointer"  class="btn btn-outline-warning" data-bs-toggle="modal"
         // data-bs-target="#xlarge"></a>`
-        lir+=`<a class="list-group-item list-group-item-action">${servc.nombre}  <button class="btn btn-info"><i class="fas fa-edit"></i></button><button class="btn btn-danger"><i class="fas fa-trash-alt"></i></button></a>`
+        lir+=`<a class="list-group-item list-group-item-action" onclick="showServic(${servc.id},2)"> ${servc.nombre}  
+            <button class="btn btn-info" data-bs-toggle="modal" data-bs-target="#large3"><i class="fas fa-edit"></i></button>
+            <button class="btn btn-danger" onclick="alertServicio(${servc.id})"            ><i class="fas fa-trash-alt"></i></button></a>`
     });
     lir+=`</div>`
     document.getElementById('listServcsss').innerHTML = lir
+}
+function alertServicio(idServici){
+    Swal.fire({
+        title: '¿Seguro de eliminar?',
+        text: "Se eliminará definitivamente el servicio!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Si, eliminar!',
+        cancelButtonText: 'Cancelar'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            deleteServicio(idServici)
+        }else{
+            Toastify({
+                text: "Se cancelo la eliminación",
+                duration: 2000,
+                backgroundColor: "#12d3dc",
+            }).showToast();
+        }
+    })
+}
+function deleteServicio(idServici){
+    datos = new FormData()
+    datos.append('idServiciD',idServici)
+    fetch(URL+'ajax/configAjax.php',{
+        method: 'POST', 
+        body: datos
+    })
+    .then(r => r.json())
+    .then(r => r == 1 ? leerHorasAtencion() : alertaToastify('Se elimino servicio','green') )
+    .catch(e => console.log(e))
+}
+tipoDeCitaAddd = []
+function showServic(id, tipo){
+    datos = new FormData()
+    datos.append('idServiConf', id)
+    fetch(URL+'ajax/configAjax.php',{
+        method : 'POST',
+        body : datos,
+    })
+    .then( r => r.json())
+    .then(r => {
+        console.log(r);
+        tipoDeCitaAddd = r.tipo
+        updateTipCita = r.tipo
+        console.log('tipoDeCitaAddd');
+        console.log(tipoDeCitaAddd);
+        HMTLConfigServv(r);
+        
+    })
+}
+idServicEdit = 0
+
+function HMTLConfigServv(datos){
+    idServicEdit = datos.servicio.id 
+    // datos principales
+    nameservC = document.getElementById('nameserv')
+    descripservC = document.getElementById('descripserv')
+    precNservC = document.getElementById('precNserv')
+    precOservC = document.getElementById('precOserv')
+    prectiemserv = document.getElementById('prectiemserv')
+    nameservC.value = datos.servicio.nombre
+    descripservC.value = datos.servicio.descripcion
+    precNservC.value = datos.servicio.precio_normal
+    precOservC.value = datos.servicio.precio_venta
+    prectiemserv.value = datos.servicio.tiempo
+    prectiemserv.disabled = true
+    li =''
+    datos.horas.forEach(hora => {
+        li += `<li class="list-group-item">
+        <input class="form-check-input me-1" checked  type="checkbox" id="horaId_${hora.id}" onchange="quitarHoraConf(${hora.id},'${hora.hora}')" aria-label="...">
+        ${hora.hora}
+        </li>`
+    });
+    document.getElementById('listHoursDisp').innerHTML = li
+
+    div = ''
+    citasAtencion.forEach((cita,index) => {
+        estado = datos.tipo.find(type => type.tipo_cita_id == cita.id) ? 'checked' : ''
+        div +=`<li class="list-group-item">
+                <input class="form-check-input me-1" type="checkbox" ${estado} id="citaId_${index}" disabled aria-label="...">
+                ${cita.nombre}
+            </li>`
+        });
+        // div +=`<li class="list-group-item">
+        //         <input class="form-check-input me-1" type="checkbox" ${estado} id="citaId_${index}" onchange="updateTipoCita(${cita.id})" aria-label="...">
+        //         ${cita.nombre}
+        //     </li>`
+        // });
+    document.getElementById('listaCitaCrudT').innerHTML = div
+    document.getElementById('btnEstadoServicio').innerHTML = `<button type="button" class="btn btn-primary ml-1 "  onclick="saveServicio(1)">
+            <i class="bx bx-check d-block d-sm-none"></i>
+            <span class="d-none d-sm-block">Editar</span>
+        </button>`
+    // updateTipCita = datos.tipo
+}
+
+function quitarHoraConf(id, hora){
+    if(horasQuitar.find(hour => hour.id == id)){
+        horasQuitar = horasQuitar.filter(hour => hour.id != id)
+    }else{
+        horasQuitar.push({'id':id,'hora':hora})        
+    }
+    console.log(horasQuitar);
+}
+
+function updateTipoCita(id){
+
+    if(updateTipCita.find(cita=>cita.tipo_cita_id == id)) {
+        // if(updateTipCita.find(cita=>cita.id != 0)){
+            const citaUp = updateTipCita.map( cit => {
+                if( cit.id != 0 ) {
+                    // let cantidad = parseInt(curso.cantidad);
+                    // cantidad++
+                    cit.estado = 0;
+                    return cit;
+               } 
+                
+            })
+            updateTipCita = [...citaUp];
+        // }else{
+        //     updateTipCita = updateTipCita.filter(cita => cita.tipo_cita_id != id)
+        // }
+        
+        // updateTipCita = updateTipCita.filter(cita => cita.tipo_cita_id != id)
+    }
+    else {
+        updateTipCita.push({'tipo_cita_id' : id, 'servicios_id' : idServicEdit, 'id' : 0, 'estado' :0 })
+    }
+    console.log(updateTipCita);
 }
 function verConfig(id,tipo){
     if(tipo == 1){
@@ -196,8 +337,10 @@ function mostrarCrudCitas(id=0,idSelect='listaCitaCrud'){
                     <input class="form-check-input me-1" type="checkbox" id="citaId_${index}" onchange="updateCita(${cita.id},this.id)" aria-label="...">
                     ${cita.nombre}
                 </li>`
-        });
+            });
+        console.log('auuuuu');
     }else{
+        console.log('auiii');
         listConfig.forEach(conff => {
             if(conff.id == id){
                 conff.lista.forEach(type => {
@@ -225,8 +368,26 @@ function mostrarCrudCitas(id=0,idSelect='listaCitaCrud'){
     // document.getElementById('listaCitaCrudT').innerHTML = div
 
 }
-function mostrarTipoC(){
-    mostrarCrudCitas(0,'listaCitaCrudT')
+function mostrarTipoC(id=0){
+    document.getElementById('nameserv').value = ''
+    document.getElementById('descripserv').value = ''
+    document.getElementById('precNserv').value = ''
+    document.getElementById('precOserv').value = ''
+    document.getElementById('prectiemserv').value = ''
+    document.getElementById('prectiemserv').disabled = false
+    div = ''
+    citasAtencion.forEach((cita,index) => {
+        div +=`<li class="list-group-item">
+                <input class="form-check-input me-1" type="checkbox" id="citaId_${index}" onchange="updateCita(${cita.id},this.id)">
+                ${cita.nombre}
+            </li>`
+    });
+    document.getElementById('listaCitaCrudT').innerHTML = div
+    document.getElementById('listHoursDisp').innerHTML = ''
+    document.getElementById('btnEstadoServicio').innerHTML = `<button type="button" class="btn btn-primary ml-1 "  onclick="saveServicio(0)">
+            <i class="bx bx-check d-block d-sm-none"></i>
+            <span class="d-none d-sm-block">Guardar</span>
+        </button>`
 }
 function filtrarUsers(users){
     users.forEach(user => {
@@ -367,19 +528,24 @@ function quitarHoraAtenc(id, hora){
 }
  
 
-function saveServicio(){
-    myModallarge3 = new bootstrap.Modal(document.getElementById('large3'))
+function saveServicio(tipo){
+    console.log(tipo);
+    
     datos = new FormData()
     datos.append('nameserv',document.getElementById('nameserv').value)
     datos.append('descripserv',document.getElementById('descripserv').value)
     datos.append('precNserv',document.getElementById('precNserv').value)
     datos.append('precOserv',document.getElementById('precOserv').value)
     datos.append('prectiemserv',document.getElementById('prectiemserv').value)
-    datos.append('citaSelectt',JSON.stringify(citasSelected))
-    datos.append('horasSelect',JSON.stringify(horasSeleccionadas))
-
-    /*  */
-    /*  */
+    datos.append('tipo',tipo)
+    datos.append('idServicEdit',idServicEdit)
+    if (tipo == 1) {
+        datos.append('horasSelect',JSON.stringify(horasQuitar))
+        datos.append('citaSelectt',JSON.stringify(updateTipCita))
+    } else {   
+        datos.append('citaSelectt',JSON.stringify(citasSelected))
+        datos.append('horasSelect',JSON.stringify(horasSeleccionadas))
+    }
 
     fetch(URL+'ajax/configAjax.php',{
         method : 'POST',
@@ -396,22 +562,26 @@ function saveServicio(){
         document.getElementById('precOserv').value = ''
         document.getElementById('prectiemserv').value = ''
         leerHorasAtencion()
-        document.getElementById('citaId_0').checked = false            
-        document.getElementById('citaId_1').checked = false            
-        document.getElementById('citaId_2').checked = false
-        citasSelected = []
-        horasSeleccionadas.forEach(hora => {
-            document.getElementById(`horaId_${hora.id}`).checked = false
-        });
-        citasAtencion.forEach((hora,index) => {
-            document.getElementById(`citaId_${index}`).checked = false
-        });
-        horasSeleccionadas = []
-        // setTimeout(() => {
-            myModallarge3.hide()
-        // }, 1500);
-
-        // }
+        
+        if(tipo == 1){
+            document.getElementById('listHoursDisp').innerHTML = ''
+            horasQuitar = []
+        }else{
+            document.getElementById('citaId_0').checked = false            
+            document.getElementById('citaId_1').checked = false            
+            document.getElementById('citaId_2').checked = false
+            horasSeleccionadas = []
+            citasSelected = []
+            horasSeleccionadas.forEach(hora => {
+                document.getElementById(`horaId_${hora.id}`).checked = false
+            });
+            citasAtencion.forEach((hora,index) => {
+                document.getElementById(`citaId_${index}`).checked = false
+            });
+        }
+        setTimeout(() => {
+            myModallarge3.hide()            
+        }, 1500);
     })
     .catch(e => alertaToastify('Comunicate con soporte','red',1500))
 

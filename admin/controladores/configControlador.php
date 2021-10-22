@@ -95,6 +95,13 @@
 			configModelo::updateCitaCrud_m($datos);
 		}
 
+		public function listsServicsIdd($id) {
+			configModelo::listsServicsId_m($id);
+		}
+		public function deleteServicio($id) {
+			configModelo::deleteServicio_m($id);
+		}
+
 		public function updatePermisoUser() {
 			$datos = [
                 'tipo' => $_POST['tipoPerm'],
@@ -137,31 +144,48 @@
 				'precOserv' => $_POST['precOserv'],
 				'prectiemserv' => $_POST['prectiemserv'],
 				'estado' => 1,
-			];
-
-			
-
-			$idInsert = configModelo::saveServics_m($datos);
-			if($idInsert){
-				foreach (json_decode($_POST['citaSelectt']) as $cita) {
-					$datos2 = [
-						'servicios' => $idInsert,
-						'tipo_cita' => $cita->citaId,
-					];
-					configModelo::insertServicTypes_m($datos2);
+				'tipo' => $_POST['tipo'],
+				'idServicEdit' => $_POST['idServicEdit'],
+			];			
+			if($_POST['tipo'] == 1){/* EDITAR */
+				$idInsert = configModelo::saveServics_m($datos);
+				if(count(json_decode($_POST['horasSelect']))>0){
+					$reso = [];
+					foreach (json_decode($_POST['horasSelect']) as $hora) {
+						$datos2 = [
+							'id' => $hora->id,
+							'estado' => 0,
+						];
+						configModelo::insertHoraServc_m($datos2,true);
+					}
+					exit(json_encode($reso));
+				}else{
+					exit(json_encode('sin camb'));
 				}
-				foreach (json_decode($_POST['horasSelect']) as $hora) {
-					$datos2 = [
-						'hora' => $hora->hora,
-						'estado' => 1,
-						'servicios_id' => $idInsert,
-					];
-					configModelo::insertHoraServc_m($datos2);
-				}
-				exit(json_encode(1));
 			}else{
-				exit(json_encode('error'));
+				$idInsert = configModelo::saveServics_m($datos);
+				if($idInsert){
+					foreach (json_decode($_POST['citaSelectt']) as $cita) {
+						$datos2 = [
+							'servicios' => $idInsert,
+							'tipo_cita' => $cita->citaId,
+						];
+						configModelo::insertServicTypes_m($datos2);
+					}
+					foreach (json_decode($_POST['horasSelect']) as $hora) {
+						$datos2 = [
+							'hora' => $hora->hora,
+							'estado' => 1,
+							'servicios_id' => $idInsert,
+						];
+						configModelo::insertHoraServc_m($datos2);
+					}
+					exit(json_encode(1));
+				}else{
+					exit(json_encode('error'));
+				}
 			}
+			
 		}
 
 	} 

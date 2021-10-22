@@ -9,7 +9,8 @@
                 <div class="col-3 col-lg-3 col-md-3" >
                     <div class="card">
                         <div class="card-header">
-                            <h4>Servicios</h4> <a class="" style="cursor:pointer"  data-bs-toggle="modal" data-bs-target="#large3" onclick="mostrarTipoC()">Crear servicio</a>
+                            <h4>Servicios</h4> <a class="" style="cursor:pointer"  
+                            data-bs-toggle="modal" data-bs-target="#large3" onclick="mostrarTipoC(0)">Crear servicio</a>
                         </div>
                         <div class="row">
                             <div class="card-body">
@@ -24,6 +25,8 @@
                     <div class="card">
                         <div class="card-header">
                             <h4 class="card-title">Lista de Configuraciones</h4>
+                            <a class="" style="cursor:pointer" onclick="verConfig(0,1)" class="btn btn-outline-warning" data-bs-toggle="modal"
+    data-bs-target="#xlarge">Crear Fechas de atención</a>
                         </div>
                         <div class="card-content">
                             <div class="card-body">
@@ -318,10 +321,12 @@
                         <i class="bx bx-x d-block d-sm-none"></i>
                         <span class="d-none d-sm-block">Cancelar</span>
                     </button>
-                    <button type="button" class="btn btn-primary ml-1 "  onclick="saveServicio()">
-                        <i class="bx bx-check d-block d-sm-none"></i>
-                        <span class="d-none d-sm-block">Guardar</span>
-                    </button>
+                    <div id="btnEstadoServicio">
+                        <!-- <button type="button" class="btn btn-primary ml-1 "  onclick="saveServicio()">
+                            <i class="bx bx-check d-block d-sm-none"></i>
+                            <span class="d-none d-sm-block">Guardar</span>
+                        </button> -->
+                    </div>
                 </div>
             </div>
         </div>

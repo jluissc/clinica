@@ -8,7 +8,8 @@
     isset($_POST['fechaCita']) || isset($_POST['fecha']) || 
 	isset($_POST['fechaSelec']) || isset($_POST['hora_idHoraC']) ||
 	isset($_POST['cita_idCitaC']) || isset($_POST['permisosTemp']) || 
-	isset($_POST['user_idPerm']) ) {
+	isset($_POST['user_idPerm']) || isset($_POST['idServiConf']) || 
+	isset($_POST['idServiciD'])) {
 		
 		require_once '../controladores/configControlador.php';
 		$inst = new configControlador();
@@ -28,6 +29,14 @@
 		// para guardar  permisos de user
 		if (isset($_POST['permisosTemp'])) {
 			$inst -> saveUsuario();
+		}
+		// para listar todo de un servicio
+		if (isset($_POST['idServiConf'])) {
+			$inst -> listsServicsIdd($_POST['idServiConf']);
+		}
+		// para eliminar un servicio (estado = 0)
+		if (isset($_POST['idServiciD'])) {
+			$inst -> deleteServicio($_POST['idServiciD']);
 		}
 		 
 

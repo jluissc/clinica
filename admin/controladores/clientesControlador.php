@@ -9,25 +9,26 @@
 	class clienteControlador extends clienteModelo	{
 
 		
-		public function reedListCustomers() {
+		// public function reedListCustomers() {
+		public function listsCustomers() {
 			$listCustomers = clienteModelo::reedListCustomers_m();
-			$html ='';
+			$datos =[];
 			foreach ($listCustomers as $customer) {
-				// <button class="btn btn-outline-primary" onclick="showDetailCustomer('.$customer->id.')">Detalles</button>
-				$html .='<tr>
-						<td>'.$customer->nombre.' '.$customer->apellidos.'</td>
-						<td>'.$customer->correo.'</td>
-						<td>'.$customer->celular.'</td>
-						<td>'.$customer->correo.'</td>
-						<td>'.$customer->celular.'</td>
-						<td>
-							<button class="btn btn-outline-info" onclick="showCustomer('.$customer->id.',2)" data-bs-toggle="modal"
-								data-bs-target="#info">Editar</button>
-							<button class="btn btn-outline-danger" onclick="deleteCustomer('.$customer->id.')">Eliminar</button>
-						</td>
-					</tr>';
+				// <button class="btn btn-outline-primary" onclick="showDetailCustomer('.$customer->id.')">Detalles</button>				
+				$nombre = $customer->nombre.' '.$customer->apellidos;
+				$correo = $customer->correo;
+				$acciones = '<button class="btn btn-outline-info" onclick="showCustomer('.$customer->id.',2)" data-bs-toggle="modal"
+						data-bs-target="#info">Editar</button>
+					<button class="btn btn-outline-danger" onclick="deleteCustomer('.$customer->id.')">Eliminar</button>';
+				array_push($datos,[
+					'nombre' => $nombre,
+					'dni' => $customer->dni,
+					'correo' => $correo,
+					'celular' => $customer->celular,
+					'acciones' => $acciones,
+				]);
 			}
-			return $html; 
+			exit(json_encode($datos));
 		}
 
 		public function showCustomer(){

@@ -15,26 +15,26 @@
                 <!-- Simple Datatable -->
             </div>
             <div class="card-body">
-                <table class="table table-striped" id="table1">
+                <table class="table table-striped" id="table1" style="width: 100%;"  >
                     <thead>
                         <tr>
-                            <th>Name</th>
+                            <th>Nombres</th>
+                            <th>DNI</th>
                             <th>Email</th>
-                            <th>Phone</th>
-                            <th>City</th>
-                            <th>Status</th>
+                            <th>Celular</th>
+                            <th>Acciones</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody >
                         
                         <?php 
-                            echo $inst->reedListCustomers();
+                            // echo $inst->reedListCustomers();
                         ?>
                         
                     </tbody>
                 </table>
             </div>
-        </div>
+        </div> 
 
         <!--info theme Modal -->
         <div class="modal fade text-left" id="info" tabindex="-1" role="dialog"
@@ -104,8 +104,30 @@
         </div>
 
     </section>
+    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
     <script>
         const url= '<?php echo SERVERURL?>'+'ajax/clienteAjax.php';
+        leerListaTratamientos()
+        function leerListaTratamientos(){
+            console.log('jjjjjjjjjjjjjjj');
+            tablaUsuarios2 = $('#table1').DataTable({  
+                "ajax":{            
+                    "url": url, 
+                    "method": 'POST', //usamos el metodo POST
+                    "data":{listsCustomers:'listsCustomers'}, //enviamos opcion 4 para que haga un SELECT
+                    "dataSrc":""
+                },
+                
+                "columns":[
+                    {"data": "nombre"},
+                    {"data": "dni"},
+                    {"data": "correo"},
+                    {"data": "celular"},
+                    {"data": "acciones"},
+                ]
+            });     
+        }
         
         function showCustomer(idCustomer,estadoModal){ /* idCustomer = idPaciente, tipo =(1 new paciente, 2 update paciente) */
             datos = new FormData()
