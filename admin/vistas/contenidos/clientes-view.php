@@ -50,7 +50,7 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        <div class="form-group">
+                        <!-- <div class="form-group">
                             <div class="col-12">
                                 <input type="text" id="dni_appoint" class="form-control font-bold" placeholder="DNI" onchange="leerDni(1)">
                             </div>
@@ -87,7 +87,10 @@
                                 <input type="text" id="addres_appoint" class="form-control font-bold" placeholder="Dirección" autocomplete="false">
                             </div>
                             
-                        </div>
+                        </div> -->
+                        <?php
+                             include "./vistas/inc/form-user.php"; 
+                        ?>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-light-secondary" data-bs-dismiss="modal">
@@ -151,13 +154,11 @@
 
         function guardarCambios(estadoModal, idAppoint=0){
             datos = {
-                dni_appoint :document.getElementById('dni_appoint').value,
-                name_appoint : document.getElementById('name_appoint').value,
-                last_appoint : document.getElementById('last_appoint').value,
-                celphone_appoint : document.getElementById('celphone_appoint').value,
-                email_appoint : document.getElementById('email_appoint').value,
-                addres_appoint : document.getElementById('addres_appoint').value,
-                addres_appoint : document.getElementById('addres_appoint').value,
+                dni_appoint :document.getElementById('dni').value,
+                name_appoint : document.getElementById('nombre').value,
+                last_appoint : document.getElementById('apellido').value,
+                celphone_appoint : document.getElementById('celular').value,
+                email_appoint : document.getElementById('correo').value,
                 idAppoint : idAppoint,
             }
             validarDatos(datos)
@@ -184,7 +185,8 @@
                                 if(result){
                                     alertaToastify('Datos Cambiados','green')
                                     setTimeout(() => {
-                                        location.reload()
+                                        // location.reload()
+                                        leerListaTratamientos()
                                     }, 1500);
                                 }else alertaToastify('Intentalo nuevamente')
                                 
@@ -200,22 +202,22 @@
         }
         function mandarCampos(estadoModal,datos= []){
             if(estadoModal == 2 || estadoModal == 3){
-                document.getElementById('dni_appoint').disabled = estadoModal == 2 ? true : false
-                document.getElementById('dni_appoint').value = datos.dni
-                document.getElementById('name_appoint').value = datos.nombre
-                document.getElementById('last_appoint').value = datos.apellidos
-                document.getElementById('celphone_appoint').value = datos.celular
-                document.getElementById('email_appoint').value = datos.correo
-                document.getElementById('addres_appoint').value = datos.direccion
+                document.getElementById('dni').disabled = estadoModal == 2 ? true : false
+                document.getElementById('dni').value = datos.dni
+                document.getElementById('nombre').value = datos.nombre
+                document.getElementById('apellido').value = datos.apellidos
+                document.getElementById('celular').value = datos.celular
+                document.getElementById('correo').value = datos.correo
+                // document.getElementById('addres_appoint').value = datos.direccion
 
             }else{
-                document.getElementById('dni_appoint').value = ''
-                document.getElementById('dni_appoint').disabled = false
-                document.getElementById('name_appoint').value = ''
-                document.getElementById('last_appoint').value = ''
-                document.getElementById('celphone_appoint').value = ''
-                document.getElementById('email_appoint').value = ''
-                document.getElementById('addres_appoint').value = ''
+                document.getElementById('dni').value = ''
+                document.getElementById('dni').disabled = false
+                document.getElementById('nombre').value = ''
+                document.getElementById('apellido').value = ''
+                document.getElementById('celular').value = ''
+                document.getElementById('correo').value = ''
+                // document.getElementById('addres_appoint').value = ''
             }
         }
 
