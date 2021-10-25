@@ -9,11 +9,8 @@
 <?php 
     require_once './controladores/homeControlador.php';
     $inst = new homeControlador();
-    // echo $inst -> iniciar_sesion_C();
 ?>
-<section class="row">
-    
-    <!-- <?php echo var_dump($_SESSION['permisos']) ?> -->
+<section class="row">    
     <div class="col-12 col-lg-12">
         <?php if($_SESSION['tipo']==1 || $_SESSION['tipo']==2 ){ ?><!-- ADMIN o CAJERO -->
             <?php 
@@ -75,7 +72,11 @@
                                 </div>
                                 <div class="col-md-8">
                                     <h6 class="text-muted font-semibold">Entrada</h6>
-                                    <h6 class="font-extrabold mb-0" id="pay-serv">0</h6>
+                                    <h6 class="font-extrabold mb-0" id="pay-serv">
+                                        <?php 
+                                            echo 'S/. '.  $datos['pay'];
+                                        ?>
+                                    </h6>
                                 </div>
                             </div>
                         </div>

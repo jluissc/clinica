@@ -100,6 +100,7 @@
 			$dates = [
 				'patients' =>homeModelo::quantityPatients()->quant,
 				'appoints' =>homeModelo::quantityAppoints()->quant,
+				'pay' =>homeModelo::quantityPayToday()->quant,
 			];			
 			return $dates;
 		}
@@ -114,6 +115,13 @@
 
 		protected static function quantityAppoints(){
 			$sql = mainModelo::conexion()->prepare("SELECT COUNT(id) AS quant FROM `tratamientos`");
+			$sql -> execute();
+			$date = $sql->fetch(PDO::FETCH_OBJ);
+			$sql = null;
+			return $date;
+		}
+		protected static function quantityPayToday(){
+			$sql = mainModelo::conexion()->prepare("SELECT SUM(total) as quant FROM `cita_pagos` WHERE estado = 1");
 			$sql -> execute();
 			$date = $sql->fetch(PDO::FETCH_OBJ);
 			$sql = null;
