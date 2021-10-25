@@ -154,7 +154,7 @@
 			// $idPaciente = $tipo ? $_SESSION['id'] : '';
 			if($_SESSION['tipo'] == 4){
 				$sql = mainModelo::conexion()->prepare("SELECT p.nombre AS usuario, c.fecha, c.id AS idcita, p.apellidos, p.celular, 
-					p.correo, h.hora, s.precio_venta FROM tratamientos c
+					p.correo, h.hora, s.precio_venta, p.dni FROM tratamientos c
 					INNER JOIN persona p
 					ON p.id = c.paciente_id
 					INNER JOIN horas h
@@ -166,7 +166,7 @@
 				$sql->bindParam(":iss",$_SESSION['id']);
 			}else{
 				$sql = mainModelo::conexion()->prepare("SELECT p.nombre AS usuario, c.fecha, c.id AS idcita, p.apellidos, p.celular, 
-					p.correo, h.hora, s.precio_venta FROM tratamientos c 
+					p.correo, h.hora, s.precio_venta, p.dni FROM tratamientos c 
 					INNER JOIN persona p
 					ON p.id = c.paciente_id
 					INNER JOIN horas h

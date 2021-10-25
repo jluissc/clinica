@@ -80,7 +80,7 @@
             role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title" id="myModalLabel16">Extra Large Modal</h4>
+                    <h4 class="modal-title" id="myModalLabel16">Configuracion de atención</h4>
                     <button type="button" class="close" data-bs-dismiss="modal"
                         aria-label="Close">
                         <i data-feather="x"></i>
@@ -160,12 +160,12 @@
                     <button type="button" class="btn btn-light-secondary"
                         data-bs-dismiss="modal">
                         <i class="bx bx-x d-block d-sm-none"></i>
-                        <span class="d-none d-sm-block">Close</span>
+                        <span class="d-none d-sm-block">Cancelar</span>
                     </button>
                     <button type="button" class="btn btn-primary ml-1"
                         data-bs-dismiss="modal">
                         <i class="bx bx-check d-block d-sm-none"></i>
-                        <span class="d-none d-sm-block">Accept</span>
+                        <span class="d-none d-sm-block">Guardar</span>
                     </button>
                 </div>
             </div>
@@ -239,7 +239,7 @@
             role="document">
             <div class="modal-content" >
                 <div class="modal-header">
-                    <h4 class="modal-title" id="myModalLabel17">Crear Usuario y permisos</h4>
+                    <h4 class="modal-title" id="myModalLabel17">Crear servicios</h4>
                     <button type="button" class="close" data-bs-dismiss="modal"
                         aria-label="Close">
                         <i data-feather="x"></i>
@@ -339,6 +339,7 @@
             background-color: #93d85e;
         }
     </style>
+    <!-- <script src="<?php echo SERVERURL ?>vistas/assets/js/config.js"></script> -->
 <?php } 
 
 else{

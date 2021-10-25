@@ -1,11 +1,11 @@
-// const URLD = "http://127.0.0.1/clinica/admin/";
+const URL = 'http://127.0.0.1/clinica/admin/';
+const days = [7, 1 , 2, 3, 4, 5, 6]
 
 Lservicios = []
 pacienteId = 0 /* 0 si es nuevo / otro si ya existe */
 datosPacienteNuevo = []
 listConfig = [] /* DIA,HORA, TIPO configurados por el admin */
 listCitasReserv = [] /* CITAS YA RESERVADAS */
-const days = [7, 1 , 2, 3, 4, 5, 6]
 servicSelect =0;
 
 LhorasAtencion = []
@@ -18,10 +18,8 @@ leerCondicionesAtencion()
 buscarHistCitas()
 leerListaTratamientos()
 leerListaHistorial()
-
 // table.destroy();
 function leerListaTratamientos(){
-    console.log(tipoUser == 4 ? true : false);
     tablaUsuarios = $('#table1').DataTable({  
         "ajax":{            
             "url": URL+'ajax/citaAjax.php', 
@@ -32,6 +30,7 @@ function leerListaTratamientos(){
         
         "columns":[
             {"data": "nombre"},
+            {"data": "dni"},
             {"data": "correo"},
             {"data": "celular"},
             {"data": "fecha"},
@@ -44,7 +43,7 @@ function leerListaTratamientos(){
     });     
 }
 function leerListaHistorial(){
-    console.log(tipoUser == 4 ? true : false);
+    // console.log(tipoUser == 4 ? true : false);
     tablaUsuarios2 = $('#table2').DataTable({  
         "ajax":{            
             "url": URL+'ajax/citaAjax.php', 
@@ -74,7 +73,7 @@ function showHistorial(idHistorial){
     .then( r => r.json())
     .then( r => {
         HTMLHistorial(r)
-        console.log(r);        
+        // console.log(r);        
     })
 }
 function HTMLHistorial(datos){
@@ -145,13 +144,13 @@ function validarDni(){
 }
 /*  */
 function leerDni(dni){
-    console.log(dni);
+    // console.log(dni);
     // urlApi=`https://dniruc.apisperu.com/api/v1/dni/${dni}?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6Impsc2MuaGNvOTZAZ21haWwuY29tIn0.ysxMDCaGlMQRJen3msmMcniIx_Q-nuhjXjQ4RNkP31o`;
     urlApi=`https://dniruc.apisperu.com/api/v1/dni/${dni}?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6InBlcGJvdC5wZUBnbWFpbC5jb20ifQ.8dxeu7zAz1x7u3S29WytfSuybE9fdPg_T8-kW087Mqw`;
     fetch(urlApi)
     .then(r => r.json())
     .then(r => {
-        console.log(r);
+        // console.log(r);
         if(r.nombres != null){            
             document.getElementById('nombre').value = r.nombres
             document.getElementById('apellido').value = r.apellidoPaterno + ' ' +r.apellidoMaterno
@@ -201,7 +200,7 @@ function mostrarListaServicios(){
 function cambioServicio(servSelect){
     
     servicSelect = document.getElementById(servSelect).value
-    console.log(servicSelect);
+    // console.log(servicSelect);
     if(servicSelect == 17){/* DEPENDE QUE ID TIENE EL CONSULTAS */
         div = `<div class="form-group">
             <label for="nameHist">Dale un nombre a tu consulta</label>
@@ -211,12 +210,17 @@ function cambioServicio(servSelect){
     }else if(servicSelect == 0)
         document.getElementById('historialNew').innerHTML = ''
     else{
-        div ='<div class="container btn-group"  aria-label="Basic radio toggle button group">'
-        listHist.forEach(h => {
-            div +=`<input type="radio" class="btn-check" id="${h.id}" value="${h.id}" name="listHHHH">
-                    <label class="btn btn-outline-success" for="${h.id}" >${h.code}-${h.nombre}</label>`
-        });
-        div +='</div>'
+        if(listHist != 0){
+
+            div ='<div class="container btn-group"  aria-label="Basic radio toggle button group">'
+            listHist.forEach(h => {
+                div +=`<input type="radio" class="btn-check" id="${h.id}" value="${h.id}" name="listHHHH">
+                <label class="btn btn-outline-success" for="${h.id}" >${h.code}-${h.nombre}</label>`
+            });
+            div +='</div>'
+        }else{
+            div  = 'No tiene servicio anterior'
+        }
         document.getElementById('historialNew').innerHTML = div
     } 
 }
@@ -230,7 +234,7 @@ function buscarHistCitas(){
     .then( r => r.json())
     .then( r => {
         listHist =r
-        console.log(listHist);
+        // console.log(listHist);
     })
 }
 function verificarFecha(dia, mes, anio){
@@ -341,8 +345,8 @@ function validarCita(){
     // b = document.querySelector('input[name="horaAtenUs"]:checked').value
     // console.log(a);
     // console.log(b);
-    console.log(dni.length > 1);
-    console.log(dni);
+    // console.log(dni.length > 1);
+    // console.log(dni);
     if(dni != ''){
         if(nombre != '' && apellido != ''){
             if (celular != '') {
@@ -365,7 +369,7 @@ function validarCita(){
                             listHistt : listHistt.value,
                         }
                         guardarCita(datosPacienteNuevo)
-                        console.log(listHistt);
+                        // console.log(listHistt);
                     }
                     else  alertaToastify('Escoge la hora de atención')
                 }else alertaToastify('Escoge el tipo de atención')
@@ -376,7 +380,7 @@ function validarCita(){
 
 function guardarCita(user){
 
-    console.log(fechaSelecionada);
+    // console.log(fechaSelecionada);
     dat = new FormData()
     dat.append('guardCitaUs',JSON.stringify(user))
     fetch(URL+'ajax/citaAjax.php',{
@@ -387,7 +391,7 @@ function guardarCita(user){
     .then( r => {  
         if(r == 1){
             alertaToastify('Se grabo tu reserva','green',1500) 
-            console.log(r);
+            // console.log(r);
             datosPacienteNuevo = []
             if(tipoUser != 4){
                 document.getElementById('dni').value = ''
@@ -401,17 +405,14 @@ function guardarCita(user){
             document.getElementById('horasDisponibles').innerHTML = ''
             document.getElementById('historialNew').innerHTML = ''
             fechaSelecionada = ''
+            setTimeout(() => {
+                location.reload()
+            }, 2000);
         }else alertaToastify('Error al grabar la reserva')
     })
 }
 
 /* ****************HASTA AQUI EL NUEVO CODIGO******************* */
-
-
-
-
-
-
 
 function datosTransf(idAppointd,showBtn){
     idAppoint = idAppointd
@@ -550,17 +551,6 @@ function mandarDatosPago(){
     }
     else alertaToastify('Número de operación necesario','red')
 }
-
-
-
-
-
-function payAppoint(idAppoint){
-console.log(idAppoint);
-}
-
-
-
 
 
 

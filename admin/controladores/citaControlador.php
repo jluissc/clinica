@@ -104,6 +104,7 @@
 					($result[0] ? ($result[1]->tipo_pago_id1 == 2 ? ($result[1]->estado ? 'Aceptado' : 'Falta Verificar'): 'Pagado' ) : '<button class="btn btn-outline-primary" onclick="payAppoint('.$appoint->idcita.')">Pagar Tarjeta</button><button class="btn btn-outline-info" data-bs-toggle="modal" data-bs-target="#info" onclick="datosTransf('.$appoint->idcita.',true)"> Mandar Transf.</button>');
 				array_push($datos,[
 					'nombre' => $nn,
+					'dni' => $appoint->dni,
 					'correo' => $appoint->correo,
 					'celular' => $appoint->celular,
 					'fecha' => $appoint->fecha,
