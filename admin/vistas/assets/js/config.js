@@ -1,4 +1,4 @@
-const URL = 'http://127.0.0.1/clinica/admin/';
+const URL = 'http://127.0.0.1:84/clinica/admin/';
 citasAtencion = []
 citasSelected = []
 

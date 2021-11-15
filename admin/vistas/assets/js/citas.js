@@ -1,4 +1,4 @@
-const URL = 'http://127.0.0.1/clinica/admin/';
+const URL = 'http://127.0.0.1:84/clinica/admin/';
 const days = [7, 1 , 2, 3, 4, 5, 6]
 
 Lservicios = []
