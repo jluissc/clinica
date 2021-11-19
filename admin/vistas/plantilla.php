@@ -8,8 +8,7 @@
 	<?php include "./vistas/inc/link.php"; ?>
     
 </head>
-<body class="light"> 
-    
+<body class="light">     
 	
 	<?php 
 		$peticionAjax = false;
@@ -23,6 +22,8 @@
 			$pagina = explode("/",$_GET['ruta']);
 			require_once "./controladores/loginControlador.php"; 
 			$inst = new loginControlador();
+            include "./vistas/inc/scrip.php"; 
+           
 			if (!isset($_SESSION['token']) || 
             !isset($_SESSION['nombre']) || 
             !isset($_SESSION['email']) || 
@@ -56,13 +57,13 @@
         <div id="main" class='layout-navbar'>
             
             <header class='mb-3'>
+            
                 <?php 
                     include "./vistas/inc/navHorizontalAdmin.php"; 
                 ?>
             </header>
             
-            <div id="main-content" style="    background-color: #bcfaef;
-">
+            <div id="main-content" style="    background-color: #bcfaef;">
                 <div class="page-heading">
                     <?php include $vistas; ?>
                 </div>
@@ -83,8 +84,12 @@
     </div>
     <?php 
         include "./vistas/inc/logout.php"; 
-        include "./vistas/inc/scrip.php"; 
         }    
     ?>
+    
+    <script src="<?php echo SERVERURL ?>vistas/assets/js/pages/dashboard.js"></script>
+    <script src="<?php echo SERVERURL ?>vistas/assets/js/main.js"></script>
+    <script src="<?php echo SERVERURL ?>vistas/assets/vendors/toastify/toastify.js"></script>
+    <script src="<?php echo SERVERURL ?>vistas/assets/js/pages/horizontal-layout.js"></script>
 </body>
 </html>

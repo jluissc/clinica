@@ -1,43 +1,106 @@
 <?php 
-
-	/**
-	 * 
-	 */
 	require_once 'mainModelo.php';
 	class configModelo extends mainModelo
-	{
-		 
+	{	
 		protected static function listarHoraAtencion_m(){
 			$sql = mainModelo::conexion()->prepare("SELECT * FROM horas");
 			$sql -> execute();
 			$horasAtencion = $sql->fetchAll(PDO::FETCH_OBJ);
 			$sql = null;
 			$datos = [
-				'horaAtencion' => $horasAtencion,
-				'tipoAtencion' => configModelo::listarTipoAtencion_m(),
-				'users' => configModelo::listarUsers_m(),
-				'permisos' => configModelo::listarPermisos_m(),
-				'servicios' => configModelo::listarServicios_m(),
-				'diasAtencion' => configModelo::listarDiasAtencion_m(),
 				'listConfig' => configModelo::listConfig_m(),
 				'listServics' => configModelo::listServics_m(),
+				'listCategs' => configModelo::listCategs_m(),
+				'diasAtencion' => configModelo::listarDiasAtencion_m(),
+				'tipoAtencion' => configModelo::listarTipoAtencion_m(),
+				// 'horaAtencion' => $horasAtencion,
+				// 'users' => configModelo::listarUsers_m(),
+				// 'permisos' => configModelo::listarPermisos_m(),
+				// 'servicios' => configModelo::listarServicios_m(),
 			];
 			exit(json_encode($datos));
 		}
-		protected static function listarTipoAtencion_m(){
-			$sql = mainModelo::conexion()->prepare("SELECT * FROM tipo_cita");
+		protected static function listServics_m(){
+			$sql = mainModelo::conexion()->prepare("SELECT sg.nombre as serv, s.nombre as cat, sg.estado as sg_est, s.estado as s_est, 
+				sg.id as sg_id, s.id as s_id, s.descripcion, s.precio_normal, s.precio_venta, s.tiempo FROM servicio_general sg
+				LEFT JOIN servicios s
+				ON s.servicio_general_id = sg.id
+			 WHERE sg.elimino = 0");
 			$sql -> execute();
-			$tipoAtencion = $sql->fetchAll(PDO::FETCH_OBJ);
+			$servics = $sql->fetchAll(PDO::FETCH_OBJ);
 			$sql = null;
-			return $tipoAtencion;
+			return $servics;
+		}
+		protected static function listCategs_m(){
+			$sql = mainModelo::conexion()->prepare("SELECT * FROM servicios");
+			$sql -> execute();
+			$servics = $sql->fetchAll(PDO::FETCH_OBJ);
+			$sql = null;
+			return $servics;
+		}
+		protected static function listConfig_m(){
+			$sql = mainModelo::conexion()->prepare("SELECT  s.nombre as servicio, s.id as s_id, 
+				c.id as c_id, c.codigo, c.nombre as c_nombre, c.horaInicio, c.horaFin, 
+				dt.id as dt_id, dt.dias_id, dt.estado, dt.tipo_atencion FROM 
+				dias_hora_atencion dt
+				INNER JOIN config c
+				ON c.id = dt.config_id
+				INNER JOIN servicio_general s
+				ON c.servicio_general_id = s.id
+			");
+			$sql -> execute();
+			$permisos = $sql->fetchAll(PDO::FETCH_OBJ);
+			$sql = null;
+			return $permisos;
 		}
 		protected static function listarDiasAtencion_m(){
-			$sql = mainModelo::conexion()->prepare("SELECT * FROM dias");
+			$sql = mainModelo::conexion()->prepare("SELECT id, nombre FROM dias");
 			$sql -> execute();
 			$tipoAtencion = $sql->fetchAll(PDO::FETCH_OBJ);
 			$sql = null;
 			return $tipoAtencion;
 		}
+		protected static function listarTipoAtencion_m(){
+			$sql = mainModelo::conexion()->prepare("SELECT id, nombre FROM tipo_atencion");
+			$sql -> execute();
+			$tipoAtencion = $sql->fetchAll(PDO::FETCH_OBJ);
+			$sql = null;
+			return $tipoAtencion;
+		}
+		protected static function addEditServics_m($datos){
+			$pdo = mainModelo::conexion();
+			if($datos['id']){
+				$sql = $pdo->prepare("UPDATE servicio_general SET nombre = :name , estado = :status WHERE id = :id");
+				$sql->bindParam(":id",$datos['id']);
+			}else{
+				$sql = $pdo->prepare("INSERT INTO servicio_general (nombre, estado) VALUES(:name, :status)");
+			}
+				$sql->bindParam(":name",$datos['name']);
+				$sql->bindParam(":status",$datos['status']);
+			$sql -> execute();
+			if($sql->rowCount()>0){
+				// $s = $pdo->lastInsertId();
+				exit(json_encode(configModelo::listServics_m()));
+			}else{
+				exit(json_encode(0));
+			}
+		}
+		protected static function deleteServicio_m($datos){
+			if($datos['tipo']== 1){
+				$sql = mainModelo::conexion()->prepare("UPDATE `servicio_general` SET elimino = 1 WHERE id =:id");
+			}else{
+				$sql = mainModelo::conexion()->prepare("UPDATE `servicios` SET estado = 0 WHERE id =:id");
+			}
+			$sql->bindParam(":id", $datos['id']);
+			$sql -> execute();
+			if($sql->rowCount()>0){
+				exit(json_encode(configModelo::listServics_m()));
+			}else{
+				exit(json_encode(0));
+			}
+		}
+		
+		
 		protected static function listarServicios_m(){
 			$sql = mainModelo::conexion()->prepare("SELECT * FROM servicios");
 			$sql -> execute();
@@ -55,23 +118,8 @@
 			$sql = null;
 			return $tipoAtencion;
 		}
-		protected static function listConfig_m(){
-			$sql = mainModelo::conexion()->prepare("SELECT * FROM dias_hora_atencion dt
-				INNER JOIN config c
-				ON c.id = dt.config_id
-			");
-			$sql -> execute();
-			$permisos = $sql->fetchAll(PDO::FETCH_OBJ);
-			$sql = null;
-			return $permisos;
-		}
-		protected static function listServics_m(){
-			$sql = mainModelo::conexion()->prepare("SELECT * FROM servicios WHERE estado = 1");
-			$sql -> execute();
-			$servics = $sql->fetchAll(PDO::FETCH_OBJ);
-			$sql = null;
-			return $servics;
-		}
+		
+
 		protected static function listarPermisos_m(){
 			$sql = mainModelo::conexion()->prepare("SELECT * FROM permisos");
 			$sql -> execute();
@@ -140,7 +188,7 @@
 		protected static function saveServics_m($datos){
 			// $tipo =;
 			$pdo=mainModelo::conexion();
-			if ($datos['tipo'] == 1) {
+			if ($datos['tipo']) {
 				$sql = $pdo->prepare('UPDATE `servicios` SET `nombre`=:nombre, `descripcion`=:descr, 
 					`precio_normal`=:precnor, `precio_venta`=:precofer, `estado`=:estado, `tiempo`=:timme WHERE id=:id');	
 				$sql->bindParam(":id",$datos['idServicEdit']);	
@@ -158,14 +206,15 @@
 					return false;
 				}	
 			} else {	
-				$sql = $pdo->prepare('INSERT INTO `servicios`(`nombre`, `descripcion`, `precio_normal`, `precio_venta`, `estado`, `tiempo`)
-				VALUES(:nombre, :descr, :precnor, :precofer, :estado, :timme)');
+				$sql = $pdo->prepare('INSERT INTO `servicios`(`nombre`, `descripcion`, `precio_normal`, `precio_venta`, `estado`, `tiempo`,`servicio_general_id`)
+				VALUES(:nombre, :descr, :precnor, :precofer, :estado, :timme, :id_serv)');
 				$sql->bindParam(":nombre",$datos['nameserv']);	
 				$sql->bindParam(":descr",$datos['descripserv']);	
 				$sql->bindParam(":precnor",$datos['precNserv']);
 				$sql->bindParam(":precofer",$datos['precOserv']);
 				$sql->bindParam(":estado",$datos['estado']);
 				$sql->bindParam(":timme",$datos['prectiemserv']);
+				$sql->bindParam(":id_serv",$datos['id_serv']);
 				$sql -> execute();
 				if ($sql->rowCount()>0) {
 					return $pdo->lastInsertId();
@@ -191,23 +240,23 @@
 		}
 
 		protected static function citasReservadasNexs($fecha=''){
-			$dia = $fecha != '' ? $fecha : date('Y-m-d');
-			$sql = mainModelo::conexion()->prepare("SELECT c.id as idCita, c.estado,  
-				c.horas_id as id, c.mensaje, p.nombre, p.dni, p.celular , h.hora, c.fecha, tc.nombre as namC  FROM `tratamientos` c
-				INNER JOIN `persona` p
-				ON p.id = c.paciente_id
-				INNER JOIN `horas` h
-				ON c.horas_id  = h.id
-				INNER JOIN tipo_cita tc
-				ON tc.id = c.tipo_cita_id
-				-- INNER JOIN `tipo_cita` tc
-				-- ON tc.id  = c.tipo_cita_id
-				WHERE c.fecha >:dia ORDER BY h.id ASC LIMIT 5" );
-			$sql->bindParam(":dia",$dia);
-            $sql -> execute();
-			$lista = $sql->fetchAll(PDO::FETCH_OBJ);
-			$sql = null;
-			return $lista;
+			// $dia = $fecha != '' ? $fecha : date('Y-m-d');
+			// $sql = mainModelo::conexion()->prepare("SELECT c.id as idCita, c.estado,  
+			// 	c.horas_id as id, c.mensaje, p.nombre, p.dni, p.celular , h.hora, c.fecha, tc.nombre as namC  FROM `tratamientos` c
+			// 	INNER JOIN `persona` p
+			// 	ON p.id = c.paciente_id
+			// 	INNER JOIN `horas` h
+			// 	ON c.horas_id  = h.id
+			// 	INNER JOIN tipo_cita tc
+			// 	ON tc.id = c.tipo_cita_id
+			// 	-- INNER JOIN `tipo_cita` tc
+			// 	-- ON tc.id  = c.tipo_cita_id
+			// 	WHERE c.fecha >:dia ORDER BY h.id ASC LIMIT 5" );
+			// $sql->bindParam(":dia",$dia);
+            // $sql -> execute();
+			// $lista = $sql->fetchAll(PDO::FETCH_OBJ);
+			// $sql = null;
+			// return $lista;
 		}
 
 		
@@ -274,6 +323,29 @@
 			$sql->bindParam(":permisos_id",$datos['tipo']);
             $sql -> execute();			
 			$sql = null;
+		}	
+
+		protected static function datosCateg_m($id){
+			$sql = mainModelo::conexion()->prepare("SELECT id, estado, dias_id, tipo_cita_id FROM servicios_tipo_dias 
+				WHERE servicios_id = :id");
+			$sql->bindParam(":id",$id);
+            $sql -> execute();
+			$servics = $sql->fetchAll(PDO::FETCH_OBJ);			
+			$sql = null;
+			$datos = [
+				'servics' => $servics,
+				'horas' => configModelo::horasCateg($id),
+			];
+			exit(json_encode($datos));
+		}		
+		protected static function horasCateg($id){
+			$sql = mainModelo::conexion()->prepare("SELECT id, hora, estado FROM horas 
+				WHERE servicios_id = :id");
+			$sql->bindParam(":id",$id);
+            $sql -> execute();
+			$servics = $sql->fetchAll(PDO::FETCH_OBJ);
+			$sql = null;	
+			return $servics;
 		}		
 		protected static function insertPermisoUser_m($datos){
 			$sql = mainModelo::conexion()->prepare("INSERT INTO `permisos_user` (`persona_id`, `permisos_id`) 
@@ -284,26 +356,28 @@
 			$sql = null;
 		}		
 		protected static function insertServicTypes_m($datos){
-			$existe = mainModelo::conexion()->prepare("SELECT * FROM `servicios_tipo` WHERE `servicios_id` =:servId AND `tipo_cita_id` =:tipID");
-			$existe->bindParam(":servId",$datos['servicios']);
-			$existe->bindParam(":tipID",$datos['tipo_cita']);
-			$existe -> execute();
-			if( $existe->rowCount() > 0){
-				// return 'existe';
-				$sql = mainModelo::conexion()->prepare("UPDATE `servicios_tipo` SET estado = 1 WHERE `servicios_id` =:servicios AND `tipo_cita_id` =:tipo_cita");
-			}else{
+			// $existe = mainModelo::conexion()->prepare("SELECT * FROM `servicios_tipo` WHERE `servicios_id` =:servId AND `tipo_cita_id` =:tipID");
+			// $existe->bindParam(":servId",$datos['servicios']);
+			// $existe->bindParam(":tipID",$datos['tipo_cita']);
+			// $existe -> execute();
+			// if( $existe->rowCount() > 0){
+			// 	// return 'existe';
+			// 	$sql = mainModelo::conexion()->prepare("UPDATE `servicios_tipo` SET estado = 1 WHERE `servicios_id` =:servicios AND `tipo_cita_id` =:tipo_cita");
+			// }else{
 				// return 'no-existe';
-				$sql = mainModelo::conexion()->prepare("INSERT INTO `servicios_tipo` (`servicios_id`, `tipo_cita_id`) 
-				VALUES (:servicios, :tipo_cita) ");
-			}
+				$sql = mainModelo::conexion()->prepare("INSERT INTO `servicios_tipo_dias` (`servicios_id`, `tipo_cita_id`,`estado`, `dias_id`) 
+				VALUES (:servicios, :tipo_cita, :estado, :dia) ");
+			// }
 			$sql->bindParam(":servicios",$datos['servicios']);
 			$sql->bindParam(":tipo_cita",$datos['tipo_cita']);
+			$sql->bindParam(":estado",$datos['estado']);
+			$sql->bindParam(":dia",$datos['dia']);
             $sql -> execute();	
-			if( $existe->rowCount() > 0){
-				return 1;
-			}else{
-				return 0;
-			}
+			// if( $existe->rowCount() > 0){
+			// 	return 1;
+			// }else{
+			// 	return 0;
+			// }
 			$sql = null;
 		}		
 		protected static function insertHoraServc_m($datos, $tipo=false){
@@ -366,21 +440,21 @@
 			exit(json_encode($datos));
 		}
 		protected static function citasReservadas($fecha=''){
-			$dia = $fecha != '' ? $fecha : date('Y-m-d');
-			$sql = mainModelo::conexion()->prepare("SELECT c.id as idCita, c.estado,  
-				c.horas_id as id, c.mensaje, p.nombre, p.dni, p.celular , h.hora, c.fecha, tc.nombre as namC  FROM `tratamientos` c
-				INNER JOIN `persona` p
-				ON p.id = c.paciente_id
-				INNER JOIN `horas` h
-				ON c.horas_id  = h.id
-				INNER JOIN tipo_cita tc
-				ON tc.id = c.tipo_cita_id
-				WHERE c.fecha =:dia ORDER BY h.id ASC" );
-			$sql->bindParam(":dia",$dia);
-            $sql -> execute();
-			$lista = $sql->fetchAll(PDO::FETCH_OBJ);
-			$sql = null;
-			return $lista;
+			// $dia = $fecha != '' ? $fecha : date('Y-m-d');
+			// $sql = mainModelo::conexion()->prepare("SELECT c.id as idCita, c.estado,  
+			// 	c.horas_id as id, c.mensaje, p.nombre, p.dni, p.celular , h.hora, c.fecha, tc.nombre as namC  FROM `tratamientos` c
+			// 	INNER JOIN `persona` p
+			// 	ON p.id = c.paciente_id
+			// 	INNER JOIN `horas` h
+			// 	ON c.horas_id  = h.id
+			// 	INNER JOIN tipo_cita tc
+			// 	ON tc.id = c.tipo_cita_id
+			// 	WHERE c.fecha =:dia ORDER BY h.id ASC" );
+			// $sql->bindParam(":dia",$dia);
+            // $sql -> execute();
+			// $lista = $sql->fetchAll(PDO::FETCH_OBJ);
+			// $sql = null;
+			// return $lista;
 		}
 		protected static function citas_no_disponioles($fecha){
 			$sql = mainModelo::conexion()->prepare("SELECT * FROM `cita_no_atencion` WHERE dia =:dia");
@@ -425,16 +499,7 @@
 			];
 			exit(json_encode($datos));
 		}
-		protected static function deleteServicio_m($id){
-			$sql = mainModelo::conexion()->prepare("UPDATE `servicios` SET estado = 0 WHERE id =:id");
-			$sql->bindParam(":id", $id);
-			$sql -> execute();
-			if($sql->rowCount()>0){
-				exit(json_encode(1));
-			}else{
-				exit(json_encode(0));
-			}
-		}
+		
 
 		protected static function horasServicList($id){
 			$sql = mainModelo::conexion()->prepare("SELECT * FROM `horas` WHERE servicios_id =:id AND estado=1");

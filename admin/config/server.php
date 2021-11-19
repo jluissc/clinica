@@ -1,6 +1,6 @@
 <?php 
 	const SERVER = "localhost";
-	const DB = "clinica_db";
+	const DB = "clinica_db1";
 	const USER = "root";
 	const PASS = "";
 

@@ -8,6 +8,14 @@
  
 	class configControlador extends configModelo	{
 		
+		public function addEditServics() {
+			$datosServ = [
+				'name' => $_POST['serv_name'],
+				'status' => $_POST['serv_status'],
+				'id' => $_POST['serv_addEdit'],
+			];
+			configModelo::addEditServics_m($datosServ);
+		}
 		public function listarHoraAtencion() {
 			configModelo::listarHoraAtencion_m();
 		}
@@ -98,8 +106,12 @@
 		public function listsServicsIdd($id) {
 			configModelo::listsServicsId_m($id);
 		}
-		public function deleteServicio($id) {
-			configModelo::deleteServicio_m($id);
+		public function deleteServicio() {
+			$datos = [
+				'id' => $_POST['idServiciD'],
+				'tipo' => $_POST['tipoServ']
+			];
+			configModelo::deleteServicio_m($datos);
 		}
 
 		public function updatePermisoUser() {
@@ -108,6 +120,9 @@
                 'user_id' => $_POST['user_idPerm'],
             ];
 			configModelo::updatePermisoUser_m($datos);
+		}
+		public function datosCateg($id) {
+			configModelo::datosCateg_m($id);
 		}
 
 		public function fecha_servicio() {			
@@ -138,16 +153,17 @@
 		}
 		public function saveServics() {
 			$datos= [
-				'nameserv' => $_POST['nameserv'],
-				'descripserv' => $_POST['descripserv'],
-				'precNserv' => $_POST['precNserv'],
-				'precOserv' => $_POST['precOserv'],
-				'prectiemserv' => $_POST['prectiemserv'],
-				'estado' => 1,
-				'tipo' => $_POST['tipo'],
-				'idServicEdit' => $_POST['idServicEdit'],
+				'nameserv' => $_POST['name_cat'],
+				'descripserv' => $_POST['descrip_cat'],
+				'precNserv' => $_POST['precN_cat'],
+				'precOserv' => $_POST['precO_cat'],
+				'prectiemserv' => $_POST['prectiem_cat'],
+				'estado' => $_POST['status_cat'],
+				'tipo' => $_POST['tipo_cat'],
+				'id_serv' => $_POST['id_serv'],
+				// 'idServicEdit' => $_POST['id_serv'],
 			];			
-			if($_POST['tipo'] == 1){/* EDITAR */
+			if($_POST['tipo_cat']){/* EDITAR */
 				$idInsert = configModelo::saveServics_m($datos);
 				if(count(json_decode($_POST['horasSelect']))>0){
 					$reso = [];
@@ -162,15 +178,19 @@
 				}else{
 					exit(json_encode('sin camb'));
 				}
-			}else{
+			}else{ /* crear categoria */
 				$idInsert = configModelo::saveServics_m($datos);
 				if($idInsert){
-					foreach (json_decode($_POST['citaSelectt']) as $cita) {
-						$datos2 = [
-							'servicios' => $idInsert,
-							'tipo_cita' => $cita->citaId,
-						];
-						configModelo::insertServicTypes_m($datos2);
+					foreach (json_decode($_POST['diasSelect']) as $dia) {
+						foreach (json_decode($_POST['tiposSelect']) as $cita) {
+							$datos2 = [
+								'servicios' => $idInsert,
+								'tipo_cita' => $cita->id,
+								'estado' => 1,
+								'dia' => $dia->id,
+							];
+							configModelo::insertServicTypes_m($datos2);
+						}
 					}
 					foreach (json_decode($_POST['horasSelect']) as $hora) {
 						$datos2 = [
@@ -180,7 +200,7 @@
 						];
 						configModelo::insertHoraServc_m($datos2);
 					}
-					exit(json_encode(1));
+					exit(json_encode(configModelo::listServics_m()));
 				}else{
 					exit(json_encode('error'));
 				}

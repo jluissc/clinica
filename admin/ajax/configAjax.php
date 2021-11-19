@@ -4,16 +4,35 @@
 
 	require_once '../config/app.php';
 
-	if (isset($_POST['horaAten']) || isset($_POST['saveConfig']) || isset($_POST['prectiemserv']) || 
+	if (isset($_POST['horaAten']) || isset($_POST['saveConfig']) || isset($_POST['name_cat']) || 
     isset($_POST['fechaCita']) || isset($_POST['fecha']) || 
 	isset($_POST['fechaSelec']) || isset($_POST['hora_idHoraC']) ||
 	isset($_POST['cita_idCitaC']) || isset($_POST['permisosTemp']) || 
 	isset($_POST['user_idPerm']) || isset($_POST['idServiConf']) || 
-	isset($_POST['idServiciD'])) {
+	isset($_POST['idServiciD']) || isset($_POST['serv_addEdit']) || 
+	isset($_POST['datosCateg'])  ) {
 		
 		require_once '../controladores/configControlador.php';
 		$inst = new configControlador();
 
+		// add and edit servics general
+		if (isset($_POST['serv_addEdit'])) {
+			$inst -> addEditServics();
+		}
+		// para eliminar un servicio, categoria (estado = 0)
+		if (isset($_POST['idServiciD'])) {
+			$inst -> deleteServicio();
+		}
+		// add categoria **************************
+		if (isset($_POST['name_cat'])) {
+			// exit(json_encode($_POST['prectiemserv']));
+			$inst->saveServics();
+		}
+		// add categoria **************************
+		if (isset($_POST['datosCateg'])) {
+			// exit(json_encode($_POST['prectiemserv']));
+			$inst->datosCateg($_POST['datosCateg']);
+		}
 		// Listar al carga la pagina todo las config *****
 		if (isset($_POST['horaAten'])) {
 			$inst -> listarHoraAtencion();
@@ -34,17 +53,10 @@
 		if (isset($_POST['idServiConf'])) {
 			$inst -> listsServicsIdd($_POST['idServiConf']);
 		}
-		// para eliminar un servicio (estado = 0)
-		if (isset($_POST['idServiciD'])) {
-			$inst -> deleteServicio($_POST['idServiciD']);
-		}
+		
 		 
 
-        // prod 
-		if (isset($_POST['prectiemserv'])) {
-			// exit(json_encode($_POST['prectiemserv']));
-			$inst->saveServics();
-		}
+        
 
         if (isset($_POST['fecha'])) {
 			echo $inst -> fecha_servicio();

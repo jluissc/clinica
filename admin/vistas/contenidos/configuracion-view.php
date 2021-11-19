@@ -6,11 +6,11 @@
         <div class="col-12 col-lg-12">
             <div class="row">
                 <!-- Editar permisos de usuarios -->
-                <div class="col-3 col-lg-3 col-md-3" >
+                <div class="col-6 col-lg-6 col-md-6" >
                     <div class="card">
                         <div class="card-header">
-                            <h4>Servicios</h4> <a class="" style="cursor:pointer"  
-                            data-bs-toggle="modal" data-bs-target="#large3" onclick="mostrarTipoC(0)">Crear servicio</a>
+                            <h4>Servicios</h4> <a class="" style="cursor:pointer" 
+                                onclick="tipoModalServc(0)">Crear servicio</a>
                         </div>
                         <div class="row">
                             <div class="card-body">
@@ -26,7 +26,7 @@
                         <div class="card-header">
                             <h4 class="card-title">Lista de Configuraciones</h4>
                             <a class="" style="cursor:pointer" onclick="verConfig(0,1)" class="btn btn-outline-warning" data-bs-toggle="modal"
-    data-bs-target="#xlarge">Crear Fechas de atención</a>
+                                data-bs-target="#xlarge">Crear Fechas de atención</a>
                         </div>
                         <div class="card-content">
                             <div class="card-body">
@@ -73,8 +73,133 @@
         </div>
     </section>
 
+    <!-- crear servicio general -->
+    <!-- modal-dialog modal-dialog-centered -->
+    <div class="modal fade" id="servicGenr" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Servicio General</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" >
+                    <div class="form-group">
+                        <label for="name_serv">Nombre servicio general</label>
+                        <input type="text" class="form-control" placeholder="Ingrese nombre" id="name_serv">
+                    </div>
+                    <div class="form-group">
+                        <label for="stat_serv">Estado</label>
+                        <select name="" id="stat_serv">
+                            <option value="0">Inactivo</option>
+                            <option value="1">Activo</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer" id="btn_serv">
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SERVICIOS -->
+    <div class="modal fade text-left" id="categModal" tabindex="-1" role="dialog"
+        aria-labelledby="myModalLabel17" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl"
+            role="document">
+            <div class="modal-content" >
+                <div class="modal-header">
+                    <h4 class="modal-title" id="myModalLabel17">Crear servicios</h4>
+                    <button type="button" class="close" data-bs-dismiss="modal"
+                        aria-label="Close">
+                        <i data-feather="x"></i>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                            <div class="col-4 col-lg-4 col-md-4">
+                                <div class="card">
+                                    <br>
+                                    <br>
+                                    <div class="form-group">
+                                        <label for="name_cat">Nombre del servicio</label>
+                                        <input type="text" class="form-control" placeholder="Nombre del servicio" id="name_cat">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="descrip_cat">Descripción del servicio</label>
+                                        <input type="text" class="form-control" placeholder="Descripción del servicio (opcional)" id="descrip_cat">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="precN_cat">Precio Normal</label>
+                                        <input type="number" class="form-control" placeholder="Precio normal " id="precN_cat">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="precO_cat">Precio Oferta</label>
+                                        <input type="number" class="form-control" placeholder="Precio Oferta " id="precO_cat">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="stat_cat">Estado</label>
+                                        <select name="" id="stat_cat">
+                                            <option value="0">Inactivo</option>
+                                            <option value="1">Activo</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="prectiem_cat">Tiempo de atención</label>
+                                        <input type="number" class="form-control" placeholder="Tiempo de atención" id="prectiem_cat" onchange="filtrarHours()">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-4 col-lg-4 col-md-4">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h4 class="card-title">POSIBLES HORAS DE ATENCIÓN</h4>
+                                    </div>
+                                    <div class="card-content">
+                                        <div class="card-body">
+                                            <!-- <p>
+                                                Place checkboxes and radios within list group items and customize as needed
+                                            </p> -->
+                                            <ul class="list-group" id="listHoursDisp">
+                                                
+                                            </ul>
+
+                                            
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-4 col-lg-4 col-md-4">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h4 class="card-title">SELECCIONAR LOS TIPOS DE CITA DISPONIBLES</h4>
+                                    </div>
+                                    <div class="card-content">
+                                        <div class="card-body">
+                                            TIPO DE ATENCION
+                                            <ul class="list-group" id="listaCitaCrudT">
+                                                
+                                            </ul>
+                                            <br>
+                                            DIAS DISPONIBLES
+                                            <ul class="list-group" id="listDiasDisp">
+                                                
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                    </div>
+                </div>
+                <div class="modal-footer" id="btn_categ">
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- DIAS TIPOS Y HORAS DE ATENCION -->
-    <div class="modal fade text-left w-100" id="xlarge" tabindex="-1" role="dialog"
+    <div class="modal fade text-left w-100" id="xlarge3" tabindex="-1" role="dialog"
         aria-labelledby="myModalLabel16" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl"
             role="document">
@@ -171,6 +296,8 @@
             </div>
         </div>
     </div>
+
+
     <!-- PERMISOS USERS -->
     <div class="modal fade text-left" id="large2" tabindex="-1" role="dialog"
         aria-labelledby="myModalLabel17" aria-hidden="true">
@@ -232,105 +359,7 @@
             </div>
         </div>
     </div>
-    <!-- SERVICIOS -->
-    <div class="modal fade text-left" id="large3" tabindex="-1" role="dialog"
-        aria-labelledby="myModalLabel17" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl"
-            role="document">
-            <div class="modal-content" >
-                <div class="modal-header">
-                    <h4 class="modal-title" id="myModalLabel17">Crear servicios</h4>
-                    <button type="button" class="close" data-bs-dismiss="modal"
-                        aria-label="Close">
-                        <i data-feather="x"></i>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <div class="row">
-                            <div class="col-4 col-lg-4 col-md-4">
-                                <div class="card">
-                                    <div class="form-group">
-                                        <label for="exampleInputPassword1">Nombre del servicio</label>
-                                        <input type="text" class="form-control" placeholder="Nombre del servicio" id="nameserv">
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="exampleInputPassword1">Descripción del servicio</label>
-                                        <input type="text" class="form-control" placeholder="Descripción del servicio (opcional)" id="descripserv">
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="exampleInputPassword1">Precio Normal</label>
-                                        <input type="number" class="form-control" placeholder="Precio normal " id="precNserv">
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="exampleInputPassword1">Precio Oferta</label>
-                                        <input type="number" class="form-control" placeholder="Precio Oferta " id="precOserv">
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="exampleInputPassword1">Tiempo de atención</label>
-                                        <input type="number" class="form-control" placeholder="Tiempo de atención" id="prectiemserv" onchange="filtrarHours()">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-4 col-lg-4 col-md-4">
-                                <!--  -->
-                                <!-- <div class="col-12 col-sm-4 col-md-4 col-lg-4 " > -->
-                                        <div class="card">
-                                            <div class="card-header">
-                                                <h4 class="card-title">POSIBLES HORAS DE ATENCIÓN</h4>
-                                            </div>
-                                            <div class="card-content">
-                                                <div class="card-body">
-                                                    <!-- <p>
-                                                        Place checkboxes and radios within list group items and customize as needed
-                                                    </p> -->
-                                                    <ul class="list-group" id="listHoursDisp">
-                                                        
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                        </div>
-                                <!-- </div> -->
-                                <!--  -->
-                            </div>
-                            <div class="col-4 col-lg-4 col-md-4">
-                                <!--  -->
-                                <!-- <div class="col-12 col-sm-4 col-md-4 col-lg-4 " > -->
-                                        <div class="card">
-                                            <div class="card-header">
-                                                <h4 class="card-title">SELECCIONAR LOS TIPOS DE CITA DISPONIBLES</h4>
-                                            </div>
-                                            <div class="card-content">
-                                                <div class="card-body">
-                                                    <!-- <p>
-                                                        Place checkboxes and radios within list group items and customize as needed
-                                                    </p> -->
-                                                    <ul class="list-group" id="listaCitaCrudT">
-                                                        
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                        </div>
-                                <!-- </div> -->
-                                <!--  -->
-                            </div>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-light-secondary"
-                        data-bs-dismiss="modal">
-                        <i class="bx bx-x d-block d-sm-none"></i>
-                        <span class="d-none d-sm-block">Cancelar</span>
-                    </button>
-                    <div id="btnEstadoServicio">
-                        <!-- <button type="button" class="btn btn-primary ml-1 "  onclick="saveServicio()">
-                            <i class="bx bx-check d-block d-sm-none"></i>
-                            <span class="d-none d-sm-block">Guardar</span>
-                        </button> -->
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+    
     <style>
         #jjdjdj{
             cursor: pointer;
@@ -339,7 +368,7 @@
             background-color: #93d85e;
         }
     </style>
-    <!-- <script src="<?php echo SERVERURL ?>vistas/assets/js/config.js"></script> -->
+    <script src="<?php echo SERVERURL ?>vistas/assets/js/config.js"></script>
 <?php } 
 
 else{
