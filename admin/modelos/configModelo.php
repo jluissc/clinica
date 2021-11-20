@@ -14,8 +14,8 @@
 				'diasAtencion' => configModelo::listarDiasAtencion_m(),
 				'tipoAtencion' => configModelo::listarTipoAtencion_m(),
 				// 'horaAtencion' => $horasAtencion,
-				// 'users' => configModelo::listarUsers_m(),
-				// 'permisos' => configModelo::listarPermisos_m(),
+				'users' => configModelo::listarUsers_m(),
+				'permisos' => configModelo::listarPermisos_m(),
 				// 'servicios' => configModelo::listarServicios_m(),
 			];
 			exit(json_encode($datos));
@@ -25,7 +25,7 @@
 				sg.id as sg_id, s.id as s_id, s.descripcion, s.precio_normal, s.precio_venta, s.tiempo FROM servicio_general sg
 				LEFT JOIN servicios s
 				ON s.servicio_general_id = sg.id
-			 WHERE sg.elimino = 0");
+			 WHERE sg.elimino = 0 AND s.elimino = 0");
 			$sql -> execute();
 			$servics = $sql->fetchAll(PDO::FETCH_OBJ);
 			$sql = null;
@@ -88,8 +88,8 @@
 		protected static function deleteServicio_m($datos){
 			if($datos['tipo']== 1){
 				$sql = mainModelo::conexion()->prepare("UPDATE `servicio_general` SET elimino = 1 WHERE id =:id");
-			}else{
-				$sql = mainModelo::conexion()->prepare("UPDATE `servicios` SET estado = 0 WHERE id =:id");
+			}else if($datos['tipo']== 2){
+				$sql = mainModelo::conexion()->prepare("UPDATE `servicios`  SET elimino = 1 WHERE id =:id");
 			}
 			$sql->bindParam(":id", $datos['id']);
 			$sql -> execute();
@@ -127,23 +127,25 @@
 			$sql = null;
 			return $permisos;
 		}
-		protected static function saveConfig_m($code,$name,$horaInicio, $horaFin){
+		protected static function saveConfig_m($datos){
 			$pdo =mainModelo::conexion();
-			$sql = $pdo->prepare("INSERT INTO `config` (`codigo`, nombre,horaInicio,horaFin) VALUES (:code, :nombre, :ini, :fin) ");
-			$sql->bindParam(":code",$code);
-			$sql->bindParam(":nombre",$name);
-			$sql->bindParam(":ini",$horaInicio);
-			$sql->bindParam(":fin",$horaFin);
+			$sql = $pdo->prepare("INSERT INTO `config` (`codigo`, nombre,horaInicio,horaFin, servicio_general_id) 
+				VALUES (:code, :nombre, :ini, :fin, :id_serv) ");
+			$sql->bindParam(":code",$datos['code']);
+			$sql->bindParam(":nombre",$datos['name']);
+			$sql->bindParam(":ini",$datos['horaInicio']);
+			$sql->bindParam(":fin",$datos['horaFin']);
+			$sql->bindParam(":id_serv",$datos['id_serv']);
             $sql -> execute();			
 			$sql = null;
 			return $pdo->lastInsertId();
 		}
 		protected static function saveConfigDiaHora_m($datos){
-			$sql = mainModelo::conexion()->prepare("INSERT INTO `dias_hora_atencion` (`dias_id`, `tipo_cita_id`, `config_id`, `horainicio`, `horafin`) 
-				VALUES (:dia, :tipo, :idConf, :inicio, :fin) ");
+			$sql = mainModelo::conexion()->prepare("INSERT INTO `dias_hora_atencion` (`dias_id`, `config_id`, `tipo_atencion`, `horainicio`, `horafin`) 
+				VALUES (:dia,  :idConf,:tipo, :inicio, :fin) ");
 			$sql->bindParam(":dia",$datos['dia']);
-			$sql->bindParam(":tipo",$datos['tipo']);
 			$sql->bindParam(":idConf",$datos['idConfig']);
+			$sql->bindParam(":tipo",$datos['tipo']);
 			$sql->bindParam(":inicio",$datos['inicio']);
 			$sql->bindParam(":fin",$datos['fin']);
             $sql -> execute();			
@@ -172,14 +174,16 @@
 			$sql->bindParam(":correo",$datos['email_appoint']);
 
 			if($sql -> execute()){
-				if($sql->rowCount()== 1){
-					$consult = mainModelo::ejecutar_consulta_simple('SELECT id FROM persona WHERE dni = '.$datos["dni_appoint"].'');
-					$IdInsert = $consult->fetch(PDO::FETCH_OBJ);
-					return $IdInsert;				
-				}else{
-					$sql = null;
-					return 0;
-				}	
+				// if($sql->rowCount()== 1){
+				// 	$consult = mainModelo::ejecutar_consulta_simple('SELECT id FROM persona WHERE dni = '.$datos["dni_appoint"].'');
+				// 	$IdInsert = $consult->fetch(PDO::FETCH_OBJ);
+				// 	return $IdInsert;				
+				// }else{
+				// 	$sql = null;
+				// 	return 0;
+				// }	
+				$sql = null;
+				return 1;
 			}else{
 				$sql = null;
 				return 0;
@@ -191,7 +195,7 @@
 			if ($datos['tipo']) {
 				$sql = $pdo->prepare('UPDATE `servicios` SET `nombre`=:nombre, `descripcion`=:descr, 
 					`precio_normal`=:precnor, `precio_venta`=:precofer, `estado`=:estado, `tiempo`=:timme WHERE id=:id');	
-				$sql->bindParam(":id",$datos['idServicEdit']);	
+				$sql->bindParam(":id",$datos['id_serv']);	
 				$sql->bindParam(":nombre",$datos['nameserv']);	
 				$sql->bindParam(":descr",$datos['descripserv']);	
 				$sql->bindParam(":precnor",$datos['precNserv']);
@@ -200,13 +204,13 @@
 				$sql->bindParam(":timme",$datos['prectiemserv']);
 				$sql -> execute();
 				if ($sql->rowCount()>0) {				
-					// $est = $datos['tipo'] == 1 ? true : $pdo->lastInsertId();
-					return true;
+					exit(json_encode(configModelo::listServics_m()));
 				} else {
-					return false;
+					exit(json_encode(configModelo::listServics_m()));
 				}	
 			} else {	
-				$sql = $pdo->prepare('INSERT INTO `servicios`(`nombre`, `descripcion`, `precio_normal`, `precio_venta`, `estado`, `tiempo`,`servicio_general_id`)
+				$sql = $pdo->prepare('INSERT INTO `servicios`(`nombre`, `descripcion`, `precio_normal`, `precio_venta`, 
+					`estado`, `tiempo`,`servicio_general_id`)
 				VALUES(:nombre, :descr, :precnor, :precofer, :estado, :timme, :id_serv)');
 				$sql->bindParam(":nombre",$datos['nameserv']);	
 				$sql->bindParam(":descr",$datos['descripserv']);	
@@ -354,6 +358,16 @@
 			$sql->bindParam(":permisos_id",$datos['tipo']);
             $sql -> execute();			
 			$sql = null;
+		}		
+		protected static function tipoUser_m($id){
+			$sql = mainModelo::conexion()->prepare("UPDATE persona SET tipo_user_id = 2 WHERE id = :id");
+			$sql->bindParam(":id",$id);
+            $sql -> execute();			
+			if( $sql->rowCount() > 0){
+				return 1;
+			}else{
+				return 0;
+			}
 		}		
 		protected static function insertServicTypes_m($datos){
 			// $existe = mainModelo::conexion()->prepare("SELECT * FROM `servicios_tipo` WHERE `servicios_id` =:servId AND `tipo_cita_id` =:tipID");

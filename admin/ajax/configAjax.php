@@ -4,7 +4,7 @@
 
 	require_once '../config/app.php';
 
-	if (isset($_POST['horaAten']) || isset($_POST['saveConfig']) || isset($_POST['name_cat']) || 
+	if (isset($_POST['horaAten']) || isset($_POST['id_config']) || isset($_POST['name_cat']) || 
     isset($_POST['fechaCita']) || isset($_POST['fecha']) || 
 	isset($_POST['fechaSelec']) || isset($_POST['hora_idHoraC']) ||
 	isset($_POST['cita_idCitaC']) || isset($_POST['permisosTemp']) || 
@@ -19,7 +19,7 @@
 		if (isset($_POST['serv_addEdit'])) {
 			$inst -> addEditServics();
 		}
-		// para eliminar un servicio, categoria (estado = 0)
+		// para eliminar un servicio, categoria 
 		if (isset($_POST['idServiciD'])) {
 			$inst -> deleteServicio();
 		}
@@ -38,7 +38,7 @@
 			$inst -> listarHoraAtencion();
 		}
 		// guardar las configuraciones de atencion *****
-		if (isset($_POST['saveConfig'])) {
+		if (isset($_POST['id_config'])) {
 			$inst->saveConfig();			
 		}
 		// Para editar los permisos de un usuario

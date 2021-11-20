@@ -21,18 +21,15 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-3 col-lg-3 col-md-3 " >
+                <div class="col-6 col-lg-6 col-md-6" >
                     <div class="card">
                         <div class="card-header">
                             <h4 class="card-title">Lista de Configuraciones</h4>
-                            <a class="" style="cursor:pointer" onclick="verConfig(0,1)" class="btn btn-outline-warning" data-bs-toggle="modal"
-                                data-bs-target="#xlarge">Crear Fechas de atención</a>
+                            <!-- <a class="" style="cursor:pointer"  class="btn btn-outline-warning">
+                                Crear Fechas de atención</a> -->
                         </div>
                         <div class="card-content">
                             <div class="card-body">
-                                <!-- <p>
-                                    Place checkboxes and radios within list group items and customize as needed
-                                </p> -->
                                 <ul class="list-group" id="listarConfig">
                                     
                                 </ul>
@@ -199,7 +196,7 @@
     </div>
 
     <!-- DIAS TIPOS Y HORAS DE ATENCION -->
-    <div class="modal fade text-left w-100" id="xlarge3" tabindex="-1" role="dialog"
+    <div class="modal fade text-left w-100" id="configDiasModal" tabindex="-1" role="dialog"
         aria-labelledby="myModalLabel16" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl"
             role="document">
@@ -220,9 +217,6 @@
                                     </div>
                                     <div class="card-content">
                                         <div class="card-body">
-                                            <!-- <p>
-                                                Place checkboxes and radios within list group items and customize as needed
-                                            </p> -->
                                             <ul class="list-group" id="listarDiasA">
                                                 
                                             </ul>
@@ -240,9 +234,6 @@
                                     </div>
                                     <div class="card-content">
                                         <div class="card-body">
-                                            <!-- <p>
-                                                Place checkboxes and radios within list group items and customize as needed
-                                            </p> -->
                                             <ul class="list-group" id="listaCitaCrud">
                                                 
                                             </ul>
@@ -260,15 +251,15 @@
                                 <div class="card-content">
                                     <div class="card-body">
                                         <div class="form-group">
-                                            <label for="exampleInputPassword1">Nombre de la configuración</label>
+                                            <label for="nameConf">Nombre de la configuración</label>
                                             <input type="text" class="form-control" placeholder="Ingrese un nombre (opcional)" id="nameConf">
                                         </div>
                                         <div class="form-group">
-                                            <label for="exampleInputPassword1">Hora Inicio</label>
+                                            <label for="horaInicio">Hora Inicio</label>
                                             <input type="time" class="form-control" placeholder="Hora de inicio" id="horaInicio">
                                         </div>
                                         <div class="form-group">
-                                            <label for="exampleInputPassword1">Hora Fin</label>
+                                            <label for="horaFin">Hora Fin</label>
                                             <input type="time" class="form-control" placeholder="Hora fin" id="horaFin">
                                         </div>
                                     </div>
@@ -281,8 +272,8 @@
                         </div>
                     </div>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-light-secondary"
+                <div class="modal-footer" id="btn_confgDias">
+                    <!-- <button type="button" class="btn btn-light-secondary"
                         data-bs-dismiss="modal">
                         <i class="bx bx-x d-block d-sm-none"></i>
                         <span class="d-none d-sm-block">Cancelar</span>
@@ -291,11 +282,12 @@
                         data-bs-dismiss="modal">
                         <i class="bx bx-check d-block d-sm-none"></i>
                         <span class="d-none d-sm-block">Guardar</span>
-                    </button>
+                    </button> -->
                 </div>
             </div>
         </div>
     </div>
+
 
 
     <!-- PERMISOS USERS -->
@@ -338,6 +330,9 @@
                                             </li>
                                             <li class="list-group-item">
                                                 <input class="form-check-input me-1"  type="checkbox" id="permi_5" onchange="selectPermis(5)" > MATERIALES
+                                            </li>
+                                            <li class="list-group-item">
+                                                <input class="form-check-input me-1"  type="checkbox" id="permi_6" onchange="selectPermis(6)" > CLIENTES
                                             </li>
                                         </ul>
                                     </div>

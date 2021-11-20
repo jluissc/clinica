@@ -20,44 +20,47 @@
 			configModelo::listarHoraAtencion_m();
 		}
 
-		public function saveConfig() {
-			$code = rand(10001, 99999);
-			$name = $_POST['nameConf'];
-			$horaInicio = $_POST['horaInicio'];
-			$horaFin = $_POST['horaFin'];
-			$idConfig = configModelo::saveConfig_m($code,$name,$horaInicio, $horaFin);
-			foreach (json_decode($_POST['diaSelect']) as $dia) { 
-				foreach (json_decode($_POST['tipoSelect']) as $tipo) {
+		public function saveConfig() {			
+			$datosConf = [
+				'code' => rand(10001, 99999),
+				'name' => $_POST['inp_nameConf'],
+				'horaInicio' => $_POST['inp_horaInicio'],
+				'horaFin' => $_POST['inp_horaFin'],
+				'id_serv' => $_POST['id_servSelc'],
+			];
+			$idConfig = configModelo::saveConfig_m($datosConf);
+			foreach (json_decode($_POST['inp_diasAt']) as $dia) { 
+				foreach (json_decode($_POST['inp_tipoAt']) as $tipo) {
 					$datos = [
-						'dia' => $dia->diaId,
-						'tipo' => $tipo->citaId,
+						'dia' => $dia->id,
+						'tipo' => $tipo->id,
 						'idConfig' => $idConfig,
-						'inicio' => $_POST['horaInicio'],
-						'fin' => $_POST['horaFin'],
+						'inicio' => $_POST['inp_horaInicio'],
+						'fin' => $_POST['inp_horaFin'],
 					];
 					configModelo::saveConfigDiaHora_m($datos);
 				}
 			}
-			return 1;
+			exit(json_encode(configModelo::listConfig_m()));
 		}
 
 		public function listNotifications() {
-			$listsToday = configModelo::listNotifications_m();
-			// $listsNetxs = configModelo::listNotifications_m();
+			// $listsToday = configModelo::listNotifications_m();
+			// // $listsNetxs = configModelo::listNotifications_m();
 
-			$listHTML = '<li>
-				<h6 class="dropdown-header" > <a href="'.SERVERURL.'citas">Citas de hoy</a></h6>
-			</li>';
-			foreach ($listsToday[0] as $list) {
-				$listHTML .= '<li><p class="text-center">'.$list->nombre.' ::: '.$list->namC .'</p><a class="dropdown-item">'.$list->fecha.' <span class="badge bg-info text-dark"><i class="far fa-clock"></i> </span> '.$list->hora.'  </a> </li><hr>';
-			}
-			$listHTML .= '<li>
-				<h6 class="dropdown-header" > <a href="'.SERVERURL.'citas">Citas de proximos dias</a></h6>
-			</li>';
-			foreach ($listsToday[1] as $list) {
-				$listHTML .= '<li><p class="text-center">'.$list->nombre.' ::: '.$list->namC .'</p><a class="dropdown-item">'.$list->fecha.' <span class="badge bg-info text-dark"><i class="far fa-clock"></i> </span> '.$list->hora.'  </a> </li><hr>';
-			}
-			return $listHTML;
+			// $listHTML = '<li>
+			// 	<h6 class="dropdown-header" > <a href="'.SERVERURL.'citas">Citas de hoy</a></h6>
+			// </li>';
+			// foreach ($listsToday[0] as $list) {
+			// 	$listHTML .= '<li><p class="text-center">'.$list->nombre.' ::: '.$list->namC .'</p><a class="dropdown-item">'.$list->fecha.' <span class="badge bg-info text-dark"><i class="far fa-clock"></i> </span> '.$list->hora.'  </a> </li><hr>';
+			// }
+			// $listHTML .= '<li>
+			// 	<h6 class="dropdown-header" > <a href="'.SERVERURL.'citas">Citas de proximos dias</a></h6>
+			// </li>';
+			// foreach ($listsToday[1] as $list) {
+			// 	$listHTML .= '<li><p class="text-center">'.$list->nombre.' ::: '.$list->namC .'</p><a class="dropdown-item">'.$list->fecha.' <span class="badge bg-info text-dark"><i class="far fa-clock"></i> </span> '.$list->hora.'  </a> </li><hr>';
+			// }
+			// return $listHTML;
 		}
 
 		public function estadoHoraAtenc() {
@@ -129,27 +132,41 @@
 			configModelo::horas_no_disponibles($_POST['fecha']);
 		}
 		public function saveUsuario() {
-			$datos= [
-				'dni_appoint' => $_POST['dni_appoint'],
-				'name_appoint' => $_POST['name_appoint'],
-				'last_appoint' => $_POST['last_appoint'],
-				'celphone_appoint' => $_POST['celphone_appoint'],
-				'email_appoint' => $_POST['email_appoint'],
-				'tipo' => 2,
-				'estado' => 1,
-			];
-			// if(configModelo::saveUsuario_m($datos) != 0){
-
-			$idInsert = configModelo::saveUsuario_m($datos);
-			foreach (json_decode($_POST['permisosTemp']) as $permi) {
-				$datos2 = [
-					'user_id' => $idInsert->id,
-					'tipo' => $permi->id,
-				];
-				configModelo::insertPermisoUser_m($datos2);
+			if(configModelo::tipoUser_m($_POST['id_cust'])){
+				foreach (json_decode($_POST['permisosTemp']) as $permi) {
+					$datos2 = [
+						'user_id' => $_POST['id_cust'],
+						'tipo' => $permi->id,
+					];
+					configModelo::insertPermisoUser_m($datos2);
+				}
+				exit(json_encode(configModelo::listarUsers_m()));
+			}else{
+				exit(json_encode(0));
 			}
 			
-			exit(json_encode(1));
+			// $user = json_decode($_POST['custom']);
+			// $datos= [
+			// 	'dni_appoint' => $user->,
+			// 	'name_appoint' => $user->nombre,
+			// 	'last_appoint' => $user->apellidos,
+			// 	'celphone_appoint' => $user->celular,
+			// 	'email_appoint' => $user->correo,
+			// 	'tipo' => 2,
+			// 	'estado' => 1,
+			// ];
+			// // if(configModelo::saveUsuario_m($datos) != 0){
+
+			// $idInsert = configModelo::saveUsuario_m($datos);
+			// foreach (json_decode($_POST['permisosTemp']) as $permi) {
+			// 	$datos2 = [
+			// 		'user_id' => $idInsert->id,
+			// 		'tipo' => $permi->id,
+			// 	];
+			// 	configModelo::insertPermisoUser_m($datos2);
+			// }
+			
+			// exit(json_encode(1));
 		}
 		public function saveServics() {
 			$datos= [
@@ -164,20 +181,24 @@
 				// 'idServicEdit' => $_POST['id_serv'],
 			];			
 			if($_POST['tipo_cat']){/* EDITAR */
-				$idInsert = configModelo::saveServics_m($datos);
-				if(count(json_decode($_POST['horasSelect']))>0){
-					$reso = [];
-					foreach (json_decode($_POST['horasSelect']) as $hora) {
-						$datos2 = [
-							'id' => $hora->id,
-							'estado' => 0,
-						];
-						configModelo::insertHoraServc_m($datos2,true);
-					}
-					exit(json_encode($reso));
+				if(configModelo::saveServics_m($datos)){
+					exit(json_encode(1));
 				}else{
-					exit(json_encode('sin camb'));
+					exit(json_encode(0));
 				}
+				// if(count(json_decode($_POST['horasSelect']))>0){
+				// 	$reso = [];
+				// 	foreach (json_decode($_POST['horasSelect']) as $hora) {
+				// 		$datos2 = [
+				// 			'id' => $hora->id,
+				// 			'estado' => 0,
+				// 		];
+				// 		configModelo::insertHoraServc_m($datos2,true);
+				// 	}
+				// 	exit(json_encode($reso));
+				// }else{
+				// 	exit(json_encode('sin camb'));
+				// }
 			}else{ /* crear categoria */
 				$idInsert = configModelo::saveServics_m($datos);
 				if($idInsert){
