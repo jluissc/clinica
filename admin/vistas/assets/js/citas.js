@@ -1,9 +1,7 @@
-const URL = 'http://127.0.0.1:84/clinica/admin/';
+
 const days = [7, 1 , 2, 3, 4, 5, 6]
 
-Lservicios = []
-pacienteId = 0 /* 0 si es nuevo / otro si ya existe */
-datosPacienteNuevo = []
+Lservicios = [] /* listar los servicios generales activos */
 listConfig = [] /* DIA,HORA, TIPO configurados por el admin */
 listCitasReserv = [] /* CITAS YA RESERVADAS */
 servicSelect =0;
@@ -14,20 +12,31 @@ seleccionFecha = false
 fechaSelecionada = ''
 idAppoint=0 /* Id Cita seleccionado */
 
+
+// hacer citas o consultas
+selectServGe =  document.getElementById('select-servc') /* Seleccionar select de servicio general */
+datosPacienteNuevo = [] /* si es nuevo */
+pacienteId = 0 /* 0 si es nuevo / otro si ya existe */
+listHist =[]  /* usuario temporal que busca cita */
+inp_nombre = document.getElementById('nombre')
+inp_apellido = document.getElementById('apellido')
+inp_celular = document.getElementById('celular')
+inp_correo = document.getElementById('correo')
+
+
 leerCondicionesAtencion()
-buscarHistCitas()
 leerListaTratamientos()
-leerListaHistorial()
+// buscarHistCitas()
+// leerListaHistorial()
 // table.destroy();
 function leerListaTratamientos(){
-    tablaUsuarios = $('#table1').DataTable({  
+    tablaUsuarios = $('#tbl_tratam').DataTable({  
         "ajax":{            
             "url": URL+'ajax/citaAjax.php', 
             "method": 'POST', //usamos el metodo POST
             "data":{tipoUserH:tipoUser == 4 ? true : false}, //enviamos opcion 4 para que haga un SELECT
             "dataSrc":""
-        },
-        
+        },        
         "columns":[
             {"data": "nombre"},
             {"data": "dni"},
@@ -42,6 +51,8 @@ function leerListaTratamientos(){
         ]
     });     
 }
+
+
 function leerListaHistorial(){
     // console.log(tipoUser == 4 ? true : false);
     tablaUsuarios2 = $('#table2').DataTable({  
@@ -62,7 +73,6 @@ function leerListaHistorial(){
         ],
     });   
 }
-
 function showHistorial(idHistorial){
     DATOS = new FormData()
     DATOS.append('idHistorial', idHistorial)
@@ -89,7 +99,6 @@ function HTMLHistorial(datos){
     // });
     document.getElementById('historialPacient').innerHTML = datos 
 }
-
 function leerCondicionesAtencion(){
     DATOS = new FormData()
     DATOS.append('horaAten', 'horaAten')
@@ -99,22 +108,103 @@ function leerCondicionesAtencion(){
     })
     .then( r => r.json())
     .then( r => {
-        LcitasAtencion = r.tipoAtencion
-        LhorasAtencion = r.horaAtencion
-        Lservicios = r.servicios
-        // filtrarConfig(r.listConfig)
-        mostrarListaServicios()
+        // LcitasAtencion = r.tipoAtencion
+        // LhorasAtencion = r.horaAtencion
+        listarServiciosss(r.listServics)       
         
     })
 }
+function listarServiciosss(listServi){
+    Lservicios = []
+    console.log(listServi);
+    listServi.forEach(servicio => {
+        if(Lservicios.some( servInt => servInt.id == servicio.sg_id)){
+            const usersInt = Lservicios.map( servInt => {
+                if( servInt.id == servicio.sg_id ) {
+                    servInt.categorias.push({ 
+                        'id': servicio.s_id,  
+                        'nombre': servicio.cat,  
+                        'descripcion': servicio.descripcion,  
+                        'precio_normal': servicio.precio_normal,  
+                        'precio_venta': servicio.precio_venta,  
+                        'estado': servicio.s_est,  
+                        'tiempo': servicio.tiempo,  
+                    })
+                    return servInt;
+                } 
+                else return servInt;
+            })
+            Lservicios = [...usersInt];
+        }else{
+            id_cat = servicio.s_id ? servicio.s_id : 0 /* si es no existe categorias del servicio */
+            Lservicios.push({
+                'id': servicio.sg_id, 
+                'nombre': servicio.serv, 
+                'estado': servicio.sg_est,                     
+                'categorias' : [{ 
+                    'id': id_cat,  
+                    'nombre': servicio.cat,  
+                    'descripcion': servicio.descripcion,  
+                    'precio_normal': servicio.precio_normal,  
+                    'precio_venta': servicio.precio_venta,  
+                    'estado': servicio.s_est,  
+                    'tiempo': servicio.tiempo,  
+                }]
+            }, 
+            );      
+        }
+    });
+    mostrarListaServicios()
+}
+function mostrarListaServicios(){
+    console.log(Lservicios);
+    listS = '<option value="0" >SELECCIONE</option>'
+    Lservicios.forEach(servic => {
+        listS +=`<option value="${servic.id}" >${servic.nombre}</option>`
+    }); 
+    selectServGe.innerHTML = listS
+}
+function cambioServicio(servSelect){
+    a = []
+    servicio =Lservicios.filter( serv => {
+        if(serv.id == servSelect ){
+            serv.categorias.forEach(element => {
+                a.push(element)
+                console.log(a);
+            });
+        }
+        return a
+    }) 
+    if(servSelect != 0){
+
+        li = `<label>SELECCIONE CATEGORIA: </label>
+        <fieldset class="form-group">
+        <select class="form-select" id="select-categ" onchange="cambioCategoria(this.value)">
+        <option value="0">SELECCIONE</option>
+        `
+        a.forEach(cat => {
+            li +=`<option value="${cat.id}" >${cat.nombre}</option>`
+        }); 
+        li+=`</select>
+        </fieldset>`
+        document.getElementById('categ_customer').innerHTML = li
+    }else{
+        document.getElementById('categ_customer').innerHTML = ''
+
+    }
+}
+function cambioCategoria(id){
+    console.log(listHist);
+    console.log(id);
+}
 function statusCampos(estado){
-    document.getElementById('nombre').disabled = estado
-    document.getElementById('apellido').disabled = estado
-    document.getElementById('celular').disabled = estado
-    document.getElementById('correo').disabled = estado
+    inp_nombre.disabled = estado
+    inp_apellido.disabled = estado
+    inp_celular.disabled = estado
+    inp_correo.disabled = estado
 
 }
-listHist =[]
+
 function validarDni(){
     dni = document.getElementById('dni').value
     DATOS = new FormData()
@@ -127,10 +217,10 @@ function validarDni(){
     .then( r => {        
         if(r != 0){
             console.log(r);
-            document.getElementById('nombre').value = r.user.nombre
-            document.getElementById('apellido').value = r.user.apellidos
-            document.getElementById('celular').value = r.user.celular
-            document.getElementById('correo').value = r.user.correo
+            inp_nombre.value = r.user.nombre
+            inp_apellido.value = r.user.apellidos
+            inp_celular.value = r.user.celular
+            inp_correo.value = r.user.correo
             pacienteId = r.user.id
             datosPacienteNuevo = []
             listHist = r.listHist
@@ -140,7 +230,20 @@ function validarDni(){
             statusCampos(false)   
             alertaToastify('Paciente nuevo, rellene sus datos  ','info',1500)
         }
+        historialTratamiento()
     })
+}
+function historialTratamiento(){
+    if(listHist.length > 0){
+
+        div ='Escoge su codigo si continuara un tratamiento<div class="container btn-group"  aria-label="Basic radio toggle button group">'
+        listHist.forEach(h => {
+            div +=`<input type="radio" class="btn-check" id="${h.id}" value="${h.id}" name="listHHHH">
+            <label class="btn btn-outline-success" for="${h.id}" >${h.code}-${h.nombre}</label>`
+        });
+        div +='</div>'
+    }else div = 'No tiene historial'
+    document.getElementById('historialNew').innerHTML = div
 }
 /*  */
 function leerDni(dni){
@@ -152,14 +255,12 @@ function leerDni(dni){
     .then(r => {
         // console.log(r);
         if(r.nombres != null){            
-            document.getElementById('nombre').value = r.nombres
-            document.getElementById('apellido').value = r.apellidoPaterno + ' ' +r.apellidoMaterno
+            inp_nombre.value = r.nombres
+            inp_apellido.value = r.apellidoPaterno + ' ' +r.apellidoMaterno
         }else{
-            document.getElementById('nombre').value = ''
-            document.getElementById('apellido').value = ''
-
-        }
-        
+            inp_nombre.value = ''
+            inp_apellido.value = ''
+        }        
     })
     .catch(r => console.log(r))
     
@@ -189,41 +290,8 @@ function leerDni(dni){
     // };  
     
 }
-function mostrarListaServicios(){
 
-    listS = '<option value="0" >SELECCIONE</option>'
-    Lservicios.forEach(servic => {
-        listS +=`<option value="${servic.id}" >${servic.nombre}</option>`
-    }); 
-    document.getElementById('select-servc').innerHTML = listS
-}
-function cambioServicio(servSelect){
-    
-    servicSelect = document.getElementById(servSelect).value
-    // console.log(servicSelect);
-    if(servicSelect == 17){/* DEPENDE QUE ID TIENE EL CONSULTAS */
-        div = `<div class="form-group">
-            <label for="nameHist">Dale un nombre a tu consulta</label>
-            <input type="text" placeholder="Nombre(opcional)" id="nameHist" class="form-control">
-        </div>`
-        document.getElementById('historialNew').innerHTML = div
-    }else if(servicSelect == 0)
-        document.getElementById('historialNew').innerHTML = ''
-    else{
-        if(listHist != 0){
 
-            div ='<div class="container btn-group"  aria-label="Basic radio toggle button group">'
-            listHist.forEach(h => {
-                div +=`<input type="radio" class="btn-check" id="${h.id}" value="${h.id}" name="listHHHH">
-                <label class="btn btn-outline-success" for="${h.id}" >${h.code}-${h.nombre}</label>`
-            });
-            div +='</div>'
-        }else{
-            div  = 'No tiene servicio anterior'
-        }
-        document.getElementById('historialNew').innerHTML = div
-    } 
-}
 function buscarHistCitas(){
     dat = new FormData()
     dat.append('searcHistUser','user')
@@ -328,7 +396,6 @@ function filtrarFechasHorasDispo(diaSelect,citaDispo,diass,horas){
     }
     
 }
-
 function validarCita(){   
     
     dni = tipoUser == '4' ? 12345678 :parseInt(document.getElementById('dni').value)
@@ -377,7 +444,6 @@ function validarCita(){
         }else alertaToastify('Completa nombre del paciente')
     }else alertaToastify('Dni incompleto ')
 }
-
 function guardarCita(user){
 
     // console.log(fechaSelecionada);

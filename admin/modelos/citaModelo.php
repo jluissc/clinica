@@ -165,8 +165,9 @@
 					ORDER BY c.id DESC");
 				$sql->bindParam(":iss",$_SESSION['id']);
 			}else{
-				$sql = mainModelo::conexion()->prepare("SELECT p.nombre AS usuario, c.fecha, c.id AS idcita, p.apellidos, p.celular, 
-					p.correo, h.hora, s.precio_venta, p.dni FROM tratamientos c 
+				$sql = mainModelo::conexion()->prepare("SELECT p.nombre AS usuario, p.apellidos, 
+					p.correo, p.dni, p.celular, c.fecha, c.id AS idcita,  
+					h.hora, s.precio_venta FROM tratamientos c 
 					INNER JOIN persona p
 					ON p.id = c.paciente_id
 					INNER JOIN horas h
@@ -227,7 +228,7 @@
 			$sql = null;
 		}
 		protected static function statusPayAppoint($idAppoint){
-			$sql = mainModelo::conexion()->prepare('SELECT tipo_pago_id1, estado, total FROM cita_pagos WHERE citas_id = '.$idAppoint.'');
+			$sql = mainModelo::conexion()->prepare('SELECT tipo_pago_id, estado, total FROM tratamiento_pagos WHERE tratamientos_id = '.$idAppoint.'');
 			$sql -> execute();
             if($sql -> rowCount() == 1){
 				$resutl = $sql->fetch(PDO::FETCH_OBJ);

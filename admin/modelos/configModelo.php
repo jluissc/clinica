@@ -9,6 +9,7 @@
 			$sql = null;
 			$datos = [
 				'listConfig' => configModelo::listConfig_m(),
+				'listaServGen' => configModelo::listaServGen_m(),
 				'listServics' => configModelo::listServics_m(),
 				'listCategs' => configModelo::listCategs_m(),
 				'diasAtencion' => configModelo::listarDiasAtencion_m(),
@@ -26,6 +27,13 @@
 				LEFT JOIN servicios s
 				ON s.servicio_general_id = sg.id
 			 WHERE sg.elimino = 0 AND s.elimino = 0");
+			$sql -> execute();
+			$servics = $sql->fetchAll(PDO::FETCH_OBJ);
+			$sql = null;
+			return $servics;
+		}
+		protected static function listaServGen_m(){
+			$sql = mainModelo::conexion()->prepare("SELECT * FROM `servicio_general` WHERE estado = 1 AND elimino = 0");
 			$sql -> execute();
 			$servics = $sql->fetchAll(PDO::FETCH_OBJ);
 			$sql = null;

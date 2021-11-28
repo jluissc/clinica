@@ -20,62 +20,31 @@
     <div class="tab-content" id="myTabContent">
         <!-- LISTAR CITAS -->
         <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
-            <?php if($_SESSION['tipo']==1 || in_array(3, $_SESSION['permisos']) ){ ?><!-- ADMIN o CAJERO -->
-                <div class="card-header">
-                    <h4>Historial de citas</h4>
-                </div>
-                <div class="card-body">
-                    <table class="table table-striped" id="table1">
-                        <thead>
-                            <tr>
-                                <th>Nombres</th>
-                                <th>Dni</th>
-                                <th>Correo</th>
-                                <th>Celular</th> 
-                                <th>Fecha</th>
-                                <th>Hora</th>
-                                <th>Monto</th>
-                                <th>Total</th>
-                                <th>Estado Pago</th>
-                                <th>Acciones</th>
-                            </tr>
-                        </thead>
-                        <tbody id="listAppointment"  data-typeUser="false">                           
-                            <?php 
-                                // echo $inst->reedListAppointment();
-                            ?>
-                        </tbody>
-                    </table>
-                </div>
-            <?php } ?><!-- ADMIN o CAJERO -->
-            <?php if($_SESSION['tipo']==4 ){ ?> <!-- PACIENTES -->
-                <div class="card-header">
-                    <h4>Mi Historial de citas</h4>
-                </div>
-                <div class="card-body">
-                    <table class="table table-striped" id="table1">
-                        <thead>
-                            <tr>
-                                <th>Nombres</th>
-                                <th>Dni</th>
-                                <th>Correo</th>
-                                <th>Celular</th> 
-                                <th>Fecha</th>
-                                <th>Hora</th>
-                                <th>Monto</th>
-                                <th>Total</th>
-                                <th>Estado Pago</th>
-                                <th>Acciones</th>
-                            </tr>
-                        </thead>
-                        <tbody id="listAppointment" data-typeUser="true">
-                            <?php 
-                                // echo $inst->reedListAppointment(true);
-                            ?>
-                        </tbody>
-                    </table>
-                </div>
-            <?php } ?>                                
+            <div class="card-header">
+                <h4>Historial de citas</h4>
+            </div>
+            <div class="card-body">
+                <table class="table table-striped" id="tbl_tratam">
+                    <thead>
+                        <tr>
+                            <th>Nombres</th>
+                            <th>Dni</th>
+                            <th>Correo</th>
+                            <th>Celular</th> 
+                            <th>Fecha</th>
+                            <th>Hora</th>
+                            <th>Monto</th>
+                            <th>Total</th>
+                            <th>Estado Pago</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="listAppointment" >                           
+                        
+                    </tbody>
+                </table>
+            </div>
+                                        
 
         </div>
         <!-- CREAR CITA  -->
@@ -87,16 +56,17 @@
                     <div class="col-12 col-md-6 col-lg-4" >
                         <?php 
                             if($_SESSION['tipo'] == 1 ){
-
                                 include "./vistas/inc/form-user.php"; 
                             }
                         ?>
                         <label>SELECCIONE SERVICIO: </label>
                         <fieldset class="form-group">
-                            <select class="form-select" id="select-servc" onchange="cambioServicio(this.id)">
+                            <select class="form-select" id="select-servc" onchange="cambioServicio(this.value)">
                                 <option value="0">SIN SERVICIOS</option>
                             </select>
                         </fieldset>
+                        <div id="categ_customer">
+                        </div>
                         <div id="historialNew">
                         </div>
                     </div>
@@ -173,6 +143,7 @@
                 Guardar Reserva
             </button>
         </div>
+        <!-- HISTORIAL DE CITAS -->
         <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
             <div class="row">
                 <div class="col-8">
@@ -354,4 +325,7 @@
 <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
 <script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
 <script src="<?php echo SERVERURL ?>vistas/assets/js/calendario.js"></script>
+<script>
+    tipoUser = '<?php echo $_SESSION['tipo']; ?>'
+</script>
 <script src="<?php echo SERVERURL ?>vistas/assets/js/citas.js"></script>

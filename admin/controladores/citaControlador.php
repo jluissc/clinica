@@ -91,8 +91,9 @@
 			$tipo = $_SESSION['tipo'];
 			$datos =[];
 			$listAppointm = citaModelo::reedListAppointment_m();
+			$acciones = '';
 			foreach ($listAppointm as $appoint) {
-				$nn = $appoint->usuario.' '.$appoint->apellidos;
+				$user = $appoint->usuario.' '.$appoint->apellidos;
 				$pagoDirecto = '<div class="form-check form-switch">
 					<input class="form-check-input" type="checkbox" id="pagoDirecto_'.$appoint->idcita.'" onchange="payDirect('.$appoint->idcita.')">
 					<label class="form-check-label" for="pagoDirecto_'.$appoint->idcita.'">Pagó directo?</label>
@@ -103,7 +104,7 @@
 				$acciones = $tipo == 1 ? ($result[0] ? ($result[1]->tipo_pago_id1 == 1 ? 'Pago Tarjeta' : ($result[1]->tipo_pago_id1 == 2 ? ($result[1]->estado ? 'Pago Transferencia Activo' :'<button class="btn btn-outline-info" data-bs-toggle="modal" data-bs-target="#info" onclick="validarTransf('.$appoint->idcita.')"> Validar Transf.</button>') : 'Pago Directo') ) : $pagoDirecto) : 
 					($result[0] ? ($result[1]->tipo_pago_id1 == 2 ? ($result[1]->estado ? 'Aceptado' : 'Falta Verificar'): 'Pagado' ) : '<button class="btn btn-outline-primary" onclick="payAppoint('.$appoint->idcita.')">Pagar Tarjeta</button><button class="btn btn-outline-info" data-bs-toggle="modal" data-bs-target="#info" onclick="datosTransf('.$appoint->idcita.',true)"> Mandar Transf.</button>');
 				array_push($datos,[
-					'nombre' => $nn,
+					'nombre' => $user,
 					'dni' => $appoint->dni,
 					'correo' => $appoint->correo,
 					'celular' => $appoint->celular,
@@ -113,6 +114,7 @@
 					'total' => 'S/. '.$montopago,
 					'pago' =>  $pago,
 					'acciones' => $acciones,
+					
 				]);
 			}
 			exit(json_encode($datos));//envio el array final el formato json a AJAX

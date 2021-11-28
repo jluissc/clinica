@@ -1,6 +1,3 @@
-    tipoUser = '<?php echo $_SESSION["tipo"]?>'
-    idUPaci = '<?php echo $_SESSION["id"]?>'
-
 
     // / calendario
     let calendar = document.querySelector('.calendar')

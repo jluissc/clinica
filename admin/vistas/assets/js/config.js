@@ -24,6 +24,7 @@ diasSeleccionadas = [] /* dias probables al crear un servicio */
 htmlULHorasDisp = document.getElementById('listHoursDisp')
 btn_categ = document.getElementById('btn_categ')
 catSelec = [] /* servicio selecionado al momento de eliminar */
+horasSeleccionadas =[{'id':1,'hora':'08:00:00'}]
 
 // configuracion dias generales
 configDiasModal = new bootstrap.Modal(document.getElementById('configDiasModal'))
@@ -521,8 +522,7 @@ function horaEnSegundos(q){
 function minutosEnSegundos(q=60){
     return q * 60;
 }
-horasSeleccionadas =[{'id':1,'hora':'08:00:00'}]
-function hhhhhh(inicio, fin, tiempo,cont,initt){
+function contadorMinutos(inicio, fin, tiempo,cont,initt){
     var hora = 3600;
     var horaInicio = horaEnSegundos(inicio);
     var horaFin = horaEnSegundos(fin);
@@ -543,8 +543,8 @@ function hhhhhh(inicio, fin, tiempo,cont,initt){
 }
 function filtrarHours(){    
     tiempo = parseInt(document.getElementById('prectiem_cat').value)
-    hhhhhh(8, 13, tiempo, 2,{'id':1,'hora':'08:00:00'})
-    hhhhhh(15, 20, tiempo, 31,{'id':30,'hora':'15:00:00'})
+    contadorMinutos(8, 13, tiempo, 2,{'id':1,'hora':'08:00:00'})
+    contadorMinutos(15, 20, tiempo, 31,{'id':30,'hora':'15:00:00'})
     
     horasSeleccionadas = horasSeleccionadas.filter(hour => hour.hora >='08:00:00' && hour.hora < '19:00:00')
     li = ''
