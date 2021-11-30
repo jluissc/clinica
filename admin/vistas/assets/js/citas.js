@@ -5,19 +5,11 @@ servSelecTempo = 0;
  catSelecTempo = 0;
 
 Lservicios = [] /* listar los servicios generales activos */
-listConfig = [] /* DIA,HORA, TIPO configurados por el admin */
-listCitasReserv = [] /* CITAS YA RESERVADAS */
-servicSelect =0;
 
-LhorasAtencion = []
-seleccionFecha = false
-fechaSelecionada = ''
 idAppoint=0 /* Id Cita seleccionado */
-
 
 // hacer citas o consultas
 selectServGe =  document.getElementById('select-servc') /* Seleccionar select de servicio general */
-datosPacienteNuevo = [] /* si es nuevo */
 pacienteId = 0 /* 0 si es nuevo / otro si ya existe */
 listHist =[]  /* usuario temporal que busca cita */
 inp_dni = document.getElementById('dni')
@@ -25,10 +17,13 @@ inp_nombre = document.getElementById('nombre')
 inp_apellido = document.getElementById('apellido')
 inp_celular = document.getElementById('celular')
 inp_correo = document.getElementById('correo')
+fechaSelecionada = ''
+serviciosTemp = []
+histNew = true
 
 leerCondicionesAtencion()
 leerListaTratamientos()
-// leerListaHistorial()
+leerListaHistorial()
 // table.destroy();
 function leerListaTratamientos(){
     tablaUsuarios = $('#tbl_tratam').DataTable({  
@@ -52,7 +47,6 @@ function leerListaTratamientos(){
         ]
     });     
 }
-
 function leerListaHistorial(){
     // console.log(tipoUser == 4 ? true : false);
     tablaUsuarios2 = $('#table2').DataTable({  
@@ -73,32 +67,6 @@ function leerListaHistorial(){
         ],
     });   
 }
-// function showHistorial(idHistorial){
-//     DATOS = new FormData()
-//     DATOS.append('idHistorial', idHistorial)
-//     fetch(URL+'ajax/citaAjax.php',{
-//         method : 'post',
-//         body : DATOS
-//     })
-//     .then( r => r.json())
-//     .then( r => {
-//         HTMLHistorial(r)
-//         // console.log(r);        
-//     })
-// }
-// function HTMLHistorial(datos){
-//     // lista = ''
-//     // datos.forEach(tratam => {
-//     //     lista+=`<li>
-//     //             <div>
-//     //                 <time>${tratam.fecha} ${tratam.hora}</time> 
-//     //                 <hr><p>SERVICIO : ${tratam.nombre}</p>
-//     //                 <hr><p>DESCRIPCIÓN : ${tratam.descripcion }</p>
-//     //             </div>
-//     //         </li>`
-//     // });
-//     document.getElementById('historialPacient').innerHTML = datos 
-// }
 function leerCondicionesAtencion(){
     DATOS = new FormData()
     DATOS.append('horaAten', 'horaAten')
@@ -110,6 +78,18 @@ function leerCondicionesAtencion(){
     .then( r => {
         LcitasAtencion = r.tipoAtencion /* listar tipo de atencion  */
         filtrarServics(r.listServics)
+    })
+}
+function showHistorial(idHistorial){
+    DATOS = new FormData()
+    DATOS.append('idHistorial', idHistorial)
+    fetch(URL+'ajax/citaAjax.php',{
+        method : 'post',
+        body : DATOS
+    })
+    .then( r => r.json())
+    .then( r => {
+        document.getElementById('historialPacient').innerHTML = r     
     })
 }
 function filtrarServics(listServi){
@@ -164,7 +144,6 @@ function mostrarListaServicios(){
     }); 
     selectServGe.innerHTML = listS
 }
-serviciosTemp = []
 function cambioServicio(servSelect){
     serviciosTemp = []
     servSelecTempo = servSelect
@@ -193,7 +172,6 @@ function cambioServicio(servSelect){
         document.getElementById('categ_customer').innerHTML = ''
     }
 }
-histNew = true
 function cambioCategoria(id){
     console.log(serviciosTemp);
     if(serviciosTemp.find(serv => serv.id == id && serv.consulta == 1)){
@@ -234,7 +212,6 @@ function validarDni(){
             inp_celular.value = r.user.celular
             inp_correo.value = r.user.correo
             pacienteId = r.user.id
-            datosPacienteNuevo = []
             listHist = r.listHist
             statusCampos(true)
         }else{   
@@ -258,7 +235,6 @@ function historialTratamiento(){
     else div = 'No tiene historial <input class="form-control" placeholder="Ingrese nombre para la cita" id="nameHistNew">'
     document.getElementById('historialNew').innerHTML = div
 }
-/*  */
 function leerDni(dni){
     // console.log(dni);
     // urlApi=`https://dniruc.apisperu.com/api/v1/dni/${dni}?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6Impsc2MuaGNvOTZAZ21haWwuY29tIn0.ysxMDCaGlMQRJen3msmMcniIx_Q-nuhjXjQ4RNkP31o`;
@@ -279,14 +255,12 @@ function leerDni(dni){
     })
     .catch(r => console.log(r))    
 }
-
 function limpiarCampos (){
     document.getElementById('fechaCita').innerHTML = ''
     document.getElementById('tipocitaSelect').innerHTML = ''
     document.getElementById('horasDisponibles').innerHTML = ''
     alertaToastify('Escoge una fecha actual');
 }
-
 function verificarFecha(dia, mes, anio){
     if(servSelecTempo != 0){ 
         if(catSelecTempo != 0){
@@ -359,7 +333,6 @@ function buscarCitasReservadas(dia,diaSelect){
         
     })
 }
-
 function validarCita(){   
     histSelecTempo = document.querySelector('input[name="listHHHH"]:checked')
     tipoAtSelecTemp = document.querySelector('input[name="tipoCitaUs"]:checked')
@@ -418,8 +391,8 @@ function guardarCita(datos){
     })
 }
 
-/* ****************HASTA AQUI EL NUEVO CODIGO******************* */
 
+/* ****************HASTA AQUI EL NUEVO CODIGO******************* */
 function datosTransf(idAppointd,showBtn){
     idAppoint = idAppointd
     if(showBtn){

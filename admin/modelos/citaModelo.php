@@ -80,7 +80,7 @@
 		}
 		/* ************** */
 		protected static function listaDescr($idTrat){
-			$sql = mainModelo::conexion()->prepare('SELECT descripcion FROM cita_detalle WHERE citas_id =:id');
+			$sql = mainModelo::conexion()->prepare('SELECT descripcion FROM tratamiento_detalle WHERE tratamientos_id =:id');
 			$sql->bindParam(":id",$idTrat);
 			$sql -> execute();  
 			if($sql -> rowCount() > 0){
