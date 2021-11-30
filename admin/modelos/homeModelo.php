@@ -16,7 +16,7 @@
 				ON h.id = c.horas_id
 				INNER JOIN servicios s
 				ON s.id = c.servicios_id
-				INNER JOIN tipo_cita tc
+				INNER JOIN tipo_atencion tc
 				ON tc.id = c.tipo_cita_id
 				
 				WHERE c.fecha =:fecha ORDER BY h.id ASC");
@@ -29,8 +29,8 @@
 		}
 
 		protected static function estadoDetalleTratam_m($tipo=0,$idAppoint){
-			$sql = mainModelo::conexion()->prepare("SELECT id FROM cita_detalle				
-				WHERE citas_id = :idcita");
+			$sql = mainModelo::conexion()->prepare("SELECT id FROM tratamiento_detalle				
+				WHERE tratamientos_id = :idcita");
             // $sql->bindParameters(':fecha',$fechaActual);
             $sql->bindParam(":idcita",$idAppoint);
 			$sql -> execute();
@@ -76,7 +76,7 @@
 		}
 
 		protected static function saveDetalleTratam_m($datos){
-			$sql = mainModelo::conexion()->prepare("INSERT INTO cita_detalle (`descripcion`, `recetas`, `otros`, `citas_id`) VALUES 
+			$sql = mainModelo::conexion()->prepare("INSERT INTO tratamiento_detalle (`descripcion`, `recetas`, `otros`, `tratamientos_id`) VALUES 
 				(:descr, :rece, :otr, :cita_id)");
 			$sql->bindParam(":descr",$datos->descripDet);
 			$sql->bindParam(":rece",$datos->recetDet);
@@ -121,7 +121,7 @@
 			return $date;
 		}
 		protected static function quantityPayToday(){
-			$sql = mainModelo::conexion()->prepare("SELECT SUM(total) as quant FROM `cita_pagos` WHERE estado = 1");
+			$sql = mainModelo::conexion()->prepare("SELECT SUM(total) as quant FROM `tratamiento_pagos` WHERE estado = 1");
 			$sql -> execute();
 			$date = $sql->fetch(PDO::FETCH_OBJ);
 			$sql = null;

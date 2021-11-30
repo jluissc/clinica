@@ -1,5 +1,5 @@
-        const URL = 'http://127.0.0.1/clinica/admin/';
-
+        // const URL = 'http://127.0.0.1/clinica/admin/';
+        console.log('ddd');
         // const url= URL+'ajax/clienteAjax.php';
         leerListaTratamientos()
         listHist =[]

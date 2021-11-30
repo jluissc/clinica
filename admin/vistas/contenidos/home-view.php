@@ -274,3 +274,4 @@
     </div>
 </div>
 <script src="<?php echo SERVERURL ?>vistas/assets/js/home.js"></script>
+ 

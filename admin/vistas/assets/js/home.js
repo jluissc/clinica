@@ -1,7 +1,7 @@
-const urlPrincipal = '<?php echo SERVERURL?>';
+// const urlPrincipal = '<?php echo SERVERURL?>';
 idAppointDetalle = 0
 function showDetailAppoint(idAppoint){
-    url = urlPrincipal+'ajax/homeAjax.php'
+    url = URL+'ajax/homeAjax.php'
     // let datos = {
     //     idAppoint : idAppoint,
     //     url : url,
@@ -15,7 +15,7 @@ function showDetailAppoint(idAppoint){
     })
     .then( result => result.json())
     .then( result => appointmentHTML(result))
-}
+} 
 
 function showDetalleTrat(idAppoint){
     console.log(idAppoint);
@@ -32,7 +32,7 @@ function saveDetalle(){
         'idAppoint' : idAppointDetalle,
     }
     if(descripDet != ''){
-        url = urlPrincipal+'ajax/homeAjax.php'
+        url = URL+'ajax/homeAjax.php'
         data = new FormData()
         data.append('savedetaTrat' , JSON.stringify(datos))
 

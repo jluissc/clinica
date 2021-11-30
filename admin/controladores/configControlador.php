@@ -45,22 +45,21 @@
 		}
 
 		public function listNotifications() {
-			// $listsToday = configModelo::listNotifications_m();
-			// // $listsNetxs = configModelo::listNotifications_m();
+			$listsToday = configModelo::listNotifications_m();
 
-			// $listHTML = '<li>
-			// 	<h6 class="dropdown-header" > <a href="'.SERVERURL.'citas">Citas de hoy</a></h6>
-			// </li>';
-			// foreach ($listsToday[0] as $list) {
-			// 	$listHTML .= '<li><p class="text-center">'.$list->nombre.' ::: '.$list->namC .'</p><a class="dropdown-item">'.$list->fecha.' <span class="badge bg-info text-dark"><i class="far fa-clock"></i> </span> '.$list->hora.'  </a> </li><hr>';
-			// }
-			// $listHTML .= '<li>
-			// 	<h6 class="dropdown-header" > <a href="'.SERVERURL.'citas">Citas de proximos dias</a></h6>
-			// </li>';
-			// foreach ($listsToday[1] as $list) {
-			// 	$listHTML .= '<li><p class="text-center">'.$list->nombre.' ::: '.$list->namC .'</p><a class="dropdown-item">'.$list->fecha.' <span class="badge bg-info text-dark"><i class="far fa-clock"></i> </span> '.$list->hora.'  </a> </li><hr>';
-			// }
-			// return $listHTML;
+			$listHTML = '<li>
+				<h6 class="dropdown-header" > <a href="'.SERVERURL.'citas">Citas de hoy</a></h6>
+			</li>';
+			foreach ($listsToday[0] as $list) {
+				$listHTML .= '<li><p class="text-center">'.$list->nombre.' ::: '.$list->namC .'</p><a class="dropdown-item">'.$list->fecha.' <span class="badge bg-info text-dark"><i class="far fa-clock"></i> </span> '.$list->hora.'  </a> </li><hr>';
+			}
+			$listHTML .= '<li>
+				<h6 class="dropdown-header" > <a href="'.SERVERURL.'citas">Citas de proximos dias</a></h6>
+			</li>';
+			foreach ($listsToday[1] as $list) {
+				$listHTML .= '<li><p class="text-center">'.$list->nombre.' ::: '.$list->namC .'</p><a class="dropdown-item">'.$list->fecha.' <span class="badge bg-info text-dark"><i class="far fa-clock"></i> </span> '.$list->hora.'  </a> </li><hr>';
+			}
+			return $listHTML;
 		}
 
 		public function estadoHoraAtenc() {
@@ -143,30 +142,7 @@
 				exit(json_encode(configModelo::listarUsers_m()));
 			}else{
 				exit(json_encode(0));
-			}
-			
-			// $user = json_decode($_POST['custom']);
-			// $datos= [
-			// 	'dni_appoint' => $user->,
-			// 	'name_appoint' => $user->nombre,
-			// 	'last_appoint' => $user->apellidos,
-			// 	'celphone_appoint' => $user->celular,
-			// 	'email_appoint' => $user->correo,
-			// 	'tipo' => 2,
-			// 	'estado' => 1,
-			// ];
-			// // if(configModelo::saveUsuario_m($datos) != 0){
-
-			// $idInsert = configModelo::saveUsuario_m($datos);
-			// foreach (json_decode($_POST['permisosTemp']) as $permi) {
-			// 	$datos2 = [
-			// 		'user_id' => $idInsert->id,
-			// 		'tipo' => $permi->id,
-			// 	];
-			// 	configModelo::insertPermisoUser_m($datos2);
-			// }
-			
-			// exit(json_encode(1));
+			}			
 		}
 		public function saveServics() {
 			$datos= [
@@ -186,19 +162,6 @@
 				}else{
 					exit(json_encode(0));
 				}
-				// if(count(json_decode($_POST['horasSelect']))>0){
-				// 	$reso = [];
-				// 	foreach (json_decode($_POST['horasSelect']) as $hora) {
-				// 		$datos2 = [
-				// 			'id' => $hora->id,
-				// 			'estado' => 0,
-				// 		];
-				// 		configModelo::insertHoraServc_m($datos2,true);
-				// 	}
-				// 	exit(json_encode($reso));
-				// }else{
-				// 	exit(json_encode('sin camb'));
-				// }
 			}else{ /* crear categoria */
 				$idInsert = configModelo::saveServics_m($datos);
 				if($idInsert){
