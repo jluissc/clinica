@@ -33,25 +33,27 @@
 			}
 		}
 		/* ************** */
-		protected static function buscarFechaCita_m($fecha,$tipoId,$diaId){
-			$sql = mainModelo::conexion()->prepare('SELECT * FROM tratamientos WHERE fecha =:fecha');
+		protected static function buscarFechaCita_m($fecha,$cat,$diaId, $serv){
+			$sql = mainModelo::conexion()->prepare('SELECT * FROM tratamientos WHERE fecha =:fecha AND servicios_id =:id');
 			$sql->bindParam(":fecha",$fecha);
+			$sql->bindParam(":id",$cat);
 			$sql -> execute();
             if($sql -> rowCount() > 0){
                 $resutl = $sql->fetchAll(PDO::FETCH_OBJ);	
 				$datos = [
-					'tipoCita' => citaModelo::listarTipoCitas($tipoId),
-					'dias' => citaModelo::listardiaHoraAtencion($diaId,$tipoId),
-					'horas' => citaModelo::listarHorasDias($tipoId),
 					'citas' => $resutl,
+					'diaDisponi' => citaModelo::checkDay($serv,$diaId),
+					'horas' => citaModelo::listarHorasDias($cat),
+					'tipoCita' => citaModelo::listarTipoCitas($cat,$diaId),
+					// 'dias' => citaModelo::listardiaHoraAtencion($diaId,$tipoId),
 				];	
 				exit(json_encode($datos));			
 			}else{				
 				$datos = [
-					'tipoCita' => citaModelo::listarTipoCitas($tipoId),
-					'dias' => citaModelo::listardiaHoraAtencion($diaId,$tipoId),
-					'horas' => citaModelo::listarHorasDias($tipoId),
 					'citas' => 0,
+					'diaDisponi' => citaModelo::checkDay($serv,$diaId),
+					'horas' => citaModelo::listarHorasDias($cat),
+					'tipoCita' => citaModelo::listarTipoCitas($cat,$diaId),
 				];
 				exit(json_encode($datos));			
 			}
@@ -88,9 +90,25 @@
 				return [false];          
 			}
 		}
-		protected static function listarTipoCitas($tipoId){
-			$sql = mainModelo::conexion()->prepare('SELECT * FROM servicios_tipo WHERE servicios_id =:tipo');
+		protected static function checkDay($serv,$diaId){
+			$sql = mainModelo::conexion()->prepare('SELECT * FROM dias_hora_atencion dh
+			INNER JOIN config c
+			ON c.id = dh.config_id 			
+			WHERE c.servicio_general_id =:serv AND dh.dias_id =:dia');
+			$sql->bindParam(":serv",$serv);
+			$sql->bindParam(":dia",$diaId);
+			$sql -> execute();  
+			if($sql -> rowCount() > 0){
+				$resutl = $sql->fetchAll(PDO::FETCH_OBJ);	
+				return $resutl;
+			}else{
+				return 0;          
+			}
+		}
+		protected static function listarTipoCitas($tipoId,$diaId){
+			$sql = mainModelo::conexion()->prepare('SELECT * FROM servicios_tipo_dias WHERE servicios_id =:tipo and dias_id =:dia');
 			$sql->bindParam(":tipo",$tipoId);
+			$sql->bindParam(":dia",$diaId);
 			$sql -> execute();  
 			if($sql -> rowCount() > 0){
 				$resutl = $sql->fetchAll(PDO::FETCH_OBJ);	
@@ -114,9 +132,9 @@
 			}
 		}
 		/* ************** */
-		protected static function listarHorasDias($tipoId){
-			$sql = mainModelo::conexion()->prepare('SELECT * FROM horas WHERE servicios_id =:dia');
-			$sql->bindParam(":dia",$tipoId);
+		protected static function listarHorasDias($cat){
+			$sql = mainModelo::conexion()->prepare('SELECT * FROM horas WHERE servicios_id =:id');
+			$sql->bindParam(":id",$cat);
 			$sql -> execute();  
 			if($sql -> rowCount() > 0){
 				$resutl = $sql->fetchAll(PDO::FETCH_OBJ);	
@@ -348,7 +366,8 @@
 		
 		protected static function saveCita_m($datos,$tipo =''){
 			$pdo = mainModelo::conexion();
-			$sql = $pdo->prepare("INSERT INTO tratamientos (`fecha`, `tiempo`, `mensaje`, `estado`, `atentido`, `paciente_id`, `horas_id`, `servicios_id`,`tipo_cita_id`) 
+			$sql = $pdo->prepare("INSERT INTO tratamientos (`fecha`, `tiempo`, `mensaje`, `estado`, `atentido`, 
+				`paciente_id`, `horas_id`, `servicios_id`,`tipo_cita_id`) 
 				VALUES (:fecha, :tiempo, :mensaje, :estado, :atentido, :paciente, :horas, :servicio, :tipo_cita)");
 			$sql->bindParam(":fecha",$datos['fecha']);
 			$sql->bindParam(":tiempo",$datos['tiempo']);

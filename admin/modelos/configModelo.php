@@ -23,7 +23,7 @@
 		}
 		protected static function listServics_m(){
 			$sql = mainModelo::conexion()->prepare("SELECT sg.nombre as serv, s.nombre as cat, sg.estado as sg_est, s.estado as s_est, 
-				sg.id as sg_id, s.id as s_id, s.descripcion, s.precio_normal, s.precio_venta, s.tiempo FROM servicio_general sg
+				sg.id as sg_id, s.id as s_id, s.descripcion, s.precio_normal, s.precio_venta, s.tiempo, s.consulta FROM servicio_general sg
 				LEFT JOIN servicios s
 				ON s.servicio_general_id = sg.id
 			 WHERE sg.elimino = 0 AND s.elimino = 0");

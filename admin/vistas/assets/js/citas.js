@@ -1,5 +1,8 @@
 
-const days = [7, 1 , 2, 3, 4, 5, 6]
+const days = [7, 1 , 2, 3, 4, 5, 6];
+LcitasAtencion = [];
+servSelecTempo = 0;
+ catSelecTempo = 0;
 
 Lservicios = [] /* listar los servicios generales activos */
 listConfig = [] /* DIA,HORA, TIPO configurados por el admin */
@@ -7,7 +10,6 @@ listCitasReserv = [] /* CITAS YA RESERVADAS */
 servicSelect =0;
 
 LhorasAtencion = []
-LcitasAtencion = []
 seleccionFecha = false
 fechaSelecionada = ''
 idAppoint=0 /* Id Cita seleccionado */
@@ -18,15 +20,14 @@ selectServGe =  document.getElementById('select-servc') /* Seleccionar select de
 datosPacienteNuevo = [] /* si es nuevo */
 pacienteId = 0 /* 0 si es nuevo / otro si ya existe */
 listHist =[]  /* usuario temporal que busca cita */
+inp_dni = document.getElementById('dni')
 inp_nombre = document.getElementById('nombre')
 inp_apellido = document.getElementById('apellido')
 inp_celular = document.getElementById('celular')
 inp_correo = document.getElementById('correo')
 
-
 leerCondicionesAtencion()
 leerListaTratamientos()
-// buscarHistCitas()
 // leerListaHistorial()
 // table.destroy();
 function leerListaTratamientos(){
@@ -52,7 +53,6 @@ function leerListaTratamientos(){
     });     
 }
 
-
 function leerListaHistorial(){
     // console.log(tipoUser == 4 ? true : false);
     tablaUsuarios2 = $('#table2').DataTable({  
@@ -73,32 +73,32 @@ function leerListaHistorial(){
         ],
     });   
 }
-function showHistorial(idHistorial){
-    DATOS = new FormData()
-    DATOS.append('idHistorial', idHistorial)
-    fetch(URL+'ajax/citaAjax.php',{
-        method : 'post',
-        body : DATOS
-    })
-    .then( r => r.json())
-    .then( r => {
-        HTMLHistorial(r)
-        // console.log(r);        
-    })
-}
-function HTMLHistorial(datos){
-    // lista = ''
-    // datos.forEach(tratam => {
-    //     lista+=`<li>
-    //             <div>
-    //                 <time>${tratam.fecha} ${tratam.hora}</time> 
-    //                 <hr><p>SERVICIO : ${tratam.nombre}</p>
-    //                 <hr><p>DESCRIPCIÓN : ${tratam.descripcion }</p>
-    //             </div>
-    //         </li>`
-    // });
-    document.getElementById('historialPacient').innerHTML = datos 
-}
+// function showHistorial(idHistorial){
+//     DATOS = new FormData()
+//     DATOS.append('idHistorial', idHistorial)
+//     fetch(URL+'ajax/citaAjax.php',{
+//         method : 'post',
+//         body : DATOS
+//     })
+//     .then( r => r.json())
+//     .then( r => {
+//         HTMLHistorial(r)
+//         // console.log(r);        
+//     })
+// }
+// function HTMLHistorial(datos){
+//     // lista = ''
+//     // datos.forEach(tratam => {
+//     //     lista+=`<li>
+//     //             <div>
+//     //                 <time>${tratam.fecha} ${tratam.hora}</time> 
+//     //                 <hr><p>SERVICIO : ${tratam.nombre}</p>
+//     //                 <hr><p>DESCRIPCIÓN : ${tratam.descripcion }</p>
+//     //             </div>
+//     //         </li>`
+//     // });
+//     document.getElementById('historialPacient').innerHTML = datos 
+// }
 function leerCondicionesAtencion(){
     DATOS = new FormData()
     DATOS.append('horaAten', 'horaAten')
@@ -108,13 +108,11 @@ function leerCondicionesAtencion(){
     })
     .then( r => r.json())
     .then( r => {
-        // LcitasAtencion = r.tipoAtencion
-        // LhorasAtencion = r.horaAtencion
-        listarServiciosss(r.listServics)       
-        
+        LcitasAtencion = r.tipoAtencion /* listar tipo de atencion  */
+        filtrarServics(r.listServics)
     })
 }
-function listarServiciosss(listServi){
+function filtrarServics(listServi){
     Lservicios = []
     console.log(listServi);
     listServi.forEach(servicio => {
@@ -129,6 +127,7 @@ function listarServiciosss(listServi){
                         'precio_venta': servicio.precio_venta,  
                         'estado': servicio.s_est,  
                         'tiempo': servicio.tiempo,  
+                        'consulta': servicio.consulta,  
                     })
                     return servInt;
                 } 
@@ -148,7 +147,8 @@ function listarServiciosss(listServi){
                     'precio_normal': servicio.precio_normal,  
                     'precio_venta': servicio.precio_venta,  
                     'estado': servicio.s_est,  
-                    'tiempo': servicio.tiempo,  
+                    'tiempo': servicio.tiempo, 
+                    'consulta': servicio.consulta,   
                 }]
             }, 
             );      
@@ -164,38 +164,51 @@ function mostrarListaServicios(){
     }); 
     selectServGe.innerHTML = listS
 }
+serviciosTemp = []
 function cambioServicio(servSelect){
-    a = []
-    servicio =Lservicios.filter( serv => {
+    serviciosTemp = []
+    servSelecTempo = servSelect
+    console.log(servSelect);
+    Lservicios.filter( serv => {
         if(serv.id == servSelect ){
             serv.categorias.forEach(element => {
-                a.push(element)
-                console.log(a);
+                serviciosTemp.push(element)
             });
         }
-        return a
+        return serviciosTemp
     }) 
+    console.log(serviciosTemp);
     if(servSelect != 0){
-
         li = `<label>SELECCIONE CATEGORIA: </label>
-        <fieldset class="form-group">
-        <select class="form-select" id="select-categ" onchange="cambioCategoria(this.value)">
-        <option value="0">SELECCIONE</option>
-        `
-        a.forEach(cat => {
+            <fieldset class="form-group">
+            <select class="form-select" id="select-categ" onchange="cambioCategoria(this.value)">
+                <option value="0">SELECCIONE</option> `
+        serviciosTemp.forEach(cat => {
             li +=`<option value="${cat.id}" >${cat.nombre}</option>`
         }); 
-        li+=`</select>
-        </fieldset>`
+        li +=`</select>
+            </fieldset>`
         document.getElementById('categ_customer').innerHTML = li
     }else{
         document.getElementById('categ_customer').innerHTML = ''
-
     }
 }
+histNew = true
 function cambioCategoria(id){
-    console.log(listHist);
+    console.log(serviciosTemp);
+    if(serviciosTemp.find(serv => serv.id == id && serv.consulta == 1)){
+        console.log('encontrado');
+        inp = `<input class="form-control" placeholder="Ingrese nombre para la cita" id="nameHistNew">`
+        document.getElementById('historialNew').innerHTML = inp
+    } 
+    else {
+        histNew=false
+        historialTratamiento()
+    }
+    // serviciosTemp.filter()
     console.log(id);
+    catSelecTempo = id
+
 }
 function statusCampos(estado){
     inp_nombre.disabled = estado
@@ -204,7 +217,6 @@ function statusCampos(estado){
     inp_correo.disabled = estado
 
 }
-
 function validarDni(){
     dni = document.getElementById('dni').value
     DATOS = new FormData()
@@ -225,7 +237,8 @@ function validarDni(){
             datosPacienteNuevo = []
             listHist = r.listHist
             statusCampos(true)
-        }else{      
+        }else{   
+            pacienteId = 0   
             leerDni(dni)            
             statusCampos(false)   
             alertaToastify('Paciente nuevo, rellene sus datos  ','info',1500)
@@ -235,14 +248,14 @@ function validarDni(){
 }
 function historialTratamiento(){
     if(listHist.length > 0){
-
         div ='Escoge su codigo si continuara un tratamiento<div class="container btn-group"  aria-label="Basic radio toggle button group">'
-        listHist.forEach(h => {
-            div +=`<input type="radio" class="btn-check" id="${h.id}" value="${h.id}" name="listHHHH">
-            <label class="btn btn-outline-success" for="${h.id}" >${h.code}-${h.nombre}</label>`
+        listHist.forEach(hist => {
+            div +=`<input type="radio" class="btn-check" id="hist_${hist.id}" value="${hist.id}" name="listHHHH">
+            <label class="btn btn-outline-success" for="hist_${hist.id}" >${hist.code}-${hist.nombre}</label>`
         });
         div +='</div>'
-    }else div = 'No tiene historial'
+    }
+    else div = 'No tiene historial <input class="form-control" placeholder="Ingrese nombre para la cita" id="nameHistNew">'
     document.getElementById('historialNew').innerHTML = div
 }
 /*  */
@@ -260,79 +273,46 @@ function leerDni(dni){
         }else{
             inp_nombre.value = ''
             inp_apellido.value = ''
-        }        
+        }  
+        historialTratamiento()      
+
     })
-    .catch(r => console.log(r))
-    
-    // *****************
-        // ,{    
-        //     mode: 'no-cors', // no-cors, *cors, same-origin
-        //     headers: {
-        //     'Content-Type': 'application/json',
-        //     'Access-Control-Allow-Origin': '*'
-        //     },
-        // }
-    // *****************
-
-    // var formData = new FormData();
-    // formData.append("token", "YccQhVMLEMGTxZC6cybJLSjoKUuLNiSssf9yvUOtdOZgwcJdzK9R6YOJBPcq");
-    // formData.append("dni",'48540264');
-
-    // var request = new XMLHttpRequest();
-
-    // request.open("POST", "https://api.migo.pe/api/v1/dni");
-    // request.setRequestHeader("Accept", "application/json");
-
-    // request.send(formData);
-    // request.onload = function() {
-    // var data = JSON.parse(this.response);
-    // console.log(data);
-    // };  
-    
+    .catch(r => console.log(r))    
 }
 
-
-function buscarHistCitas(){
-    dat = new FormData()
-    dat.append('searcHistUser','user')
-    fetch(URL+'ajax/citaAjax.php',{
-        method : 'post',
-        body : dat
-    })
-    .then( r => r.json())
-    .then( r => {
-        listHist =r
-        // console.log(listHist);
-    })
+function limpiarCampos (){
+    document.getElementById('fechaCita').innerHTML = ''
+    document.getElementById('tipocitaSelect').innerHTML = ''
+    document.getElementById('horasDisponibles').innerHTML = ''
+    alertaToastify('Escoge una fecha actual');
 }
+
 function verificarFecha(dia, mes, anio){
-    if(servicSelect != 0){    
-        dia = ('0' +dia).slice(-2)
-        fecha = `${monthNumber(mes)}-${dia}-${anio}`;
-        fechaB = `${anio}-${monthNumber(mes)}-${dia}`;
-        document.getElementById('tipocitaSelect').innerHTML = ''
-        document.getElementById('fechaCita').innerHTML = fecha
-        document.getElementById('horasDisponibles').innerHTML = ''
-        // document.getElementById('spinner').innerHTML = `<div class="spinner-grow text-success" role="status">
-        //         <span class="sr-only"></span>
-        //     </div>` 
-        // seleccionFecha = true
-        // fechaSelecionada = fecha    
-        diaSelect = days[new Date(fecha).getDay()]
-        document.getElementById('tipocitaSelect').innerHTML = ''
-        document.getElementById('horasDisponibles').innerHTML = ''
-        fechaSelecionada = fechaB
-        buscarCitasReservadas(fechaB,diaSelect)
-    }else{
-        alertaToastify('Escoge tipo de servicio');
-    }
+    if(servSelecTempo != 0){ 
+        if(catSelecTempo != 0){
+            dia = ('0' +dia).slice(-2)
+            fecha = `${monthNumber(mes)}-${dia}-${anio}`;
+            fechaB = `${anio}-${monthNumber(mes)}-${dia}`;
+            document.getElementById('fechaCita').innerHTML = fecha
+            diaSelect = days[new Date(fecha).getDay()]
+            document.getElementById('tipocitaSelect').innerHTML = ''
+            document.getElementById('horasDisponibles').innerHTML = ''
+            fechaSelecionada = fechaB
+            buscarCitasReservadas(fechaB,diaSelect)
+        }else alertaToastify('Escoge alguna categoria'); 
+    }else alertaToastify('Escoge algun servicio'); 
     
 }
 function buscarCitasReservadas(dia,diaSelect){
+    console.log(dia);
+    console.log(diaSelect);
+    console.log(catSelecTempo);
+    console.log(servSelecTempo);
     DATOS = new FormData()
     DATOS.append('fechaCita', dia)
     DATOS.append('diaSelectsss', diaSelect)
-    DATOS.append('tipoServf', servicSelect)
+    DATOS.append('tipoCateg', catSelecTempo)
+    DATOS.append('tipoServG', servSelecTempo)
     
     fetch(URL+'ajax/citaAjax.php',{
         method : 'post',
@@ -340,137 +320,97 @@ function buscarCitasReservadas(dia,diaSelect){
     })
     .then( r => r.json())
     .then( r => {   
-        if(r.dias != 0){
+        console.log(r);
+        if(r.diaDisponi != 0){
+            if(r.tipoCita != 0){
+                a = []
+                r.diaDisponi.forEach( dia => {
+                    if(r.tipoCita.find(tip => dia.tipo_atencion == tip.tipo_cita_id)){
+                        disponi = r.tipoCita.filter(tip => dia.tipo_atencion == tip.tipo_cita_id)
+                        a.push(disponi)         
+                    }
+                })
+                if(a.length > 0){
+                    console.log(disponi);
+                    list = ''
+                    LcitasAtencion.forEach((tipo,index) => {
+                        if(disponi.find(type => type.tipo_cita_id == tipo.id)){
+                            list +=`<input type="radio" class="btn-check" name="tipoCitaUs" id="${tipo.nombre}" value="${tipo.id}">
+                            <label class="btn btn-outline-success" for="${tipo.nombre}">${tipo.nombre}</label>`
+                        }
+                    });
+                    document.getElementById('tipocitaSelect').innerHTML = list
 
-            if(r.citas == 0){
-                listCitasReserv = []
-            }else{
-                listCitasReserv = r.citas 
-            }
-            filtrarFechasHorasDispo(diaSelect,r.tipoCita,r.dias,r.horas)/*dia en numero / tipo disponibles para esta servicio,  */
-        }else{
-            alertaToastify('Dia no disponibles, escoge otro dia por favor')
-        }
+                    /* dddddddddddd */
+                    tb = '<div class="row text-center ">'
+                    r.horas.forEach((hour,index) => {
+                        tb +=`<div class="col-6 col-md-6 col-lg-4 hora-cita">
+                                <input type="radio" class="btn-check" name="horaAtenUs" id="${index}" value="${hour.id}" >
+                                <label class="btn btn-outline-success" for="${index}">${hour.hora}</label>
+                            </div>`                        
+                    });
+                    document.getElementById('horasDisponibles').innerHTML = tb
+
+                }else{
+                    alertaToastify('error aaa')
+                }
+            }else alertaToastify('Dia no disponibles, escoge otro dia por favor')
+        }else alertaToastify('Dia no disponibles, escoge otro dia por favor')
         
     })
 }
-function filtrarFechasHorasDispo(diaSelect,citaDispo,diass,horas){
-    aaaa = []
-    dispon = citaDispo.length > diass.length ? citaDispo : diass
-    statuss = citaDispo.length > diass.length ? diass : citaDispo
-    dispon.forEach(element => {
-        if(statuss.find(ff => ff.tipo_cita_id == element.tipo_cita_id)){
-            aaaa.push(diass.find(ff => ff.tipo_cita_id == element.tipo_cita_id)) 
-        }
-    });
-    if(aaaa.length>0){
-        inicio = aaaa[0].horainicio;
-        fin = aaaa[0].horafin;
-        list =''
-        LcitasAtencion.forEach((tipo,index) => {
-            if(aaaa.find(type => type.tipo_cita_id == tipo.id)){
-                list +=`<input type="radio" class="btn-check" name="tipoCitaUs" id="${tipo.nombre}" value="${tipo.id}">
-                <label class="btn btn-outline-success" for="${tipo.nombre}">${tipo.nombre}</label>`
-            }
-        });
-        document.getElementById('tipocitaSelect').innerHTML = list
-        tb = '<div class="row text-center ">'
-        horas.forEach(hour => {
-            if(listCitasReserv.find(cita=> cita.horas_id == hour.id)){
-                horas = horas.filter(hou => hou.id != hour.id)
-            }
-        });  
-        horas.forEach((hour,index) => {
-            if(hour.hora >= inicio && hour.hora < fin){
-                tb +=`<div class="col-6 col-md-6 col-lg-4 hora-cita">
-                        <input type="radio" class="btn-check" name="horaAtenUs" id="${index}" value="${hour.id}" >
-                        <label class="btn btn-outline-success" for="${index}">${hour.hora}</label>
-                    </div>`
-                    
-            }
-        });
-        tb += '</div>'
-        document.getElementById('horasDisponibles').innerHTML = tb
-    }else{
-        alertaToastify('Fecha no disponible')
+
+function validarCita(){   
+    histSelecTempo = document.querySelector('input[name="listHHHH"]:checked')
+    tipoAtSelecTemp = document.querySelector('input[name="tipoCitaUs"]:checked')
+    horaAtSelecTemp = document.querySelector('input[name="horaAtenUs"]:checked')
+    nameHistNew = document.getElementById('nameHistNew')
+    usuario = {
+        dni : parseInt(inp_dni.value),
+        nombre : inp_nombre.value,
+        apellido : inp_apellido.value,
+        celular : inp_celular.value,
+        correo : inp_correo.value,
     }
     
+    if(tipoAtSelecTemp) {
+        if(horaAtSelecTemp) {
+            datos = {
+                histSelec : histSelecTempo ? histSelecTempo.value : nameHistNew.value,
+                histSelecE : histSelecTempo ? 'old' : 'new',
+                catSelec : catSelecTempo,
+                userSelec : pacienteId ? pacienteId : usuario,
+                userSelecE : pacienteId ? 'old' : 'new',
+                tipoAtSelec : tipoAtSelecTemp ? tipoAtSelecTemp.value : 0,
+                horaAtSelec : horaAtSelecTemp ? horaAtSelecTemp.value : 0,
+                fechaSelec : fechaSelecionada,
+            }
+            guardarCita(datos)
+            console.log(datos); 
+        } else  alertaToastify('Escoge la hora de atención')
+    } else alertaToastify('Escoge el tipo de atención')
 }
-function validarCita(){   
-    
-    dni = tipoUser == '4' ? 12345678 :parseInt(document.getElementById('dni').value)
-    nombre = tipoUser == 4 ? 'login' :document.getElementById('nombre').value
-    apellido = tipoUser == 4 ? 'login' :document.getElementById('apellido').value
-    celular = tipoUser == 4 ? 'login' :document.getElementById('celular').value
-    correo = tipoUser == 4 ? 'login' :document.getElementById('correo').value
-    nameHist = servicSelect == 17 ? document.getElementById('nameHist').value : ''
-    cita = document.querySelector('input[name="tipoCitaUs"]:checked')
-    listHistt = servicSelect != 17 ? document.querySelector('input[name="listHHHH"]:checked') : 0
-    hora = document.querySelector('input[name="horaAtenUs"]:checked')
-    
-    
-    // b = document.querySelector('input[name="horaAtenUs"]:checked').value
-    // console.log(a);
-    // console.log(b);
-    // console.log(dni.length > 1);
-    // console.log(dni);
-    if(dni != ''){
-        if(nombre != '' && apellido != ''){
-            if (celular != '') {
-                if(cita) {
-                    if(hora) {
-                        datosPacienteNuevo = {
-                            tipoUse : tipoUser,
-                            idUPaci : idUPaci,
-                            dni : dni,
-                            nombre : nombre,
-                            apellidos :apellido,
-                            celular :celular,
-                            correo :correo,
-                            cita :cita.value,
-                            hora :hora.value,
-                            iduser : tipoUser == 4 ? idUPaci : pacienteId,
-                            fecha : fechaSelecionada,
-                            servicSelect : servicSelect,
-                            nameHist : nameHist,
-                            listHistt : listHistt.value,
-                        }
-                        guardarCita(datosPacienteNuevo)
-                        // console.log(listHistt);
-                    }
-                    else  alertaToastify('Escoge la hora de atención')
-                }else alertaToastify('Escoge el tipo de atención')
-            } else alertaToastify('Rellene celular')
-        }else alertaToastify('Completa nombre del paciente')
-    }else alertaToastify('Dni incompleto ')
-}
-function guardarCita(user){
-
-    // console.log(fechaSelecionada);
+function guardarCita(datos){
     dat = new FormData()
-    dat.append('guardCitaUs',JSON.stringify(user))
+    dat.append('guardCitaUs',JSON.stringify(datos))
     fetch(URL+'ajax/citaAjax.php',{
         method : 'post',
         body : dat
     })
     .then( r => r.json())
     .then( r => {  
+        console.log(r);
         if(r == 1){
             alertaToastify('Se grabo tu reserva','green',1500) 
-            // console.log(r);
-            datosPacienteNuevo = []
-            if(tipoUser != 4){
-                document.getElementById('dni').value = ''
-                document.getElementById('nombre').value = ''
-                document.getElementById('apellido').value = ''
-                document.getElementById('celular').value = ''
-                document.getElementById('correo').value = ''
-            }
-            document.getElementById('fechaCita').innerHTML = ''
+            inp_dni.value = ''
+            inp_nombre.value = ''
+            inp_apellido
+            inp_celular.value = ''
+            inp_correo.value = ''
+            selectServGe.value = 0
+            fechaSelecionada = ''
             document.getElementById('tipocitaSelect').innerHTML = ''
             document.getElementById('horasDisponibles').innerHTML = ''
-            document.getElementById('historialNew').innerHTML = ''
-            fechaSelecionada = ''
             setTimeout(() => {
                 location.reload()
             }, 2000);
