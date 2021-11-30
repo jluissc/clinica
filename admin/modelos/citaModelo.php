@@ -33,7 +33,7 @@
 			}
 		}
 		/* ************** */
-		protected static function buscarFechaCita_m($fecha,$cat,$diaId, $serv){
+		protected static function buscarFechaCita_m($fecha,$cat,$diaId, $serv){		
 			$sql = mainModelo::conexion()->prepare('SELECT * FROM tratamientos WHERE fecha =:fecha AND servicios_id =:id');
 			$sql->bindParam(":fecha",$fecha);
 			$sql->bindParam(":id",$cat);
@@ -44,8 +44,7 @@
 					'citas' => $resutl,
 					'diaDisponi' => citaModelo::checkDay($serv,$diaId),
 					'horas' => citaModelo::listarHorasDias($cat),
-					'tipoCita' => citaModelo::listarTipoCitas($cat,$diaId),
-					// 'dias' => citaModelo::listardiaHoraAtencion($diaId,$tipoId),
+					'tipoCita' => citaModelo::listarTipoCitas($cat,$diaId),		
 				];	
 				exit(json_encode($datos));			
 			}else{				
@@ -152,7 +151,7 @@
 
 
 		protected static function idPayDirect_m($idAppoint, $monto=50){
-			$sql = mainModelo::conexion()->prepare('INSERT INTO cita_pagos (`tipo_pago_id1`, `detalles`, `medio_pago`, `fecha`, `total`, `estado`, `citas_id`)
+			$sql = mainModelo::conexion()->prepare('INSERT INTO tratamiento_pagos (`tipo_pago_id`, `detalles`, `medio_pago`, `fecha`, `total`, `estado`, `tratamientos_id`)
 				VALUES (3, "PAGO DIRECTO", "FISICO", now(), :monto, 1, :cita_id)');
 			$sql->bindParam(":monto",$monto);
 			$sql->bindParam(":cita_id",$idAppoint);
@@ -170,7 +169,7 @@
 			// echo $tipo;
 			
 			// $idPaciente = $tipo ? $_SESSION['id'] : '';
-			if($_SESSION['tipo'] == 4){
+			if($_SESSION['tipo'] == 4 || $_SESSION['tipo'] == 2){
 				$sql = mainModelo::conexion()->prepare("SELECT p.nombre AS usuario, c.fecha, c.id AS idcita, p.apellidos, p.celular, 
 					p.correo, h.hora, s.precio_venta, p.dni FROM tratamientos c
 					INNER JOIN persona p
@@ -203,7 +202,7 @@
 		}
 		protected static function reedListHistorialAppointment_m(){
 			
-			if($_SESSION['tipo'] == 4){
+			if($_SESSION['tipo'] == 4 || $_SESSION['tipo'] == 2){
 				$sql = mainModelo::conexion()->prepare("SELECT p.nombre AS usuario,p.dni, p.apellidos, p.celular, p.correo, h.code, h.nombre AS nameC, h.id AS idHis  FROM historial h
 					INNER JOIN persona p
 					ON p.id = h.persona_id
@@ -294,7 +293,7 @@
 		}
 
 		protected static function validarTransferencia_m($idAppointPay){
-			$sql = mainModelo::conexion()->prepare('UPDATE `cita_pagos` SET estado = 1
+			$sql = mainModelo::conexion()->prepare('UPDATE `tratamiento_pagos` SET estado = 1
 				WHERE id ='.$idAppointPay.'');
 			$sql -> execute();
 			// $sql = null;
@@ -307,7 +306,7 @@
 		}
 
 		protected static function saveDatosPayAppoint_m($datos){
-			$sql = mainModelo::conexion()->prepare('INSERT INTO `cita_pagos`(`tipo_pago_id1`, `detalles`, `medio_pago`, `fecha`, `total`, `estado`, `citas_id`) 
+			$sql = mainModelo::conexion()->prepare('INSERT INTO `tratamiento_pagos`(`tipo_pago_id`, `detalles`, `medio_pago`, `fecha`, `total`, `estado`, `tratamientos_id`) 
 				VALUES (2, :numPago, :medioPago, now(), :total, 0 , :citaId)');
 			$sql->bindParam(":numPago",$datos['numb_pay']);
 			$sql->bindParam(":medioPago",$datos['name_bank']);
@@ -322,7 +321,7 @@
 		}
 
 		protected static function searchAppointPay_m($idAppoint){
-			$sql = mainModelo::conexion()->prepare('SELECT * FROM cita_pagos WHERE citas_id = '.$idAppoint.'');
+			$sql = mainModelo::conexion()->prepare('SELECT * FROM tratamiento_pagos WHERE tratamientos_id = '.$idAppoint.'');
 			$sql -> execute();
 			$listaDatos = $sql->fetch(PDO::FETCH_OBJ);
 			if ($sql->rowCount()== 1) {
@@ -453,7 +452,5 @@
 				$sql = null;
 				return 0;
 			}
-		}
-
-		
+		}		
 	}

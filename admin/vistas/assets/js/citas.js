@@ -3,6 +3,7 @@ const days = [7, 1 , 2, 3, 4, 5, 6];
 LcitasAtencion = [];
 servSelecTempo = 0;
  catSelecTempo = 0;
+ hisTrat = []
 
 Lservicios = [] /* listar los servicios generales activos */
 
@@ -20,6 +21,8 @@ inp_correo = document.getElementById('correo')
 fechaSelecionada = ''
 serviciosTemp = []
 histNew = true
+tipoUsuario = 0
+idUser = 0
 
 leerCondicionesAtencion()
 leerListaTratamientos()
@@ -48,7 +51,6 @@ function leerListaTratamientos(){
     });     
 }
 function leerListaHistorial(){
-    // console.log(tipoUser == 4 ? true : false);
     tablaUsuarios2 = $('#table2').DataTable({  
         "ajax":{            
             "url": URL+'ajax/citaAjax.php', 
@@ -76,6 +78,11 @@ function leerCondicionesAtencion(){
     })
     .then( r => r.json())
     .then( r => {
+        console.log(r.hisTrat);
+        hisTrat = r.hisTrat
+        console.log(r.tipoUser);
+        tipoUsuario = r.tipoUser
+        idUser = r.idUser
         LcitasAtencion = r.tipoAtencion /* listar tipo de atencion  */
         filtrarServics(r.listServics)
     })
@@ -338,14 +345,13 @@ function validarCita(){
     tipoAtSelecTemp = document.querySelector('input[name="tipoCitaUs"]:checked')
     horaAtSelecTemp = document.querySelector('input[name="horaAtenUs"]:checked')
     nameHistNew = document.getElementById('nameHistNew')
-    usuario = {
-        dni : parseInt(inp_dni.value),
-        nombre : inp_nombre.value,
-        apellido : inp_apellido.value,
-        celular : inp_celular.value,
-        correo : inp_correo.value,
-    }
-    
+    usuario = tipoUsuario == 2 || tipoUsuario == 4 ? idUser : {
+            dni : parseInt(inp_dni.value),
+            nombre : inp_nombre.value,
+            apellido : inp_apellido.value,
+            celular : inp_celular.value,
+            correo : inp_correo.value,
+        }
     if(tipoAtSelecTemp) {
         if(horaAtSelecTemp) {
             datos = {
@@ -353,7 +359,7 @@ function validarCita(){
                 histSelecE : histSelecTempo ? 'old' : 'new',
                 catSelec : catSelecTempo,
                 userSelec : pacienteId ? pacienteId : usuario,
-                userSelecE : pacienteId ? 'old' : 'new',
+                userSelecE : pacienteId ? 'old' : (tipoUsuario == 2 || tipoUsuario == 4 ? 'old' : 'new'),
                 tipoAtSelec : tipoAtSelecTemp ? tipoAtSelecTemp.value : 0,
                 horaAtSelec : horaAtSelecTemp ? horaAtSelecTemp.value : 0,
                 fechaSelec : fechaSelecionada,
@@ -375,11 +381,8 @@ function guardarCita(datos){
         console.log(r);
         if(r == 1){
             alertaToastify('Se grabo tu reserva','green',1500) 
-            inp_dni.value = ''
-            inp_nombre.value = ''
-            inp_apellido
-            inp_celular.value = ''
-            inp_correo.value = ''
+            usuario = tipoUsuario == 2 || tipoUsuario == 4 ? 'ok' : limpiarInpTrat()
+            
             selectServGe.value = 0
             fechaSelecionada = ''
             document.getElementById('tipocitaSelect').innerHTML = ''
@@ -390,7 +393,13 @@ function guardarCita(datos){
         }else alertaToastify('Error al grabar la reserva')
     })
 }
-
+function limpiarInpTrat(){
+    inp_dni.value = ''
+    inp_nombre.value = ''
+    inp_apellido
+    inp_celular.value = ''
+    inp_correo.value = ''
+}
 
 /* ****************HASTA AQUI EL NUEVO CODIGO******************* */
 function datosTransf(idAppointd,showBtn){
@@ -404,7 +413,6 @@ function datosTransf(idAppointd,showBtn){
         document.getElementById('estadoPay').innerHTML = ''
     }
 }
-
 function validarTransf(idAppointd){
     datos = new FormData()
     datos.append('idAppointdV',idAppointd)
@@ -425,7 +433,6 @@ function validarTransf(idAppointd){
 
     })
 }
-
 function validarTRansfern(idAppointPay){
     document.getElementById('checkValidTransf').disabled = true
     estado = document.getElementById('checkValidTransf').checked
@@ -448,7 +455,6 @@ function validarTRansfern(idAppointPay){
         }
     })
 }
-
 function payDirect(idAppointPay){
     document.getElementById(`pagoDirecto_${idAppointPay}`).checked = false
     
@@ -495,7 +501,6 @@ function payDirect(idAppointPay){
     
     
 }
-
 function mandarDatosPago(){
     numb_pay = document.getElementById('numbTrans').value
     name_bank = document.getElementById('name_bank').value

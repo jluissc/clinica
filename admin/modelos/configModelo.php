@@ -3,12 +3,16 @@
 	class configModelo extends mainModelo
 	{	
 		protected static function listarHoraAtencion_m(){
+			session_start(['name' => 'bot']);
 			$sql = mainModelo::conexion()->prepare("SELECT * FROM horas");
 			$sql -> execute();
 			$horasAtencion = $sql->fetchAll(PDO::FETCH_OBJ);
 			$sql = null;
 			$datos = [
+				'tipoUser' => $_SESSION['tipo'],
+				'idUser' => $_SESSION['tipo'] == 4 || $_SESSION['tipo'] == 2 ? $_SESSION['id'] : 0,
 				'listConfig' => configModelo::listConfig_m(),
+				'hisTrat' => $_SESSION['tipo'] == 4 || $_SESSION['tipo'] == 2 ? configModelo::reedListHistorialAppointment_m() : 0,
 				'listaServGen' => configModelo::listaServGen_m(),
 				'listServics' => configModelo::listServics_m(),
 				'listCategs' => configModelo::listCategs_m(),
@@ -20,6 +24,26 @@
 				// 'servicios' => configModelo::listarServicios_m(),
 			];
 			exit(json_encode($datos));
+		}
+		protected static function reedListHistorialAppointment_m(){
+			
+			if($_SESSION['tipo'] == 4 || $_SESSION['tipo'] == 2){
+				$sql = mainModelo::conexion()->prepare("SELECT p.nombre AS usuario,p.dni, p.apellidos, p.celular, p.correo, h.code, h.nombre AS nameC, h.id AS idHis  FROM historial h
+					INNER JOIN persona p
+					ON p.id = h.persona_id
+					WHERE p.id=:iss
+					ORDER BY h.id DESC");
+				$sql->bindParam(":iss",$_SESSION['id']);
+			}else{
+				$sql = mainModelo::conexion()->prepare("SELECT p.nombre AS usuario,p.dni, p.apellidos, p.celular, p.correo, h.code, h.nombre AS nameC, h.id AS idHis FROM historial h 
+					INNER JOIN persona p
+					ON p.id = h.persona_id
+					ORDER BY h.id DESC");
+			}
+			$sql -> execute();
+			$resutl = $sql->fetchAll(PDO::FETCH_OBJ);
+			$sql = null;
+			return $resutl;
 		}
 		protected static function listServics_m(){
 			$sql = mainModelo::conexion()->prepare("SELECT sg.nombre as serv, s.nombre as cat, sg.estado as sg_est, s.estado as s_est, 

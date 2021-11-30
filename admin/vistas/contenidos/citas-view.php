@@ -201,7 +201,7 @@
                     total
                 -->
                 <?php 
-                    if($_SESSION['tipo']==4){
+                    if($_SESSION['tipo']==4 || $_SESSION['tipo']==2 ){
                 ?>
                 <div>
                     <h5>Num. Cuenta : 1931903910931029301</h5>
@@ -239,7 +239,7 @@
             </div>
             <div class="modal-footer">
                 <?php 
-                    if($_SESSION['tipo']==4){
+                    if($_SESSION['tipo']==4 || $_SESSION['tipo']==2 ){
                 ?>
                 <button type="button" class="btn btn-light-secondary" data-bs-dismiss="modal">
                     <i class="bx bx-x d-block d-sm-none"></i>
