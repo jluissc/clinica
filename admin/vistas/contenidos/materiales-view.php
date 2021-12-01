@@ -15,21 +15,18 @@
                 <!-- Simple Datatable -->
             </div>
             <div class="card-body">
-                <table class="table table-striped" id="table1" style="width: 100%;"  >
+                <table class="table table-striped" id="tableMateriales" style="width: 100%;"  >
                     <thead>
                         <tr>
                             <th>Nombres</th>
                             <th>DESCRIPCION</th>
                             <th>ACCIONES</th>
-                            <th>Celulnes</th>
                         </tr>
                     </thead>
-                    <tbody >
-                        
+                    <tbody >                        
                         <?php 
                             // echo $inst->reedListCustomers();
-                        ?>
-                        
+                        ?>                        
                     </tbody>
                 </table>
             </div>
@@ -43,65 +40,32 @@
             role="document">
             <div class="modal-content">
                 <div class="modal-header bg-info">
-                    <h5 class="modal-title white" id="tituloModal"> Info Modal </h5>
+                    <h5 class="modal-title white" id="tituloModal"> Material </h5>
                     <button type="button" class="close" data-bs-dismiss="modal"
                         aria-label="Close">
                         <i data-feather="x"></i>
                     </button>
                 </div>
-                <div class="modal-body">
+                <div class="modal-body"> 
                     <div class="form-group">
                         <div class="col-12">
-                            <input type="text" id="dni_appoint" class="form-control font-bold" placeholder="DNI" onchange="leerDni(1)">
-                        </div>                            
-                    </div>
-
-                    <div id="spinnerTemp"></div>
-
-                    <div class="form-group">
-                        <div class="col-12">
-                            <input type="text" id="name_appoint" class="form-control font-bold" placeholder="Nombres" autocomplete="false">
+                            <input type="text" id="name_mat" class="form-control font-bold" placeholder="Nombre material" autocomplete="false">
                         </div>   
                     </div>
-
                     <div class="form-group">
                         <div class="col-12">
-                            <input type="text" id="last_appoint" class="form-control font-bold" placeholder="Apellidos" autocomplete="false">
+                            <input type="text" id="descr_mat" class="form-control font-bold" placeholder="Descripción material" autocomplete="false">
                         </div>
                     </div>
-
-                    <div class="form-group">
-                        <div class="col-12">
-                            <input type="text" id="celphone_appoint" class="form-control font-bold" placeholder="Celular (Whatsapp)" autocomplete="false">
-                        </div>                            
-                    </div>
-
-                    <div class="form-group">
-                        <div class="col-12">
-                            <input type="text" id="email_appoint" class="form-control font-bold" placeholder="Correo" autocomplete="false">
-                        </div>                            
-                    </div>
-
-                    <div class="form-group">
-                        <div class="col-12">
-                            <input type="text" id="addres_appoint" class="form-control font-bold" placeholder="Dirección" autocomplete="false">
-                        </div>                            
-                    </div>
                 </div>
-                <div class="modal-footer">
-                    <!-- <button type="button" class="btn btn-light-secondary" data-bs-dismiss="modal">
-                        <i class="bx bx-x d-block d-sm-none"></i>
-                        <span class="d-none d-sm-block">Cancelar</span>
-                    </button>
-                    <button type="button" class="btn btn-info ml-1" id="btnsss">
-                        <i class="bx bx-check d-block d-sm-none"></i>
-                        <span class="d-none d-sm-block" id="btn_titulo">Editar</span>
-                    </button> -->
+                <div class="modal-footer" id="btn_materiales">
+                    <!-- BTN OPTIONS -->
                 </div>
             </div>
         </div>
     </div>
-    
+    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
     <script src="<?php echo SERVERURL ?>vistas/assets/js/material.js"></script>
 <?php 
     }else{

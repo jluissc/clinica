@@ -24,10 +24,10 @@
     </li> 
     <?php } ?>
     <?php if($_SESSION['tipo'] == 1 || in_array(2, $_SESSION['permisos'])){ ?>
-    <li class="sidebar-item <?php echo $_GET['ruta'] == 'gastos' ? 'active' : '' ?> ">
-        <a href="<?php echo SERVERURL ?>gastos" class='sidebar-link'>
+    <li class="sidebar-item <?php echo $_GET['ruta'] == 'compras' ? 'active' : '' ?> ">
+        <a href="<?php echo SERVERURL ?>compras" class='sidebar-link'>
             <i class="bi bi-grid-1x2-fill"></i>
-            <span>Gastos</span>
+            <span>Compras</span>
         </a>
     </li> 
     <?php } ?>
