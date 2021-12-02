@@ -9,7 +9,15 @@
 	class pagosControlador extends pagosModelo	{
 
         public function verPagos(){
+			
             pagosModelo::verPagos_m($_POST['Idpagos']);
+        }
+        public function payUser(){
+			$datos = [
+				'idPay' => $_POST['idPay'],
+				'montoPay' => $_POST['montoPay'],
+			];
+            pagosModelo::payUser_m($datos);
         }
         public function detallePago(){
             pagosModelo::detallePago_m($_POST['idDetalle']);

@@ -4,7 +4,7 @@
 
 	require_once '../config/app.php';
 
-	if (isset($_POST['datosMateriales']) || isset($_POST['listarPagos'])
+	if (isset($_POST['idPay']) || isset($_POST['listarPagos'])
         || isset($_POST['Idpagos']) || isset($_POST['idDetalle'])) {
 		
 		require_once '../controladores/pagosControlador.php';
@@ -24,8 +24,8 @@
 		if (isset($_POST['idDetalle'])) {
 			echo $inst -> detallePago();
 		}
-		if (isset($_POST['idDelete'])) {
-			echo $inst -> deleteDefinity();
+		if (isset($_POST['idPay'])) {
+			echo $inst -> payUser();
 		}
 
 	} else {

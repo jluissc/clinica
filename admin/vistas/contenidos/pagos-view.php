@@ -5,7 +5,7 @@
 
 <div class="container">
     <div class="row text-center">
-        <div class="col-3">
+        <div class="col-6">
             <div class="card-body">
                 <table class="table table-striped" id="tablepagos" with="100%">
                     <thead>
@@ -15,32 +15,18 @@
                             <th>ACCIONES</th>
                         </tr>
                     </thead>
-                    <tbody >                        
-                        <?php 
-                            // echo $inst->reedListCustomers();
-                        ?>                        
+                    <tbody >
+                        <!-- con ajax -->
                     </tbody>
                 </table>
             </div>
         </div>
         <div class="col-3">
             <ul class="list-group" id="listPagos">
-                <!-- <li class="list-group-item">An item</li>
-                <li class="list-group-item">A second item</li>
-                <li class="list-group-item">A third item</li>
-                <li class="list-group-item">A fourth item</li>
-                <li class="list-group-item">And a fifth one</li> -->
             </ul>
         </div>
-        <div class="col-6">
-            agregar un pago mas
-            <input type="button" value="Pagar" class="btn btn-outline-primary"> <br> <br>
+        <div class="col-3">
             <ul class="list-group" id="detallePago">
-                <!-- <li class="list-group-item">An item</li>
-                <li class="list-group-item">A second item</li>
-                <li class="list-group-item">A third item</li>
-                <li class="list-group-item">A fourth item</li>
-                <li class="list-group-item">And a fifth one</li> -->
             </ul>
         </div>
     </div>
