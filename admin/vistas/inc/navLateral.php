@@ -31,6 +31,14 @@
         </a>
     </li> 
     <?php } ?>
+    <?php if($_SESSION['tipo'] == 1 || in_array(2, $_SESSION['permisos'])){ ?>
+    <li class="sidebar-item <?php echo $_GET['ruta'] == 'pagos' ? 'active' : '' ?> ">
+        <a href="<?php echo SERVERURL ?>pagos" class='sidebar-link'>
+            <i class="bi bi-grid-1x2-fill"></i>
+            <span>Pagos</span>
+        </a>
+    </li> 
+    <?php } ?>
     <?php if($_SESSION['tipo'] == 1 || in_array(5, $_SESSION['permisos'])){ ?>
     <li class="sidebar-item <?php echo $_GET['ruta'] == 'materiales' ? 'active' : '' ?> ">
         <a href="<?php echo SERVERURL ?>materiales" class='sidebar-link'>
