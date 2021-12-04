@@ -6,8 +6,10 @@
 <div class="container">
     <div class="row text-center">
         <div class="col-6">
+        <section class="section">
+        <div class="card">
             <div class="card-body">
-                <table class="table table-striped" id="tablepagos" with="100%">
+                <table class="table table-striped" id="tablepagos" style="width: 100%;"  >
                     <thead>
                         <tr>
                             <th>Nombres</th>
@@ -20,6 +22,8 @@
                     </tbody>
                 </table>
             </div>
+            </div>
+        </section>
         </div>
         <div class="col-3">
             <ul class="list-group" id="listPagos">

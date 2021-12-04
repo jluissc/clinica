@@ -74,7 +74,7 @@
                                     <h6 class="text-muted font-semibold">Entrada</h6>
                                     <h6 class="font-extrabold mb-0" id="pay-serv">
                                         <?php 
-                                            echo 'S/. '.  $datos['pay'];
+                                            echo 'S/. '.  ($datos['pay'] ? $datos['pay'] : 0);
                                         ?>
                                     </h6>
                                 </div>
@@ -95,7 +95,11 @@
                                 </div>
                                 <div class="col-md-8">
                                     <h6 class="text-muted font-semibold">Salida</h6>
-                                    <h6 class="font-extrabold mb-0" id="pay-gastos">0</h6>
+                                    <h6 class="font-extrabold mb-0" id="pay-gastos">
+                                        <?php 
+                                            echo 'S/. '.  ($datos['payOut'] ? $datos['payOut'] : 0);
+                                        ?>
+                                    </h6>
                                 </div>
                             </div>
                         </div>

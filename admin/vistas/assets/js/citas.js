@@ -33,7 +33,7 @@ function leerListaTratamientos(){
         "ajax":{            
             "url": URL+'ajax/citaAjax.php', 
             "method": 'POST', //usamos el metodo POST
-            "data":{tipoUserH:tipoUser == 4 ? true : false}, //enviamos opcion 4 para que haga un SELECT
+            "data":{tipoUserH:'tippp'}, //enviamos opcion 4 para que haga un SELECT
             "dataSrc":""
         },        
         "columns":[
@@ -56,7 +56,7 @@ function leerListaHistorial(){
         "ajax":{            
             "url": URL+'ajax/citaAjax.php', 
             "method": 'POST', //usamos el metodo POST
-            "data":{tipoUserHist:tipoUser == 4 ? true : false}, //enviamos opcion 4 para que haga un SELECT
+            "data":{tipoUserHist:'tippp'}, //enviamos opcion 4 para que haga un SELECT
             "dataSrc":""
         },        
         "columns":[
@@ -388,9 +388,14 @@ function guardarCita(datos){
             fechaSelecionada = ''
             document.getElementById('tipocitaSelect').innerHTML = ''
             document.getElementById('horasDisponibles').innerHTML = ''
-            setTimeout(() => {
-                location.reload()
-            }, 2000);
+            // setTimeout(() => {
+            //     location.reload()
+            // }, 2000);
+            $('#tbl_tratam').DataTable().destroy()
+            leerListaTratamientos()
+            $('#table2').DataTable().destroy()
+            leerListaHistorial()
+
         }else alertaToastify('Error al grabar la reserva')
     })
 }
@@ -448,9 +453,11 @@ function validarTRansfern(idAppointPay){
     .then( result => {
         if(result == 1){
             alertaToastify('Se verifico transferencia', 'green')
-            setTimeout(() => {
-                location.reload()
-            }, 2000);
+            // setTimeout(() => {
+            //     location.reload()
+            // }, 2000);
+            $('#tbl_tratam').DataTable().destroy()
+            leerListaTratamientos()
         }else{
 
         }
@@ -490,9 +497,11 @@ function payDirect(idAppointPay){
                         // imageUrl: result.value.avatar_url
                         })
                         
-                    setTimeout(() => {
-                        location.reload()
-                    }, 1000);
+                    // setTimeout(() => {
+                    //     location.reload()
+                    // }, 1000);
+                    $('#tbl_tratam').DataTable().destroy()
+                    leerListaTratamientos()
                 }else{
 
                 }
@@ -522,9 +531,11 @@ function mandarDatosPago(){
                 .then(result => {
                     if(result){
                         alertaToastify('Se mando tus datos de transferencia','green')
-                        setTimeout(() => {
-                            location.reload()
-                        }, 1500);
+                        // setTimeout(() => {
+                        //     location.reload()
+                        // }, 1500);
+                        $('#tbl_tratam').DataTable().destroy()
+                        leerListaTratamientos()
                     }
                     else alertaToastify('Intentalo nuevamente por favor','red') 
                 })

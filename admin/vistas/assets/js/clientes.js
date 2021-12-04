@@ -143,10 +143,12 @@
                             .then(result => {
                                 if(result){
                                     alertaToastify('Datos Cambiados','green')
-                                    setTimeout(() => {
-                                        location.reload()
-                                        // leerListaTratamientos()
-                                    }, 1500);
+                                    // setTimeout(() => {
+                                    //     location.reload()
+                                    //     // leerListaTratamientos()
+                                    // }, 1500);
+                                    $('#table1').DataTable().destroy()
+                                    leerListaTratamientos()
                                 }else alertaToastify('Intentalo nuevamente')
                                 
                             })

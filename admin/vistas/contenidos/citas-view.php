@@ -20,32 +20,37 @@
     <div class="tab-content" id="myTabContent">
         <!-- LISTAR CITAS -->
         <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
-            <div class="card-header">
-                <h4>Historial de citas</h4>
-            </div>
-            <div class="card-body">
-                <table class="table table-striped" id="tbl_tratam">
-                    <thead>
-                        <tr>
-                            <th>Nombres</th>
-                            <th>Dni</th>
-                            <!-- <th>Correo</th> -->
-                            <th>Celular</th> 
-                            <th>Servicio</th> 
-                            <th>Fecha</th>
-                            <th>Hora</th>
-                            <th>Monto</th>
-                            <th>Total</th>
-                            <th>Estado Pago</th>
-                            <th>Acciones</th>
-                        </tr>
-                    </thead>
-                    <tbody id="listAppointment" >                           
-                        
-                    </tbody>
-                </table>
-            </div>
-                                        
+            <section class="section">
+                <div class="card">
+
+                
+                <div class="card-header">
+                    <h4>Historial de citas</h4>
+                </div>
+                <div class="card-body">
+                    <table class="table table-striped" id="tbl_tratam" style="width: 100%;"  >
+                        <thead>
+                            <tr>
+                                <th>Nombres</th>
+                                <th>Dni</th>
+                                <!-- <th>Correo</th> -->
+                                <th>Celular</th> 
+                                <th>Servicio</th> 
+                                <th>Fecha</th>
+                                <th>Hora</th>
+                                <th>Monto</th>
+                                <th>Total</th>
+                                <th>Estado Pago</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody id="listAppointment" >                           
+                            
+                        </tbody>
+                    </table>
+                </div>
+                </div>
+            </section>                            
 
         </div>
         <!-- CREAR CITA  -->
@@ -326,7 +331,4 @@
 <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
 <script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
 <script src="<?php echo SERVERURL ?>vistas/assets/js/calendario.js"></script>
-<script>
-    tipoUser = '<?php echo $_SESSION['tipo']; ?>'
-</script>
 <script src="<?php echo SERVERURL ?>vistas/assets/js/citas.js"></script>
