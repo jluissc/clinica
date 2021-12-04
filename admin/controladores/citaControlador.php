@@ -107,8 +107,9 @@
 				array_push($datos,[
 					'nombre' => $user,
 					'dni' => $appoint->dni,
-					'correo' => $appoint->correo,
+					// 'correo' => $appoint->correo,
 					'celular' => $appoint->celular,
+					'servicio' => $appoint->nombre.'::'.$appoint->cat,
 					'fecha' => $appoint->fecha,
 					'hora' => $appoint->hora, 
 					'monto' => 'S/. '.$appoint->precio_venta ,

@@ -4,23 +4,19 @@
 
 	require_once '../config/app.php';
 
-	if (isset($_POST['datosMateriales']) || isset($_POST['listarMat'])
-        || isset($_POST['idMaterial']) || isset($_POST['idDelete']) 
-		|| isset($_POST['listarMat2'])) {
+	if (isset($_POST['listaCompras']) || isset($_POST['listarMat'])
+        || isset($_POST['idMaterial']) || isset($_POST['idDelete'])) {
 		
-		require_once '../controladores/materialControlador.php';
-		$inst = new materialControlador();
+		require_once '../controladores/comprasControlador.php';
+		$inst = new comprasControlador();
 
+        // detail appointment
+        if (isset($_POST['listaCompras'])) {
+            echo $inst -> listarCompras();
+        }
 		// detail appointment
 		if (isset($_POST['datosMateriales'])) {
 			echo $inst -> updateMaterial();
-		}
-		// detail appointment
-		if (isset($_POST['listarMat'])) {
-			echo $inst -> listarMater();
-		}
-		if (isset($_POST['listarMat2'])) {
-			echo $inst -> listarMater2();
 		}
 		if (isset($_POST['idMaterial'])) {
 			echo $inst -> searchMaterial();

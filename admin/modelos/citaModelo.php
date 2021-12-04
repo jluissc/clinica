@@ -171,26 +171,30 @@
 			// $idPaciente = $tipo ? $_SESSION['id'] : '';
 			if($_SESSION['tipo'] == 4 || $_SESSION['tipo'] == 2){
 				$sql = mainModelo::conexion()->prepare("SELECT p.nombre AS usuario, c.fecha, c.id AS idcita, p.apellidos, p.celular, 
-					p.correo, h.hora, s.precio_venta, p.dni FROM tratamientos c
+					p.correo, h.hora, s.precio_venta, p.dni,s.nombre as cat, sg.nombre FROM tratamientos c
 					INNER JOIN persona p
 					ON p.id = c.paciente_id
 					INNER JOIN horas h
 					ON h.id = c.horas_id 
 					INNER JOIN servicios s
 					ON s.id = c.servicios_id
+					INNER JOIN servicio_general sg
+					ON sg.id = s.servicio_general_id
 					WHERE p.id=:iss
 					ORDER BY c.id DESC");
 				$sql->bindParam(":iss",$_SESSION['id']);
 			}else{
 				$sql = mainModelo::conexion()->prepare("SELECT p.nombre AS usuario, p.apellidos, 
 					p.correo, p.dni, p.celular, c.fecha, c.id AS idcita,  
-					h.hora, s.precio_venta FROM tratamientos c 
+					h.hora, s.precio_venta, s.nombre as cat, sg.nombre FROM tratamientos c 
 					INNER JOIN persona p
 					ON p.id = c.paciente_id
 					INNER JOIN horas h
 					ON h.id = c.horas_id
 					INNER JOIN servicios s
 					ON s.id = c.servicios_id
+					INNER JOIN servicio_general sg
+					ON sg.id = s.servicio_general_id
 					ORDER BY c.id DESC");
 			}
 			$sql -> execute();

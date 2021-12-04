@@ -39,8 +39,9 @@ function leerListaTratamientos(){
         "columns":[
             {"data": "nombre"},
             {"data": "dni"},
-            {"data": "correo"},
+            // {"data": "correo"},
             {"data": "celular"},
+            {"data": "servicio"},
             {"data": "fecha"},
             {"data": "hora"},
             {"data": "monto"},

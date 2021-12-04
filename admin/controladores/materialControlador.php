@@ -17,6 +17,9 @@
         public function deleteDefinity(){
             materialModelo::deleteDefinity_m($_POST['idDelete']);
         }
+        public function listarMater2(){
+            materialModelo::listaMateriales2();
+        }
 
         public function listarMater(){
             $datosMat = materialModelo::listaMateriales();

@@ -49,13 +49,13 @@ function morePay(idPay){
     .then( r => {
         console.log(r);
         li = ''
-        a = 0.0
+        monto = 0.0
         r.forEach(detalle => {
-            a += parseFloat(detalle.monto)
+            monto += parseFloat(detalle.monto)
             li += `<li class="list-group-item"> S/. ${detalle.monto}          
             </li>`
         });
-        li += `<h4>TOTAL: S/. ${a} <br></h4>`
+        li += `<h4>TOTAL: S/. ${monto} <br></h4>`
         li += `agregar un pago mas
             <input type="button" value="Pagar" class="btn btn-outline-primary" onclick="payUser()">`
         document.getElementById('detallePago').innerHTML = li

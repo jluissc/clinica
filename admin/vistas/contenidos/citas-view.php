@@ -1,7 +1,7 @@
 <?php 
     require_once './controladores/citaControlador.php';
     $inst = new citaControlador();
-?>
+?> 
 <section class="">    
     <ul class="nav nav-tabs" id="myTab" role="tablist">
         <li class="nav-item" role="presentation">
@@ -29,8 +29,9 @@
                         <tr>
                             <th>Nombres</th>
                             <th>Dni</th>
-                            <th>Correo</th>
+                            <!-- <th>Correo</th> -->
                             <th>Celular</th> 
+                            <th>Servicio</th> 
                             <th>Fecha</th>
                             <th>Hora</th>
                             <th>Monto</th>

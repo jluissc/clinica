@@ -28,6 +28,12 @@
             $sql -> execute();
             return $sql->fetchAll(PDO::FETCH_OBJ);
         }
+        protected static function listaMateriales2(){
+            $sql = mainModelo::conexion()->prepare("SELECT * FROM materiales WHERE estado = 1");
+            $sql -> execute();
+            exit(json_encode($sql->fetchAll(PDO::FETCH_OBJ)));
+            // return ;
+        }
         protected static function deleteDefinity_m($id){
             $sql = mainModelo::conexion()->prepare("UPDATE materiales SET estado = 0 WHERE id =:id");
             $sql->bindParam(':id',$id);
