@@ -8,11 +8,10 @@
     </button>
     <br>
     <br>
-    <h4 class="modal-title" id="myModalLabel17">LISTA DE MATERIALES</h4>
     <section class="section">
         <div class="card">
             <div class="card-header">
-                <!-- Simple Datatable -->
+            <h4>LISTA DE MATERIALES</h4>
             </div>
             <div class="card-body">
                 <table class="table table-striped" id="tableMateriales" style="width: 100%;"  >

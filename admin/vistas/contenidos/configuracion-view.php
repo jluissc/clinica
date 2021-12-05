@@ -320,7 +320,7 @@
                                                 <input class="form-check-input me-1"  type="checkbox" id="permi_1" onchange="selectPermis(1)"  > PAGOS
                                             </li>
                                             <li class="list-group-item">
-                                                <input class="form-check-input me-1"  type="checkbox" id="permi_2" onchange="selectPermis(2)" > GASTOS
+                                                <input class="form-check-input me-1"  type="checkbox" id="permi_2" onchange="selectPermis(2)" > COMPRAS
                                             </li>
                                             <li class="list-group-item">
                                                 <input class="form-check-input me-1"  type="checkbox" id="permi_3" onchange="selectPermis(3)" > CITAS

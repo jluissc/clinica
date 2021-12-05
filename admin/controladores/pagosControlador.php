@@ -22,6 +22,22 @@
         public function detallePago(){
             pagosModelo::detallePago_m($_POST['idDetalle']);
         }
+        public function updateDatos(){
+			$pagos = json_decode($_POST['updateDatos']);
+			$datos = [
+				'user' => $pagos->id,
+				'nombre' => $pagos->concept,
+			];
+			$id = pagosModelo::updateDatos_m($datos);
+            if($id){
+				$detalles = [
+					'monto' => $pagos->monto,
+					'pagos' => $id,
+				];
+				pagosModelo::updateDatos2_m($detalles);
+			}
+			else exit(json_encode($id));
+        }
 
         public function listarPagos(){
             $users = pagosModelo::listarPagos_m();

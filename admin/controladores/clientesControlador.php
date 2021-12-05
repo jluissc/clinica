@@ -53,6 +53,7 @@
 				'email_appoint' => $_POST['email_appoint'],
 				'addres_appoint' => $_POST['addres_appoint'],
 				'idAppoint' => intval($_POST['idAppoint']),
+				'pass' => mainModelo::encryption($_POST['dni_appoint']),
 				'tipo' => 4,
 				'estado' => 1,
 			];

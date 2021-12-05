@@ -4,6 +4,7 @@ LcitasAtencion = [];
 servSelecTempo = 0;
  catSelecTempo = 0;
  hisTrat = []
+ hisTrat2 = []
 
 Lservicios = [] /* listar los servicios generales activos */
 
@@ -79,10 +80,12 @@ function leerCondicionesAtencion(){
     })
     .then( r => r.json())
     .then( r => {
-        console.log(r.hisTrat);
+        console.log(r.hisTrat); /* jalar de aqui su historial de un usuario */
         hisTrat = r.hisTrat
+        hisTrat2 = r.hisTrat
         console.log(r.tipoUser);
         tipoUsuario = r.tipoUser
+        
         idUser = r.idUser
         LcitasAtencion = r.tipoAtencion /* listar tipo de atencion  */
         filtrarServics(r.listServics)
@@ -232,15 +235,26 @@ function validarDni(){
     })
 }
 function historialTratamiento(){
-    if(listHist.length > 0){
+    console.log(tipoUsuario);
+    if(tipoUsuario == 4){
         div ='Escoge su codigo si continuara un tratamiento<div class="container btn-group"  aria-label="Basic radio toggle button group">'
-        listHist.forEach(hist => {
-            div +=`<input type="radio" class="btn-check" id="hist_${hist.id}" value="${hist.id}" name="listHHHH">
-            <label class="btn btn-outline-success" for="hist_${hist.id}" >${hist.code}-${hist.nombre}</label>`
-        });
-        div +='</div>'
+            hisTrat2.forEach(hist => {
+                div +=`<input type="radio" class="btn-check" id="hist_${hist.idHis}" value="${hist.idHis}" name="listHHHH">
+                <label class="btn btn-outline-success" for="hist_${hist.idHis}" >${hist.code}-${hist.nameC}</label>`
+            });
+            div +='</div>'
+    }else{
+
+        if(listHist.length > 0 ){
+            div ='Escoge su codigo si continuara un tratamiento<div class="container btn-group"  aria-label="Basic radio toggle button group">'
+            listHist.forEach(hist => {
+                div +=`<input type="radio" class="btn-check" id="hist_${hist.id}" value="${hist.id}" name="listHHHH">
+                <label class="btn btn-outline-success" for="hist_${hist.id}" >${hist.code}-${hist.nombre}</label>`
+            });
+            div +='</div>'
+        }
+        else div = 'No tiene historial <input class="form-control" placeholder="Ingrese nombre para la cita" id="nameHistNew">'
     }
-    else div = 'No tiene historial <input class="form-control" placeholder="Ingrese nombre para la cita" id="nameHistNew">'
     document.getElementById('historialNew').innerHTML = div
 }
 function leerDni(dni){
@@ -346,7 +360,8 @@ function validarCita(){
     tipoAtSelecTemp = document.querySelector('input[name="tipoCitaUs"]:checked')
     horaAtSelecTemp = document.querySelector('input[name="horaAtenUs"]:checked')
     nameHistNew = document.getElementById('nameHistNew')
-    usuario = tipoUsuario == 2 || tipoUsuario == 4 ? idUser : {
+    // usuario = tipoUsuario == 2 || tipoUsuario == 4 ? idUser : {
+    usuario = tipoUsuario == 4 ? idUser : {
             dni : parseInt(inp_dni.value),
             nombre : inp_nombre.value,
             apellido : inp_apellido.value,
@@ -360,13 +375,13 @@ function validarCita(){
                 histSelecE : histSelecTempo ? 'old' : 'new',
                 catSelec : catSelecTempo,
                 userSelec : pacienteId ? pacienteId : usuario,
-                userSelecE : pacienteId ? 'old' : (tipoUsuario == 2 || tipoUsuario == 4 ? 'old' : 'new'),
+                userSelecE : pacienteId ? 'old' : (tipoUsuario == 4 ? 'old' : 'new'),
                 tipoAtSelec : tipoAtSelecTemp ? tipoAtSelecTemp.value : 0,
                 horaAtSelec : horaAtSelecTemp ? horaAtSelecTemp.value : 0,
                 fechaSelec : fechaSelecionada,
             }
             guardarCita(datos)
-            console.log(datos); 
+            // console.log(datos); 
         } else  alertaToastify('Escoge la hora de atención')
     } else alertaToastify('Escoge el tipo de atención')
 }

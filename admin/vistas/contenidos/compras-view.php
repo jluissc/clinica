@@ -2,34 +2,31 @@
     require_once './controladores/citaControlador.php';
     $inst = new citaControlador();
 ?>
+<button class="btn btn-outline-primary" onclick="modalCompras(0)">Nueva Compra</button>
+    <br>
+    <br>
     <section class="section">
         <div class="card">
-            <div class="container">
-                <div class="row text-center">
-                    <div class="col-12">
-                        <div class="card-body">
-                            <button class="btn btn-outline-primary" onclick="modalCompras(0)">Nueva Compra</button>
-                            <table class="table table-striped" id="tableCompras" with="100%">
-                                <thead>
-                                    <tr>
-                                        <th>Material</th>
-                                        <th>Cantidad</th>
-                                        <th>Precio</th>
-                                        <th>Fecha</th>
-                                        <th>Subtotal</th>
-                                        <th>ACCIONES</th>
-                                    </tr>
-                                </thead>
-                                <tbody >
-                                    <!-- con ajax -->
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                    <!-- <div class="col-4">
-                        <ul class="list-group" id="listPagos">
-                        </ul>
-                    </div> -->
+            <div class="card-header">
+                <h4>LISTA DE COMPRAS</h4>
+            </div>
+            <div class="card-body">
+                <div class="card-body">
+                    <table class="table table-striped" id="tableCompras" with="100%">
+                        <thead>
+                            <tr>
+                                <th>Material</th>
+                                <th>Cantidad</th>
+                                <th>Precio</th>
+                                <th>Fecha</th>
+                                <th>Subtotal</th>
+                                <th>ACCIONES</th>
+                            </tr>
+                        </thead>
+                        <tbody >
+                            <!-- con ajax -->
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>

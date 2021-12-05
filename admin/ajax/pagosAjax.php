@@ -5,14 +5,14 @@
 	require_once '../config/app.php';
 
 	if (isset($_POST['idPay']) || isset($_POST['listarPagos'])
-        || isset($_POST['Idpagos']) || isset($_POST['idDetalle'])) {
+        || isset($_POST['Idpagos']) || isset($_POST['idDetalle']) || isset($_POST['updateDatos'])) {
 		
 		require_once '../controladores/pagosControlador.php';
 		$inst = new pagosControlador();
 
 		// detail appointment
-		if (isset($_POST['datosMateriales'])) {
-			echo $inst -> updateMaterial();
+		if (isset($_POST['updateDatos'])) {
+			echo $inst -> updateDatos();
 		}
 		// detail appointment
 		if (isset($_POST['listarPagos'])) {

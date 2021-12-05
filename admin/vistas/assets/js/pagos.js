@@ -1,4 +1,5 @@
 console.log('dddddddddd');
+clickModal = new bootstrap.Modal(document.getElementById('pagosModal'))
 listarPagos()
 function listarPagos(){
     tablaUsuarios = $('#tablepagos').DataTable({  
@@ -28,7 +29,7 @@ function verPagos(idUser){
         li = ''
         r.forEach(pay => {
             li += `<li class="list-group-item">${pay.nombre}
-            <button class="btn btn-info" onclick="morePay(${pay.id})">Pagar</button>                
+            <button class="btn btn-info" onclick="morePay(${pay.id})">Ver pagos</button>                
             </li>`
         });
         
@@ -57,7 +58,7 @@ function morePay(idPay){
         });
         li += `<h4>TOTAL: S/. ${monto} <br></h4>`
         li += `agregar un pago mas
-            <input type="button" value="Pagar" class="btn btn-outline-primary" onclick="payUser()">`
+            <input type="button" value="Agregar Pago" class="btn btn-outline-primary" onclick="payUser()">`
         document.getElementById('detallePago').innerHTML = li
     })
 }
@@ -87,4 +88,59 @@ function payUser(){
             .then( result => console.log(result))
         }else alertaToastify('Cancelado')
     })
+}
+
+function modalPagos(id){
+    if(id){
+        document.getElementById('btns_pagos').innerHTML = 'EDITAR'
+    }else{
+        
+    }
+    clickModal.show()
+} 
+idUserT = 0
+function validarDni(){
+    dni = document.getElementById('dni').value
+    DATOS = new FormData()
+    DATOS.append('dni', dni)
+    fetch(URL+'ajax/citaAjax.php',{
+        method : 'post',
+        body : DATOS
+    })
+    .then( r => r.json())
+    .then( r => {        
+        console.log(r);
+        idUserT = r.user.id
+        document.getElementById('nombre').value = r.user.nombre
+        document.getElementById('apellido').value = r.user.apellidos
+        document.getElementById('celular').value = r.user.celular
+        document.getElementById('correo').value = r.user.correo
+    })
+}
+function verificarPag(){
+    concetPay = document.getElementById('concetPay').value    
+    firstPay = document.getElementById('firstPay').value
+    
+    if(concetPay.trim().length > 0){
+        if(firstPay.length > 0 ){
+            datos = {
+                id : idUserT,
+                concept : concetPay,
+                monto : firstPay
+            }
+            console.log(datos);
+            updatePayUser(datos)
+        }else alertaToastify('Ingresa monto')
+    }else alertaToastify('Ingresa el concepto de pago')
+}
+
+function updatePayUser(datosd){
+    DATOS = new FormData()
+    DATOS.append('updateDatos', JSON.stringify(datosd))
+    fetch(URL+'ajax/pagosAjax.php',{
+        method : 'post',
+        body : DATOS
+    })
+    .then( r => r.json())
+    .then( r => console.log(r))
 }

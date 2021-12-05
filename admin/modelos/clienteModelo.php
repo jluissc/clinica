@@ -50,7 +50,7 @@
 					:direccion, :user, :pass, :tipo, :estado)');				
 				$sql->bindParam(":dni",$datos['dni_appoint']);	
 				$sql->bindParam(":user",$datos['dni_appoint']);	
-				$sql->bindParam(":pass",$datos['dni_appoint']);
+				$sql->bindParam(":pass",$datos['pass']);
 				$sql->bindParam(":tipo",$datos['tipo']);
 				$sql->bindParam(":estado",$datos['estado']);
 			}	

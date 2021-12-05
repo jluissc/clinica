@@ -25,7 +25,7 @@
 
                 
                 <div class="card-header">
-                    <h4>Historial de citas</h4>
+                    <h4>Lista de citas</h4>
                 </div>
                 <div class="card-body">
                     <table class="table table-striped" id="tbl_tratam" style="width: 100%;"  >
@@ -61,7 +61,7 @@
                 <div class="row">
                     <div class="col-12 col-md-6 col-lg-4" >
                         <?php 
-                            if($_SESSION['tipo'] == 1 ){
+                            if($_SESSION['tipo'] == 1 || in_array(3, $_SESSION['permisos']) ){
                                 include "./vistas/inc/form-user.php"; 
                             }
                         ?>
@@ -144,15 +144,24 @@
                     </div>
                 </div>
             </div>
-            <button type="button" class="btn btn-primary ml-1 "  onclick="validarCita()">
-                <i class="bx bx-check d-block d-sm-none"></i>
-                Guardar Reserva
-            </button>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary ml-1 "  onclick="validarCita()">
+                    <i class="bx bx-check d-block d-sm-none"></i>
+                    Guardar Reserva
+                </button>
+            </div>
+            
         </div>
         <!-- HISTORIAL DE CITAS -->
         <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
             <div class="row">
                 <div class="col-8">
+                <section class="section">
+                <div class="card">
+                <div class="card-header">
+                    <h4>Historial de citas</h4>
+                </div>
+                <div class="card-body">
                     <table class="table table-striped" id="table2" style="width:100%">
                         <thead>
                             <tr>
@@ -168,6 +177,9 @@
                         <tbody id="DDD">
                         </tbody>
                     </table>
+                </div>
+                </div>
+                </section>
                 </div>
                 <div class="col-4">
                     <h3 class="text-center">Historial de un paciente</h3>

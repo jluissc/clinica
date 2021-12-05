@@ -126,9 +126,8 @@
 			$datos =[];
 			$listAppointm = citaModelo::reedListHistorialAppointment_m();
 			foreach ($listAppointm as $appoint) {
-				$acciones = '<button class="btn btn-outline-primary" onclick="showHistorial('.$appoint->idHis.')">Ver Historial</button>';
-				$nn = $appoint->usuario.' '.$appoint->apellidos;
-				
+				$acciones = '<button class="btn btn-outline-primary" onclick="showHistorial('.$appoint->idHis.')">Historial</button>';
+				$nn = $appoint->usuario.' '.$appoint->apellidos;				
 				array_push($datos,[
 					'nombre' => $nn,
 					'dni' => $appoint->dni,

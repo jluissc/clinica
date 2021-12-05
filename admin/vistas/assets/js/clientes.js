@@ -121,6 +121,7 @@
                 idAppoint : idAppoint,
             }
             validarDatos(datos)
+            // console.log(datos);
         }
         function validarDatos(datos){
             if(datos.dni_appoint != ''){
@@ -142,13 +143,14 @@
                             .then(result => result.json())
                             .then(result => {
                                 if(result){
-                                    alertaToastify('Datos Cambiados','green')
-                                    // setTimeout(() => {
-                                    //     location.reload()
-                                    //     // leerListaTratamientos()
-                                    // }, 1500);
+                                    datos.idAppoint ?   alertaToastify('Datos Cambiados','green') : alertaToastify('Usuario creado','green')
                                     $('#table1').DataTable().destroy()
                                     leerListaTratamientos()
+                                    document.getElementById('dni').value = ''
+                                    document.getElementById('nombre').value = ''
+                                    document.getElementById('apellido').value = ''
+                                    document.getElementById('celular').value = ''
+                                    document.getElementById('correo').value = ''
                                 }else alertaToastify('Intentalo nuevamente')
                                 
                             })
