@@ -1,10 +1,10 @@
 <?php 
 
 	$peticionAjax = true;
-
+ 
 	require_once '../config/app.php';
 
-	if (isset($_POST['listaCompras']) || isset($_POST['listarMat'])
+	if (isset($_POST['listaCompras']) || isset($_POST['updateDatos'])
         || isset($_POST['idMaterial']) || isset($_POST['idDelete'])) {
 		
 		require_once '../controladores/comprasControlador.php';
@@ -15,8 +15,8 @@
             echo $inst -> listarCompras();
         }
 		// detail appointment
-		if (isset($_POST['datosMateriales'])) {
-			echo $inst -> updateMaterial();
+		if (isset($_POST['updateDatos'])) {
+			echo $inst -> updateCompras();
 		}
 		if (isset($_POST['idMaterial'])) {
 			echo $inst -> searchMaterial();

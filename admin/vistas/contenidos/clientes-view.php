@@ -4,14 +4,14 @@
         $inst = new clienteControlador();
 ?>
     <button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#info" onclick="cambioModal(1)" >
-        Nuevo Cliente
+        Nuevo paciente
     </button>
     <br>
     <br>
     <section class="section">
         <div class="card">
             <div class="card-header">
-                    <h4>LISTA DE CLIENTES</h4>
+                    <h4>LISTA DE PACIENTES</h4>
                 </div>
             <div class="card-body">
                 <table class="table table-striped" id="table1" style="width: 100%;"  >

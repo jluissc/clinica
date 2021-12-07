@@ -49,7 +49,10 @@ function leerListaTratamientos(){
             {"data": "total"},
             {"data": "pago"},
             {"data": "acciones"}
-        ]
+        ],
+        "language": {
+            "url": "//cdn.datatables.net/plug-ins/1.10.11/i18n/Spanish.json"
+        },
     });     
 }
 function leerListaHistorial(){
@@ -69,6 +72,9 @@ function leerListaHistorial(){
             {"data": "code"},
             {"data": "acciones"},
         ],
+        "language": {
+            "url": "//cdn.datatables.net/plug-ins/1.10.11/i18n/Spanish.json"
+        },
     });   
 }
 function leerCondicionesAtencion(){

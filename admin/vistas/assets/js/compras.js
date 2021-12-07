@@ -2,9 +2,10 @@
 comprasModal = new bootstrap.Modal(document.getElementById('comprasModal'), {
     keyboard: false
 })
-
+prec_com = document.getElementById('prec_com')
+cant_com = document.getElementById('cant_com')
 listarCompras()
-listarMateriales()
+
 function listarCompras(){
     tablaUsuarios = $('#tableCompras').DataTable({  
         "ajax":{            
@@ -20,7 +21,10 @@ function listarCompras(){
             {"data": "date"},
             {"data": "subt"},
             {"data": "acciones"},
-        ]
+        ],
+        "language": {
+            "url": "//cdn.datatables.net/plug-ins/1.10.11/i18n/Spanish.json"
+        },
     });     
 }
 function listarMateriales(){
@@ -69,9 +73,53 @@ function hollla(r){
         }
     }
 }
+matEscTemp = 0
 function cambioCategoria(id){
     console.log(id);
+    matEscTemp = id
 }
 function modalCompras(id){
+    if (id) {
+        
+    } else {
+        listarMateriales()
+    }
     comprasModal.show()
+}
+
+function verificarComp(){
+    // a = document.querySelector('input[name="listHHHH"]:checked')
+    if(matEscTemp){
+        if (prec_com.value.trim().length>0) {
+            if (cant_com.value.trim().length>0) {
+                datos = {
+                    id_mat : matEscTemp,
+                    price : prec_com.value,
+                    cant : cant_com.value,
+                    id_compra : 0
+                }
+                updateCompras(datos)
+            } else alertaToastify('Falta cantidad')
+        } else alertaToastify('Falta precio')
+    }else alertaToastify('Escoge el material')
+}
+
+function updateCompras(datosd){
+    DATOS = new FormData()
+    DATOS.append('updateDatos', JSON.stringify(datosd))
+    fetch(URL+'ajax/comprasAjax.php',{
+        method : 'post',
+        body : DATOS
+    })
+    .then( r => r.json())
+    .then( r => {
+        if(r!=0){
+            alertaToastify('Se guardo pago', 'green')
+            $('#tableCompras').DataTable().destroy()
+            listarCompras()
+            prec_com.value = ''
+            cant_com.value = ''
+
+        }else alertaToastify('Error al guardar pago')
+    })
 }

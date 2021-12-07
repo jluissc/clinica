@@ -10,6 +10,8 @@
 	 */
 	class mainModelo
 	{
+
+		
 		protected static function conexion() {
 			$con = new PDO(SGBD, USER, PASS);
 			$con -> exec("SET CHARACTER SET utf8");

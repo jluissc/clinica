@@ -33,6 +33,7 @@
 				$detalles = [
 					'monto' => $pagos->monto,
 					'pagos' => $id,
+					'user' => $pagos->id,
 				];
 				pagosModelo::updateDatos2_m($detalles);
 			}

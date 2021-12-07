@@ -5,22 +5,22 @@
                     <div class="row">
                         <div class="col-xl-6 col-md-6 ">
                             <div class="social_media_links">
-                                <a href="#">
+                                <!-- <a href="#">
                                     <i class="fa fa-linkedin"></i>
-                                </a>
+                                </a> -->
                                 <a href="#">
                                     <i class="fa fa-facebook"></i>
                                 </a>
-                                <a href="#">
+                                <!-- <a href="#">
                                     <i class="fa fa-google-plus"></i>
-                                </a>
+                                </a> -->
                             </div>
                         </div>
                         <div class="col-xl-6 col-md-6">
                             <div class="short_contact_list">
                                 <ul>
-                                    <li><a href="#"> <i class="fa fa-envelope"></i> info@docmed.com</a></li>
-                                    <li><a href="#"> <i class="fa fa-phone"></i> 160160</a></li>
+                                    <!-- <li><a href="#"> <i class="fa fa-envelope"></i> info@docmed.com</a></li> -->
+                                    <li><a href="#"> <i class="fa fa-phone"></i> +51 991509111</a></li>
                                 </ul>
                             </div>
                         </div>
@@ -41,22 +41,22 @@
                             <div class="main-menu  d-none d-lg-block">
                                 <nav>
                                     <ul id="navigation">
-                                        <li><a class="active" href="index.html">home</a></li>
-                                        <li><a href="Department.html">Department</a></li>
-                                        <li><a href="#">blog <i class="ti-angle-down"></i></a>
+                                        <li><a class="active" href="<?php echo SERVERURL?>">Inicio</a></li>
+                                        <li><a href="#">Servicios <i class="ti-angle-down"></i></a>
                                             <ul class="submenu">
-                                                <li><a href="blog.html">blog</a></li>
-                                                <li><a href="single-blog.html">single-blog</a></li>
+                                                <li><a href="blog.html">Terapia Física</a></li>
+                                                <li><a href="single-blog.html">Odontología</a></li>
                                             </ul>
                                         </li>
-                                        <li><a href="#">pages <i class="ti-angle-down"></i></a>
+                                        <li><a href="Department.html">Testimonios</a></li>
+                                        <li><a href="contact.html">Contactos</a></li>
+                                        <!-- <li><a href="#">pages <i class="ti-angle-down"></i></a>
                                             <ul class="submenu">
                                                 <li><a href="elements.html">elements</a></li>
                                                 <li><a href="about.html">about</a></li>
                                             </ul>
-                                        </li>
-                                        <li><a href="Doctors.html">Doctors</a></li>
-                                        <li><a href="contact.html">Contact</a></li>
+                                        </li> -->
+                                        
                                     </ul>
                                 </nav>
                             </div>
@@ -64,7 +64,8 @@
                         <div class="col-xl-3 col-lg-3 d-none d-lg-block">
                             <div class="Appointment">
                                 <div class="book_btn d-none d-lg-block">
-                                    <a class="popup-with-form" href="#test-form">Make an Appointment</a>
+                                    <!-- <a class="popup-with-form" href="<?php echo SERVERURL?>admin">Citas Online</a> -->
+                                    <a href="<?php echo SERVERURL?>admin" target="_bank">Citas Online</a>
                                 </div>
                             </div>
                         </div>

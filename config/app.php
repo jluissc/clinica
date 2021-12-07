@@ -1,8 +1,8 @@
 <?php 
 
 	// const SERVERURL = "http://localhost:8080/clinica/";
-	const SERVERURL = "http://127.0.0.1/clinica/";
-	const COMPANY = "CLINICA";
+	const SERVERURL = "http://127.0.0.1:84/clinica/";
+	const COMPANY = "CLINICA RHABILITACION";
 	const MONEDA = "S/.";
 	date_default_timezone_set('America/Lima');
 

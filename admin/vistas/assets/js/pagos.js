@@ -1,4 +1,3 @@
-console.log('dddddddddd');
 clickModal = new bootstrap.Modal(document.getElementById('pagosModal'))
 listarPagos()
 function listarPagos(){
@@ -13,7 +12,10 @@ function listarPagos(){
             {"data": "nombre"},
             {"data": "dni"},
             {"data": "acciones"},
-        ]
+        ],
+        "language": {
+            "url": "//cdn.datatables.net/plug-ins/1.10.11/i18n/Spanish.json"
+        },
     });     
 }
 
@@ -26,15 +28,18 @@ function verPagos(idUser){
     })
     .then( r => r.json())
     .then( r => {
-        li = ''
-        r.forEach(pay => {
-            li += `<li class="list-group-item">${pay.nombre}
-            <button class="btn btn-info" onclick="morePay(${pay.id})">Ver pagos</button>                
-            </li>`
-        });
-        
-        document.getElementById('listPagos').innerHTML = li
+        pintarListaPagos(r)
     })
+}
+function pintarListaPagos(r){
+    li = ''
+    r.forEach(pay => {
+        li += `<li class="list-group-item">${pay.nombre}
+        <button class="btn btn-info" onclick="morePay(${pay.id})">Ver pagos</button>                
+        </li>`
+    });
+    
+    document.getElementById('listPagos').innerHTML = li
 }
 
 idPayT = 0 /* para un pago(id temporal) */
@@ -48,12 +53,11 @@ function morePay(idPay){
     })
     .then( r => r.json())
     .then( r => {
-        console.log(r);
         li = ''
         monto = 0.0
         r.forEach(detalle => {
             monto += parseFloat(detalle.monto)
-            li += `<li class="list-group-item"> S/. ${detalle.monto}          
+            li += `<li class="list-group-item"> S/. ${detalle.monto} :: ${detalle.fecha}          
             </li>`
         });
         li += `<h4>TOTAL: S/. ${monto} <br></h4>`
@@ -108,8 +112,7 @@ function validarDni(){
         body : DATOS
     })
     .then( r => r.json())
-    .then( r => {        
-        console.log(r);
+    .then( r => {       
         idUserT = r.user.id
         document.getElementById('nombre').value = r.user.nombre
         document.getElementById('apellido').value = r.user.apellidos
@@ -142,5 +145,11 @@ function updatePayUser(datosd){
         body : DATOS
     })
     .then( r => r.json())
-    .then( r => console.log(r))
+    .then( r => {
+        if(r!=0){
+            clickModal.hide()
+            pintarListaPagos(r)
+            alertaToastify('Se guardo pago', 'green')
+        }else alertaToastify('Error al guardar pago')
+    })
 }

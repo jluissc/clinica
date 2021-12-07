@@ -30,7 +30,9 @@
             exit(json_encode($sql->fetchAll(PDO::FETCH_OBJ)));
         }
         protected static function detallePago_m($id){
-            $sql = mainModelo::conexion()->prepare("SELECT * FROM pagos_detalles WHERE pagos_id =:id");
+            $sqlF = mainModelo::conexion()->prepare("SET GLOBAL lc_time_names = 'es_ES'");
+            $sqlF -> execute();
+            $sql = mainModelo::conexion()->prepare("SELECT monto, DATE_FORMAT(fecha, '%d de %b %Y') as fecha FROM pagos_detalles WHERE pagos_id =:id");
             $sql->bindParam(':id',$id);
             $sql -> execute();
             exit(json_encode($sql->fetchAll(PDO::FETCH_OBJ)));
@@ -54,7 +56,7 @@
             $sql->bindParam(':pay',$datos['pagos']);
             $sql->bindParam(':user',$_SESSION['id']);
             $sql -> execute();
-            if($sql->rowCount()>0) exit(json_encode(1));
+            if($sql->rowCount()>0) exit(json_encode(pagosModelo::verPagos_m($datos['user'])));
             else exit(json_encode(0));
         }
 	}

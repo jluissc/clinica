@@ -51,17 +51,25 @@
                     </div> <br><br>
                     <div class="form-group">
                         <div class="col-12">
-                            <input type="text" id="name_mat" class="form-control font-bold" placeholder="Precio" autocomplete="false">
+                            <input type="number" id="prec_com" class="form-control font-bold" placeholder="Precio" autocomplete="false">
                         </div>   
                     </div><br><br>
                     <div class="form-group">
                         <div class="col-12">
-                            <input type="text" id="descr_mat" class="form-control font-bold" placeholder="Cantidad" autocomplete="false">
+                            <input type="number" id="cant_com" class="form-control font-bold" placeholder="Cantidad" autocomplete="false">
                         </div>
                     </div>
                 </div>
-                <div class="modal-footer" id="btn_materiales">
-                    <!-- BTN OPTIONS -->
+                <div class="modal-footer" id="btn_compras">
+                    <button type="button" class="btn btn-light-secondary"
+                        data-bs-dismiss="modal">
+                        <i class="bx bx-x d-block d-sm-none"></i>
+                        <span class="d-none d-sm-block">Cancelar</span>
+                    </button>
+                    <button type="button" class="btn btn-primary ml-1 "  onclick="verificarComp()">
+                        <i class="bx bx-check d-block d-sm-none"></i>
+                        <span class="d-none d-sm-block">Guardar</span>
+                    </button>
                 </div>
             </div>
         </div>

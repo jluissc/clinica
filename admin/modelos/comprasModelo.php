@@ -16,11 +16,22 @@
             return $sql->fetchAll(PDO::FETCH_OBJ);
         }
         
-        protected static function verPagos_m($id){
-            $sql = mainModelo::conexion()->prepare("SELECT * FROM pagos WHERE persona_id =:id");
-            $sql->bindParam(':id',$id);
+        protected static function updateCompras_m($datos){
+            session_start(['name' => 'bot']);
+            $dato = json_decode($datos);
+            if ($dato->id_compra) {
+                # code...
+            } else {
+                $sql = mainModelo::conexion()->prepare("INSERT INTO gastos(materiales_id, precio, cantidad, persona_id ) 
+                    VALUES(:mat, :price, :cant, :user)");
+            }            
+            
+            $sql->bindParam(':mat',$dato->id_mat);
+            $sql->bindParam(':price',$dato->price);
+            $sql->bindParam(':cant',$dato->cant);
+            $sql->bindParam(':user',$_SESSION['id']);
             $sql -> execute();
-            exit(json_encode($sql->fetchAll(PDO::FETCH_OBJ)));
+            $sql->rowCount() > 0 ? exit(json_encode(1)) : exit(json_encode(0));
         }
         protected static function payUser_m($datos){
             session_start(['name' => 'bot']);
