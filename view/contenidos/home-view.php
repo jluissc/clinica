@@ -47,38 +47,29 @@
 		</div>
 	</div>
 </div>
-
-<div class="service_area">
-        <div class="container p-0">
+<div class="Emergency_contact">
+        <div class="conatiner-fluid p-0">
             <div class="row no-gutters">
-                <div class="col-xl-4 col-md-4">
-                    <div class="single_service">
-                        <div class="icon">
-                            <i class="flaticon-electrocardiogram"></i>
+                <div class="col-xl-6">
+                    <div class="single_emergency d-flex align-items-center justify-content-center emergency_bg_1 overlay_skyblue">
+                        <div class="info">
+                            <h3>For Any Emergency Contact</h3>
+                            <p>Esteem spirit temper too say adieus.</p>
                         </div>
-                        <h3>Hospitality</h3>
-                        <p>Clinical excellence must be the priority for any health care service provider.</p>
-                        <a href="#" class="boxed-btn3-white">Apply For a Bed</a>
+                        <div class="info_button">
+                            <a href="#" class="boxed-btn3-white">+10 378 4673 467</a>
+                        </div>
                     </div>
                 </div>
-                <div class="col-xl-4 col-md-4">
-                    <div class="single_service">
-                        <div class="icon">
-                            <i class="flaticon-emergency-call"></i>
+                <div class="col-xl-6">
+                    <div class="single_emergency d-flex align-items-center justify-content-center emergency_bg_2 overlay_skyblue">
+                        <div class="info">
+                            <h3>Make an Online Appointment</h3>
+                            <p>Esteem spirit temper too say adieus.</p>
                         </div>
-                        <h3>Emergency Care</h3>
-                        <p>Clinical excellence must be the priority for any health care service provider.</p>
-                        <a href="#" class="boxed-btn3-white">+10 672 356 3567</a>
-                    </div>
-                </div>
-                <div class="col-xl-4 col-md-4">
-                    <div class="single_service">
-                        <div class="icon">
-                            <i class="flaticon-first-aid-kit"></i>
+                        <div class="info_button">
+                            <a href="#" class="boxed-btn3-white">Make an Appointment</a>
                         </div>
-                        <h3>Chamber Service</h3>
-                        <p>Clinical excellence must be the priority for any health care service provider.</p>
-                        <a href="#" class="boxed-btn3-white">Make an Appointment</a>
                     </div>
                 </div>
             </div>

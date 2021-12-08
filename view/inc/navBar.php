@@ -49,6 +49,7 @@
                                             </ul>
                                         </li>
                                         <li><a href="Department.html">Testimonios</a></li>
+                                        <li><a href="Department.html">Nosotros</a></li>
                                         <li><a href="contact.html">Contactos</a></li>
                                         <!-- <li><a href="#">pages <i class="ti-angle-down"></i></a>
                                             <ul class="submenu">
