@@ -214,31 +214,33 @@ function statusCampos(estado){
 }
 function validarDni(){
     dni = document.getElementById('dni').value
-    DATOS = new FormData()
-    DATOS.append('dni', dni)
-    fetch(URL+'ajax/citaAjax.php',{
-        method : 'post',
-        body : DATOS
-    })
-    .then( r => r.json())
-    .then( r => {        
-        if(r != 0){
-            console.log(r);
-            inp_nombre.value = r.user.nombre
-            inp_apellido.value = r.user.apellidos
-            inp_celular.value = r.user.celular
-            inp_correo.value = r.user.correo
-            pacienteId = r.user.id
-            listHist = r.listHist
-            statusCampos(true)
-        }else{   
-            pacienteId = 0   
-            leerDni(dni)            
-            statusCampos(false)   
-            alertaToastify('Paciente nuevo, rellene sus datos  ','info',1500)
-        }
-        historialTratamiento()
-    })
+    if (dni.length == 8) {
+        DATOS = new FormData()
+        DATOS.append('dni', dni)
+        fetch(URL+'ajax/citaAjax.php',{
+            method : 'post',
+            body : DATOS
+        })
+        .then( r => r.json())
+        .then( r => {        
+            if(r != 0){
+                console.log(r);
+                inp_nombre.value = r.user.nombre
+                inp_apellido.value = r.user.apellidos
+                inp_celular.value = r.user.celular
+                inp_correo.value = r.user.correo
+                pacienteId = r.user.id
+                listHist = r.listHist
+                statusCampos(true)
+            }else{   
+                pacienteId = 0   
+                leerDni(dni)            
+                statusCampos(false)   
+                alertaToastify('Paciente nuevo, rellene sus datos  ','info',1500)
+            }
+            historialTratamiento()
+        })
+    } else alertaToastify('Dni incompleto')
 }
 function historialTratamiento(){
     console.log(tipoUsuario);
@@ -374,22 +376,30 @@ function validarCita(){
             celular : inp_celular.value,
             correo : inp_correo.value,
         }
-    if(tipoAtSelecTemp) {
-        if(horaAtSelecTemp) {
-            datos = {
-                histSelec : histSelecTempo ? histSelecTempo.value : nameHistNew.value,
-                histSelecE : histSelecTempo ? 'old' : 'new',
-                catSelec : catSelecTempo,
-                userSelec : pacienteId ? pacienteId : usuario,
-                userSelecE : pacienteId ? 'old' : (tipoUsuario == 4 ? 'old' : 'new'),
-                tipoAtSelec : tipoAtSelecTemp ? tipoAtSelecTemp.value : 0,
-                horaAtSelec : horaAtSelecTemp ? horaAtSelecTemp.value : 0,
-                fechaSelec : fechaSelecionada,
-            }
-            guardarCita(datos)
-            // console.log(datos); 
-        } else  alertaToastify('Escoge la hora de atención')
-    } else alertaToastify('Escoge el tipo de atención')
+    if(servSelecTempo){        
+        if(catSelecTempo){        
+            // if(histSelecTempo){        
+                if(fechaSelecionada != ''){        
+                    if(tipoAtSelecTemp) {
+                        if(horaAtSelecTemp) {
+                            datos = {
+                                histSelec : histSelecTempo ? histSelecTempo.value : nameHistNew.value,
+                                histSelecE : histSelecTempo ? 'old' : 'new',
+                                catSelec : catSelecTempo,
+                                userSelec : pacienteId ? pacienteId : usuario,
+                                userSelecE : pacienteId ? 'old' : (tipoUsuario == 4 ? 'old' : 'new'),
+                                tipoAtSelec : tipoAtSelecTemp ? tipoAtSelecTemp.value : 0,
+                                horaAtSelec : horaAtSelecTemp ? horaAtSelecTemp.value : 0,
+                                fechaSelec : fechaSelecionada,
+                            }
+                            guardarCita(datos)
+                            // console.log(datos); 
+                        } else  alertaToastify('Escoge la hora de atención')
+                    } else alertaToastify('Escoge el tipo de atención')
+                } else alertaToastify('Escoge un día habil')
+            // } else alertaToastify('Escoge un historial anterior')
+        }else alertaToastify('Escoge la categoria')
+    }else alertaToastify('Escoge el servicio')
 }
 function guardarCita(datos){
     dat = new FormData()

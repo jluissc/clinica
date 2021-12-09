@@ -6,29 +6,33 @@
         function validarDni(){
             console.log('aau');
             dni = document.getElementById('dni').value
-            DATOS = new FormData()
-            DATOS.append('dni', dni)
-            fetch(URL+'ajax/citaAjax.php',{
-                method : 'post',
-                body : DATOS
-            })
-            .then( r => r.json())
-            .then( r => {        
-                if(r != 0){
-                    document.getElementById('nombre').value = r.user.nombre
-                    document.getElementById('apellido').value = r.user.apellidos
-                    document.getElementById('celular').value = r.user.celular
-                    document.getElementById('correo').value = r.user.correo
-                    pacienteId = r.user.id
-                    datosPacienteNuevo = []
-                    listHist = r.listHist
-                    statusCampos(true)
-                }else{      
-                    leerDni(dni)            
-                    statusCampos(false)   
-                    alertaToastify('Paciente nuevo, rellene sus datos  ','info',1500)
-                }
-            })
+            if (dni.length == 8) {
+                DATOS = new FormData()
+                DATOS.append('dni', dni)
+                fetch(URL+'ajax/citaAjax.php',{
+                    method : 'post',
+                    body : DATOS
+                })
+                .then( r => r.json())
+                .then( r => {        
+                    if(r != 0){
+                        document.getElementById('nombre').value = r.user.nombre
+                        document.getElementById('apellido').value = r.user.apellidos
+                        document.getElementById('celular').value = r.user.celular
+                        document.getElementById('correo').value = r.user.correo
+                        pacienteId = r.user.id
+                        datosPacienteNuevo = []
+                        listHist = r.listHist
+                        statusCampos(true)
+                    }else{      
+                        leerDni(dni)            
+                        statusCampos(false)   
+                        alertaToastify('Paciente nuevo, rellene sus datos  ','info',1500)
+                    }
+                })
+            } else {
+                alertaToastify('Dni incorrecto')
+            }
         }
 
         function leerDni(dni){
@@ -42,16 +46,23 @@
                 fetch(urlApi)
                 .then(r => r.json())
                 .then(r => {
-                    datos = {
-                        dni : r.dni,
-                        nombre : r.nombres,
-                        apellidos : r.apellidoPaterno+ ' ' +r.apellidoMaterno,
-                        celular : '',
-                        correo : '',
-                        direccion : '',
+                    if(!r.success){
+                        console.log('auiii');
+                        document.getElementById('nombre').value = ''
+                        document.getElementById('apellido').value = ''
+                    }else{
+                        console.log(r);
+                        datos = {
+                            dni : r.dni,
+                            nombre : r.nombres,
+                            apellidos : r.apellidoPaterno+ ' ' +r.apellidoMaterno,
+                            celular : '',
+                            correo : '',
+                            direccion : '',
+                        }
+                        // document.getElementById('spinnerTemp').innerHTML = ''
+                        mandarCampos(3,datos)
                     }
-                    // document.getElementById('spinnerTemp').innerHTML = ''
-                    mandarCampos(3,datos)
 
                 })
                 .catch(r => console.log(r))
@@ -127,7 +138,7 @@
             // console.log(datos);
         }
         function validarDatos(datos){
-            if(datos.dni_appoint != ''){
+            if(datos.dni_appoint != '' && datos.dni_appoint.length ==8){
                 if(datos.name_appoint!= ''){
                     if(datos.last_appoint!= ''){
                         if (datos.celphone_appoint!= '') {
@@ -164,7 +175,7 @@
                 }
                 else alertaToastify('Nombres obligatorios')                
             }
-            else alertaToastify('Dni obligatorio')
+            else alertaToastify('Dni obligatorio o incompleto')
         }
         function mandarCampos(estadoModal,datos= []){
             if(estadoModal == 2 || estadoModal == 3){

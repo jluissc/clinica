@@ -1,4 +1,4 @@
-<?php 
+<?php  
 
 	/**
 	 * 
@@ -143,13 +143,6 @@
 			}
 		}
 
-
-
-
-
-
-
-
 		protected static function idPayDirect_m($idAppoint, $monto=50){
 			$sql = mainModelo::conexion()->prepare('INSERT INTO tratamiento_pagos (`tipo_pago_id`, `detalles`, `medio_pago`, `fecha`, `total`, `estado`, `tratamientos_id`)
 				VALUES (3, "PAGO DIRECTO", "FISICO", now(), :monto, 1, :cita_id)');
@@ -169,7 +162,8 @@
 			// echo $tipo;
 			
 			// $idPaciente = $tipo ? $_SESSION['id'] : '';
-			if($_SESSION['tipo'] == 4 || $_SESSION['tipo'] == 2){
+			// if($_SESSION['tipo'] == 4 || $_SESSION['tipo'] == 2){
+			if($_SESSION['tipo'] == 4 ){
 				$sql = mainModelo::conexion()->prepare("SELECT p.nombre AS usuario, c.fecha, c.id AS idcita, p.apellidos, p.celular, 
 					p.correo, h.hora, s.precio_venta, p.dni,s.nombre as cat, sg.nombre FROM tratamientos c
 					INNER JOIN persona p

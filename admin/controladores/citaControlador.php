@@ -102,8 +102,23 @@
 				$result = citaModelo::statusPayAppoint($appoint->idcita);
 				$montopago = $result[0] ? $result[1]->total : 0.0;
 				$pago = $result[0] ? ($result[1]->tipo_pago_id == 1 ? ($result[1]->estado ? 'Pago Tarjeta/Aceptado' : 'Pago Tarjeta/No Aceptado'): ($result[1]->tipo_pago_id == 2 ? ($result[1]->estado ? 'Transferencia/Aceptado' : 'Transferencia/No Aceptado') : ($result[1]->estado ? 'Pago Directo/Aceptado' : 'Pago Directo/No Aceptado'))) : 'Falta Pagar';
-				$acciones = $tipo == 1 ? ($result[0] ? ($result[1]->tipo_pago_id == 1 ? 'Pago Tarjeta' : ($result[1]->tipo_pago_id == 2 ? ($result[1]->estado ? 'Pago Transferencia Activo' :'<button class="btn btn-outline-info" data-bs-toggle="modal" data-bs-target="#info" onclick="validarTransf('.$appoint->idcita.')"> Validar Transf.</button>') : 'Pago Directo') ) : $pagoDirecto) : 
-					($result[0] ? ($result[1]->tipo_pago_id == 2 ? ($result[1]->estado ? 'Aceptado' : 'Falta Verificar'): 'Pagado' ) : '<button class="btn btn-outline-primary" onclick="payAppoint('.$appoint->idcita.')">Pagar Tarjeta</button><button class="btn btn-outline-info" data-bs-toggle="modal" data-bs-target="#info" onclick="datosTransf('.$appoint->idcita.',true)"> Mandar Transf.</button>');
+				$acciones = $tipo == 1 || in_array(1, $_SESSION['permisos']) ? 
+					($result[0] ? 
+						($result[1]->tipo_pago_id == 1 ? 
+							'Pago Tarjeta' : 
+							($result[1]->tipo_pago_id == 2 ? 
+								($result[1]->estado ? 
+									'Pago Transferencia Activo' :
+									'<button class="btn btn-outline-info" data-bs-toggle="modal" data-bs-target="#info" onclick="validarTransf('.$appoint->idcita.')"> Validar Transf.</button>') : 
+								'Pago Directo') ) : 
+						$pagoDirecto) : 
+					($result[0] ? 
+						($result[1]->tipo_pago_id == 2 ? 
+							($result[1]->estado ? 
+								'Aceptado' : 
+								'Falta Verificar'): 
+							'Pagado' ) : 
+						'<button class="btn btn-outline-primary" onclick="payAppoint('.$appoint->idcita.')">Pagar Tarjeta</button><button class="btn btn-outline-info" data-bs-toggle="modal" data-bs-target="#info" onclick="datosTransf('.$appoint->idcita.',true)"> Mandar Transf.</button>');
 				array_push($datos,[
 					'nombre' => $user,
 					'dni' => $appoint->dni,

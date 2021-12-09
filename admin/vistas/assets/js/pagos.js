@@ -52,19 +52,7 @@ function morePay(idPay){
         body : datos
     })
     .then( r => r.json())
-    .then( r => {
-        li = ''
-        monto = 0.0
-        r.forEach(detalle => {
-            monto += parseFloat(detalle.monto)
-            li += `<li class="list-group-item"> S/. ${detalle.monto} :: ${detalle.fecha}          
-            </li>`
-        });
-        li += `<h4>TOTAL: S/. ${monto} <br></h4>`
-        li += `agregar un pago mas
-            <input type="button" value="Agregar Pago" class="btn btn-outline-primary" onclick="payUser()">`
-        document.getElementById('detallePago').innerHTML = li
-    })
+    .then( r => pintarDetallePagos(r))
 }
 
 function payUser(){
@@ -89,9 +77,22 @@ function payUser(){
                 body : datos,
             })
             .then( result => result.json())
-            .then( result => console.log(result))
+            .then( result => pintarDetallePagos(result))
         }else alertaToastify('Cancelado')
     })
+}
+function pintarDetallePagos(datos){
+    li = ''
+    monto = 0.0
+    datos.forEach(detalle => {
+        monto += parseFloat(detalle.monto)
+        li += `<li class="list-group-item"> S/. ${detalle.monto} :: ${detalle.fecha}          
+        </li>`
+    });
+    li += `<h4>TOTAL: S/. ${monto} <br></h4>`
+    li += `agregar un pago mas
+        <input type="button" value="+ Agregar Pago" class="btn btn-outline-success" onclick="payUser()">`
+    document.getElementById('detallePago').innerHTML = li
 }
 
 function modalPagos(id){

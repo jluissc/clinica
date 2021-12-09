@@ -163,7 +163,7 @@ function HTMLServicios(){
             <button class="btn btn-info" onclick="tipoModalServc(${servc.id})"><i class="fas fa-edit"></i></button>
             <button class="btn btn-danger" onclick="alertServicio(${servc.id},1)"><i class="fas fa-trash-alt"></i></button>
             <button class="btn btn-primary" onclick="tipoModalCateg(${servc.id},0)"><i class="fas fa-plus-square"></i></button>
-            <button class="btn btn-primary" onclick="tipoModalConfig(${servc.id},false)"><i class="fas fa-plus-square"></i></button>
+            <button class="btn btn-success" onclick="tipoModalConfig(${servc.id},false)"><i class="fas fa-plus-square"></i></button>
             </a>`
             servc.categorias.forEach((categoria, key) => {
                 if(categoria.id != 0){
@@ -606,6 +606,7 @@ function filtrarUsers(users){
             users_permisos.push({
                 'persona_id': user.persona_id, 
                 'nombre': user.nombre, 
+                'dni': user.dni, 
                 'correo': user.correo,                     
                 'tipo_user_id': user.tipo_user_id,                     
                 'permisos' : [{ 
@@ -628,7 +629,7 @@ function mostrarListaColaboradores(){
                 </div>
                 <div class="name ms-4">
                     <h5 class="mb-1">${user.nombre}</h5>
-                    <h6 class="text-muted mb-0">${user.correo}</h6>
+                    <h6 class="text-muted mb-0">DNI: ${user.dni}</h6>
                 </div>
             </div>`
     });

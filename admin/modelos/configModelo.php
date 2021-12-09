@@ -141,7 +141,7 @@
 			return $tipoAtencion;
 		}
 		protected static function listarUsers_m(){
-			$sql = mainModelo::conexion()->prepare("SELECT p.id, p.nombre,p.correo, p.tipo_user_id, pu.* FROM persona p
+			$sql = mainModelo::conexion()->prepare("SELECT p.id, p.nombre,p.correo, p.dni, p.tipo_user_id, pu.* FROM persona p
 				INNER JOIN permisos_user pu
 				ON p.id = pu.persona_id
 				WHERE p.tipo_user_id = 2 OR p.tipo_user_id = 3");
@@ -275,9 +275,15 @@
 		}
 
 		protected static function citasReservadasNexs($fecha=''){
+			$sqlF = mainModelo::conexion()->prepare("SET GLOBAL lc_time_names = 'es_ES'");
+            $sqlF -> execute();
 			$dia = $fecha != '' ? $fecha : date('Y-m-d');
 			$sql = mainModelo::conexion()->prepare("SELECT c.id as idCita, c.estado,  
-				c.horas_id as id, c.mensaje, p.nombre, p.dni, p.celular , h.hora, c.fecha, tc.nombre as namC  FROM `tratamientos` c
+				c.horas_id as id, c.mensaje, p.nombre, p.dni, p.celular , h.hora, DATE_FORMAT(c.fecha, '%d de %b %Y') as fecha , tc.nombre as namC, cat.nombre as cat, serv.nombre as serv  FROM `tratamientos` c
+                INNER JOIN servicios cat
+                ON cat.id = c.servicios_id
+                INNER JOIN servicio_general serv
+                ON serv.id = cat.servicio_general_id
 				INNER JOIN `persona` p
 				ON p.id = c.paciente_id
 				INNER JOIN `horas` h
@@ -286,7 +292,7 @@
 				ON tc.id = c.tipo_cita_id
 				-- INNER JOIN `tipo_cita` tc
 				-- ON tc.id  = c.tipo_cita_id
-				WHERE c.fecha >:dia ORDER BY h.id ASC LIMIT 5" );
+				WHERE c.fecha >:dia ORDER BY c.fecha ASC LIMIT 5" );
 			$sql->bindParam(":dia",$dia);
             $sql -> execute();
 			$lista = $sql->fetchAll(PDO::FETCH_OBJ);
@@ -294,9 +300,15 @@
 			return $lista;
 		}
 		protected static function citasReservadas($fecha=''){
+			$sqlF = mainModelo::conexion()->prepare("SET GLOBAL lc_time_names = 'es_ES'");
+            $sqlF -> execute();
 			$dia = $fecha != '' ? $fecha : date('Y-m-d');
 			$sql = mainModelo::conexion()->prepare("SELECT c.id as idCita, c.estado,  
-				c.horas_id as id, c.mensaje, p.nombre, p.dni, p.celular , h.hora, c.fecha, tc.nombre as namC  FROM `tratamientos` c
+				c.horas_id as id, c.mensaje, p.nombre, p.dni, p.celular , h.hora, DATE_FORMAT(c.fecha, '%d de %b %Y') as fecha, tc.nombre as namC, cat.nombre as cat, serv.nombre as serv  FROM `tratamientos` c
+				INNER JOIN servicios cat
+                ON cat.id = c.servicios_id
+                INNER JOIN servicio_general serv
+                ON serv.id = cat.servicio_general_id
 				INNER JOIN `persona` p
 				ON p.id = c.paciente_id
 				INNER JOIN `horas` h
@@ -306,9 +318,16 @@
 				WHERE c.fecha =:dia ORDER BY h.hora ASC" );
 			$sql->bindParam(":dia",$dia);
             $sql -> execute();
-			$lista = $sql->fetchAll(PDO::FETCH_OBJ);
-			$sql = null;
-			return $lista;
+			if ($sql->rowCount() > 0) {
+				$lista = $sql->fetchAll(PDO::FETCH_OBJ);
+				$sql = null;
+				return $lista;
+			} else {
+				$sql = null;
+				return 0;
+			}
+			
+			
 		}
 
 		

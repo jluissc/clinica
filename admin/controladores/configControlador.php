@@ -50,14 +50,29 @@
 			$listHTML = '<li>
 				<h6 class="dropdown-header" > <a href="'.SERVERURL.'citas">Citas de hoy</a></h6>
 			</li>';
-			foreach ($listsToday[0] as $list) {
-				$listHTML .= '<li><p class="text-center">'.$list->nombre.' ::: '.$list->namC .'</p><a class="dropdown-item">'.$list->fecha.' <span class="badge bg-info text-dark"><i class="far fa-clock"></i> </span> '.$list->hora.'  </a> </li><hr>';
+			if ($listsToday[0]) {
+				foreach ($listsToday[0] as $list) {
+					$listHTML .= '<li>
+						<p class="text-center">'.$list->serv.' ::: '.$list->cat .'</p>
+						<p class="text-center">'.$list->nombre.' ::: '.$list->namC .'</p>
+						<a class="dropdown-item">'.$list->fecha.' <span class="badge bg-info text-dark"><i class="far fa-clock"></i> </span> '.$list->hora.'  </a> </li><hr>';
+				}
+			} else {
+				$listHTML .= '<li><strong>No hay cita hoy, por el momento</strong></li> <hr>';
 			}
 			$listHTML .= '<li>
 				<h6 class="dropdown-header" > <a href="'.SERVERURL.'citas">Citas de proximos dias</a></h6>
 			</li>';
-			foreach ($listsToday[1] as $list) {
-				$listHTML .= '<li><p class="text-center">'.$list->nombre.' ::: '.$list->namC .'</p><a class="dropdown-item">'.$list->fecha.' <span class="badge bg-info text-dark"><i class="far fa-clock"></i> </span> '.$list->hora.'  </a> </li><hr>';
+			if(count($listsToday[1])>0){
+
+				foreach ($listsToday[1] as $list) {
+					$listHTML .= '<li>
+						<p class="text-center">'.$list->serv.' ::: '.$list->cat .'</p>
+						<p class="text-center">'.$list->nombre.' ::: '.$list->namC .'</p>
+						<a class="dropdown-item">'.$list->fecha.' <span class="badge bg-info text-dark"><i class="far fa-clock"></i> </span> '.$list->hora.'  </a> </li><hr>';
+				}
+			} else {
+				$listHTML .= '<li><strong>No hay cita proximas, por el momento</strong></li> <hr>';
 			}
 			return $listHTML;
 		}

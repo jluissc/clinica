@@ -29,7 +29,7 @@
         <div class="col-6">
             <label>CORREO: </label>
             <div class="form-group">
-                <input type="text" placeholder="Correo" class="form-control" id="correo" >
+                <input type="email" placeholder="Correo" class="form-control" id="correo" required>
             </div>
         </div>
     </div>

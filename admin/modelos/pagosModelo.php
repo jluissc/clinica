@@ -27,7 +27,7 @@
             $sql->bindParam(':idPay',$datos['idPay']);
             $sql->bindParam(':idUser',$_SESSION['id']);
             $sql -> execute();
-            exit(json_encode($sql->fetchAll(PDO::FETCH_OBJ)));
+            exit(json_encode(pagosModelo::detallePago_m($datos['idPay'])));
         }
         protected static function detallePago_m($id){
             $sqlF = mainModelo::conexion()->prepare("SET GLOBAL lc_time_names = 'es_ES'");
