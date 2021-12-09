@@ -296,9 +296,10 @@ function verificarFecha(dia, mes, anio){
         if(catSelecTempo != 0){
             dia = ('0' +dia).slice(-2)
             fecha = `${monthNumber(mes)}-${dia}-${anio}`;
+            fechaCCC = `${monthNumber(mes)} ${dia} ${anio}`;
             fechaB = `${anio}-${monthNumber(mes)}-${dia}`;
             document.getElementById('fechaCita').innerHTML = fecha
-            diaSelect = days[new Date(fecha).getDay()]
+            diaSelect = days[new Date(fechaCCC).getDay()]
             document.getElementById('tipocitaSelect').innerHTML = ''
             document.getElementById('horasDisponibles').innerHTML = ''
             fechaSelecionada = fechaB
@@ -308,10 +309,6 @@ function verificarFecha(dia, mes, anio){
     
 }
 function buscarCitasReservadas(dia,diaSelect){
-    console.log(dia);
-    console.log(diaSelect);
-    console.log(catSelecTempo);
-    console.log(servSelecTempo);
     DATOS = new FormData()
     DATOS.append('fechaCita', dia)
     DATOS.append('diaSelectsss', diaSelect)

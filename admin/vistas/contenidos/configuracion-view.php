@@ -37,6 +37,7 @@
                         </div>
                     </div>
                 </div>
+                
                 <div class="col-6 col-lg-6 col-md-6" >
                     <div class="card">
                         <div class="card-header">
@@ -65,6 +66,18 @@
                     </div>
                 </div>
                 
+                <div class="col-6 col-lg-6 col-md-6" >
+                    <div class="card">
+                        <div class="card-header">
+                            <h4 class="card-title">Empresa</h4>
+                        </div>
+                        <div class="card-content">
+                            <div class="card-body">
+                                
+                            </div>
+                        </div>
+                    </div>
+                </div>
                
             </div>
         </div>
