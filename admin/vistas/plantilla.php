@@ -91,5 +91,6 @@
     <script src="<?php echo SERVERURL ?>vistas/assets/js/main.js"></script>
     <script src="<?php echo SERVERURL ?>vistas/assets/vendors/toastify/toastify.js"></script>
     <script src="<?php echo SERVERURL ?>vistas/assets/js/pages/horizontal-layout.js"></script>
+    <script src="<?php echo SERVERURL ?>vistas/assets/js/nav-vertical.js"></script>
 </body>
 </html>

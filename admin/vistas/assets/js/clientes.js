@@ -6,7 +6,7 @@
         function validarDni(){
             console.log('aau');
             dni = document.getElementById('dni').value
-            if (dni.length == 8) {
+            // if (dni.length == 8) {
                 DATOS = new FormData()
                 DATOS.append('dni', dni)
                 fetch(URL+'ajax/citaAjax.php',{
@@ -30,9 +30,9 @@
                         alertaToastify('Paciente nuevo, rellene sus datos  ','info',1500)
                     }
                 })
-            } else {
-                alertaToastify('Dni incorrecto')
-            }
+            // } else {
+            //     alertaToastify('Dni incorrecto')
+            // }
         }
 
         function leerDni(dni){

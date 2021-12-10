@@ -2,6 +2,41 @@
 	require_once 'mainModelo.php';
 	class configModelo extends mainModelo
 	{	
+		protected static function datosUser_m(){
+			session_start(['name' => 'bot']);
+
+			$sql = mainModelo::conexion()->prepare("SELECT nombre, apellidos, celular, correo, dni FROM `persona` WHERE id =:id");
+			$sql->bindParam(":id",$_SESSION['id']);
+			$sql -> execute();
+			$servics = $sql->fetch(PDO::FETCH_OBJ);
+			$sql = null;		
+			exit(json_encode($servics));
+		}
+		protected static function updateDatos_m($datos){
+			$user = json_decode($datos);
+			session_start(['name' => 'bot']);
+			$sql = mainModelo::conexion()->prepare("UPDATE persona SET nombre =:nombre, apellidos=:apellido, celular =:celular, correo =:correo WHERE id =:id");
+			$sql->bindParam(":nombre",$user->nombre);
+			$sql->bindParam(":apellido",$user->apellido);
+			$sql->bindParam(":celular",$user->celular);
+			$sql->bindParam(":correo",$user->correo);
+			$sql->bindParam(":id",$_SESSION['id']);
+			$sql -> execute();
+			if ($sql->rowCount()>0) {
+				$sql = null;		
+				exit(json_encode(1));	
+			} else {
+				$sql = null;
+				exit(json_encode(0));
+			}			
+		}
+		protected static function datosEmpresa_m(){
+			$sql = mainModelo::conexion()->prepare("SELECT * FROM `sede`");
+			$sql -> execute();
+			$servics = $sql->fetch(PDO::FETCH_OBJ);
+			$sql = null;		
+			return $servics;
+		}
 		protected static function listarHoraAtencion_m(){
 			session_start(['name' => 'bot']);
 			$sql = mainModelo::conexion()->prepare("SELECT * FROM horas");
@@ -47,7 +82,7 @@
 		}
 		protected static function listServics_m(){
 			$sql = mainModelo::conexion()->prepare("SELECT sg.nombre as serv, s.nombre as cat, sg.estado as sg_est, s.estado as s_est, 
-				sg.id as sg_id, s.id as s_id, s.descripcion, s.precio_normal, s.precio_venta, s.tiempo, s.consulta FROM servicio_general sg
+				sg.id as sg_id, s.id as s_id, s.descripcion, s.precio_normal, s.precio_venta, s.tiempo, s.consulta, s.cant_atenc, s.consulta FROM servicio_general sg
 				LEFT JOIN servicios s
 				ON s.servicio_general_id = sg.id
 			 WHERE sg.elimino = 0 AND s.elimino = 0");

@@ -26,7 +26,7 @@
 					'cant' => $gasto->cantidad,
 					'price' => $gasto->precio,					
 					'date' => $gasto->fecha,					
-					'subt' => $gasto->precio,				
+					'subt' => 'S/. '.floatval($gasto->cantidad)*floatval($gasto->precio),				
 					'acciones' => $btn,					
 				]);
 			}

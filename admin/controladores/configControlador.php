@@ -7,7 +7,16 @@
 	} 
  
 	class configControlador extends configModelo	{
-		
+		public function datosUser(){
+			configModelo::datosUser_m();
+		  }	
+		public function updateDatos(){
+			configModelo::updateDatos_m($_POST['userUpdate']);
+		  }	
+		public function datosEmpresa(){
+			$dates = configModelo::datosEmpresa_m();
+			return $dates;
+		  }	
 		public function addEditServics() {
 			$datosServ = [
 				'name' => $_POST['serv_name'],

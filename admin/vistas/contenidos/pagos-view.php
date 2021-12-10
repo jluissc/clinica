@@ -3,8 +3,8 @@
     $inst = new citaControlador();
 ?>
 
-<input type="button" value="Nuevo Pago" class="btn btn-outline-primary" onclick="modalPagos(0)">
-        <br><br>
+    <input type="button" value="Nuevo Pago" class="btn btn-outline-primary" onclick="modalPagos(0)">
+    <br><br>
     <div class="container">
         <div class="row ">
             <div class="col-6">

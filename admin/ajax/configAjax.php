@@ -10,11 +10,19 @@
 	isset($_POST['cita_idCitaC']) || isset($_POST['permisosTemp']) || 
 	isset($_POST['user_idPerm']) || isset($_POST['idServiConf']) || 
 	isset($_POST['idServiciD']) || isset($_POST['serv_addEdit']) || 
-	isset($_POST['datosCateg'])  ) {
+	isset($_POST['userUpdate']) ||  
+	isset($_POST['datosCateg']) || isset($_POST['user']) ) {
 		
 		require_once '../controladores/configControlador.php';
 		$inst = new configControlador();
 
+		// add and edit servics general
+		if (isset($_POST['user'])) {
+			$inst -> datosUser();
+		}
+		if (isset($_POST['userUpdate'])) {
+			$inst -> updateDatos();
+		}
 		// add and edit servics general
 		if (isset($_POST['serv_addEdit'])) {
 			$inst -> addEditServics();

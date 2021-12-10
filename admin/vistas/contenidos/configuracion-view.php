@@ -1,4 +1,9 @@
 <?php if($_SESSION['tipo']==1){ ?><!-- ADMIN -->
+    <?php 
+        require_once './controladores/configControlador.php';
+        $inst = new configControlador();
+        $datos = $inst->datosEmpresa();
+    ?>
     <section class="row">
         <div class="page-heading">
             <h3>CONFIGURACIÓN GENERAL DE CITAS, PERMISO, EMPRESA, </h3>
@@ -73,9 +78,53 @@
                         </div>
                         <div class="card-content">
                             <div class="card-body">
+                                <!--  -->
                                 
+                                <!--  -->
+                                <div class="row">
+                                    <div class="col-6">
+                                        <label> NOMBRE EMPRESA:</label>
+                                        <div class="form-group">
+                                            <input type="text" placeholder="Nombre" class="form-control" id="nombre_emp" value="<?php echo $datos->nombre ?>" disabled>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <label>DIRECCIÓN: </label>
+                                        <div class="form-group">
+                                            <input type="text" placeholder="Dirección" class="form-control" id="address_emp"value="<?php echo $datos->direccion ?>" disabled>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <label> CELULAR 1:</label>
+                                        <div class="form-group">
+                                            <input type="text" placeholder="Celular" class="form-control" id="cel1_emp"value="<?php echo $datos->telefono ?>" disabled>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <label> CORREO:</label>
+                                        <div class="form-group">
+                                            <input type="text" placeholder="Correo institucional" class="form-control" id="correo_emp"value="<?php echo $datos->email ?>" disabled>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <label>FACEBOOK:</label>
+                                        <div class="form-group">
+                                            <input type="text" placeholder="Link" class="form-control" id="face_emp" value="<?php echo $datos->facebook ?>" disabled>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <label>INSTAGRAM:</label>
+                                        <div class="form-group">
+                                            <input type="text" placeholder="Link" class="form-control" id="inst_emp" value="<?php echo $datos->instagram ?>" disabled>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--  -->
                             </div>
                         </div>
+                        <!-- <div class="card-footer">
+                            <input type="button" value="Editar Datos" class="btn btn-outline-success">
+                        </div> -->
                     </div>
                 </div>
                

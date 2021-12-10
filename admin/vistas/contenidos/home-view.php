@@ -121,7 +121,7 @@
             <section id="groups">
                 <div class="row match-height">
                     <div class="col-12 mt-3 mb-1">
-                        <h4 class="section-title text-uppercase" >Datos <a class="" style="text-decoration: underline; cursor: pointer" onclick="showDatos()" >Editar datos</a></h4>
+                        <h4 class="section-title text-uppercase" >Datos <a class="" style="text-decoration: underline; cursor: pointer" onclick="modalExtraShow()" >Editar datos</a></h4>
                     </div>
                 </div>
                 <div class="row match-height">
@@ -135,7 +135,7 @@
                                         <!-- <p class="card-text">
                                             This card has supporting text below as a natural lead-in to additional
                                             content.</p> -->
-                                            <h2>1.87 cm</h2>
+                                            <h2 id="h_talla"></h2>
                                         <!-- <small class="text-muted">Last updated 3 mins ago</small> -->
                                     </div>
                                 </div>
@@ -150,7 +150,7 @@
                                             This card has supporting text below as a natural lead-in to additional
                                             content.
                                         </p> -->
-                                        <h2>65.00 Kg</h2>
+                                        <h2 id="h_peso"></h2>
                                         <!-- <small class="text-muted">Last updated 3 mins ago</small> -->
                                     </div>
                                 </div>
@@ -164,7 +164,7 @@
                                             This card has supporting text below as a natural lead-in to additional
                                             content.
                                         </p> -->
-                                        <h2>24 años</h2>
+                                        <h2 id="h_edad"></h2>
                                         <!-- <small class="text-muted">Last updated 3 mins ago</small> -->
                                     </div>
                                 </div>
@@ -178,7 +178,7 @@
                                             This card has supporting text below as a natural lead-in to additional
                                             content.
                                         </p> -->
-                                        <h2>O+</h2>
+                                        <h2 id="h_sangre"></h2>
                                         <!-- <small class="text-muted">Last updated 3 mins ago</small> -->
                                     </div>
                                 </div>
@@ -224,6 +224,67 @@
                         data-bs-dismiss="modal">
                         <i class="bx bx-check d-block d-sm-none"></i>
                         <span class="d-none d-sm-block">Accept</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade text-left" id="UserExtra" tabindex="-1" role="dialog"
+    aria-labelledby="myModalLabel17" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg"
+            role="document">
+            <div class="modal-content" >
+                <div class="modal-header">
+                    <h4 class="modal-title" id="myModalLabel17">Crear Usuario y permisos</h4>
+                    <button type="button" class="close" data-bs-dismiss="modal"
+                        aria-label="Close">
+                        <i data-feather="x"></i>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-12 col-lg-12 col-md-12">
+                            <div class="container">
+                                <div class="row">
+                                    <h5>Recuerde que estos datos son opcionales</h5>
+                                    <div class="col-6">
+                                        <label> TALLA: (cm)</label>
+                                        <div class="form-group">
+                                            <input type="text" placeholder="Digite tu estatura (cm)" class="form-control" id="talla_u" >
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <label>PESO: (K)</label>
+                                        <div class="form-group">
+                                            <input type="text" placeholder="Digite su masa corporal (K)" class="form-control" id="peso_u" >
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <label> EDAD:</label>
+                                        <div class="form-group">
+                                            <input type="text" placeholder="Digite su edad" class="form-control" id="edad_u" >
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <label>TIPO SANGRE: </label>
+                                        <div class="form-group">
+                                            <input type="text" placeholder="Digite tipo sangre" class="form-control" id="sangre_u" required>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>                          
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer" id="btns_pagos">
+                    <button type="button" class="btn btn-light-secondary"
+                        data-bs-dismiss="modal">
+                        <i class="bx bx-x d-block d-sm-none"></i>
+                        <span class="d-none d-sm-block">Cancelar</span>
+                    </button>
+                    <button type="button" class="btn btn-primary ml-1 "  onclick="updateDatosExtra()">
+                        <i class="bx bx-check d-block d-sm-none"></i>
+                        <span class="d-none d-sm-block">Guardar</span>
                     </button>
                 </div>
             </div>

@@ -71,6 +71,13 @@
       $datos = json_decode($_POST['savedetaTrat']);
       homeModelo::saveDetalleTratam_m($datos);
     }	
+    public function updateDatosExtra(){
+      $datos = json_decode($_POST['userUpdate']);
+      homeModelo::updateDatosExtra_m($datos);
+    }	
+    public function datosUserExtra(){
+      homeModelo::datosUserExtra_m();
+    }	
 
     public function dateQuantity(){
       $dates = homeModelo::dateQuantity_m();

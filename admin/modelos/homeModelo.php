@@ -28,6 +28,45 @@
             return $appointments;			
 		}
 
+		protected static function updateDatosExtra_m($user){
+			session_start(['name' => 'bot']);
+			if ($user->tipo) {
+				$sql = mainModelo::conexion()->prepare("UPDATE persona_extra SET peso =:peso, edad=:edad, talla =:talla, sangre =:sangre WHERE persona_id =:id");
+			} else {
+				$sql = mainModelo::conexion()->prepare("INSERT INTO persona_extra (peso, edad, talla, sangre,persona_id) VALUES(:peso, :edad, :talla, :sangre, :id) ");
+			}			
+			$sql->bindParam(":id",$_SESSION['id']);
+			$sql->bindParam(":talla",$user->talla);
+			$sql->bindParam(":peso",$user->peso);
+			$sql->bindParam(":edad",$user->edad);
+			$sql->bindParam(":sangre",$user->sangre);
+			$sql -> execute();
+			if ($sql->rowCount()>0) {
+				$sql = null;		
+				exit(json_encode(homeModelo::datosUserExtra_m(false)));	
+			} else {
+				$sql = null;
+				exit(json_encode(0));
+			}	
+		}
+		protected static function datosUserExtra_m($tipo=true){
+			if($tipo){
+				session_start(['name' => 'bot']);
+			}
+
+			$sql = mainModelo::conexion()->prepare("SELECT peso, edad, talla, sangre FROM `persona_extra` WHERE persona_id =:id");
+			$sql->bindParam(":id",$_SESSION['id']);
+			$sql -> execute();
+			if($sql->rowCount() > 0){
+				$servics = $sql->fetch(PDO::FETCH_OBJ);
+				$sql = null;		
+				exit(json_encode($servics));
+			}else{
+				$sql = null;		
+				exit(json_encode(0)); /* MANDAR AL LOGIN */
+			}
+			
+		}
 		protected static function estadoDetalleTratam_m($tipo=0,$idAppoint){
 			$sql = mainModelo::conexion()->prepare("SELECT id FROM tratamiento_detalle				
 				WHERE tratamientos_id = :idcita");

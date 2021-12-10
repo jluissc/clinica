@@ -21,6 +21,7 @@ inp_celular = document.getElementById('celular')
 inp_correo = document.getElementById('correo')
 fechaSelecionada = ''
 serviciosTemp = []
+categTemp = []
 histNew = true
 tipoUsuario = 0
 idUser = 0
@@ -125,6 +126,7 @@ function filtrarServics(listServi){
                         'estado': servicio.s_est,  
                         'tiempo': servicio.tiempo,  
                         'consulta': servicio.consulta,  
+                        'cant_atenc': servicio.cant_atenc,  
                     })
                     return servInt;
                 } 
@@ -146,6 +148,7 @@ function filtrarServics(listServi){
                     'estado': servicio.s_est,  
                     'tiempo': servicio.tiempo, 
                     'consulta': servicio.consulta,   
+                    'cant_atenc': servicio.cant_atenc,  
                 }]
             }, 
             );      
@@ -191,6 +194,8 @@ function cambioServicio(servSelect){
 }
 function cambioCategoria(id){
     console.log(serviciosTemp);
+    categTemp = serviciosTemp.filter( ser => ser.id == id)
+    // console.log(a);
     if(serviciosTemp.find(serv => serv.id == id && serv.consulta == 1)){
         console.log('encontrado');
         inp = `<input class="form-control" placeholder="Ingrese nombre para la cita" id="nameHistNew">`
@@ -296,10 +301,9 @@ function verificarFecha(dia, mes, anio){
         if(catSelecTempo != 0){
             dia = ('0' +dia).slice(-2)
             fecha = `${monthNumber(mes)}-${dia}-${anio}`;
-            fechaCCC = `${monthNumber(mes)} ${dia} ${anio}`;
             fechaB = `${anio}-${monthNumber(mes)}-${dia}`;
             document.getElementById('fechaCita').innerHTML = fecha
-            diaSelect = days[new Date(fechaCCC).getDay()]
+            diaSelect = days[new Date(fecha).getDay()]
             document.getElementById('tipocitaSelect').innerHTML = ''
             document.getElementById('horasDisponibles').innerHTML = ''
             fechaSelecionada = fechaB
@@ -309,6 +313,10 @@ function verificarFecha(dia, mes, anio){
     
 }
 function buscarCitasReservadas(dia,diaSelect){
+    console.log(dia);
+    console.log(diaSelect);
+    console.log(catSelecTempo);
+    console.log(servSelecTempo);
     DATOS = new FormData()
     DATOS.append('fechaCita', dia)
     DATOS.append('diaSelectsss', diaSelect)
@@ -324,6 +332,7 @@ function buscarCitasReservadas(dia,diaSelect){
         console.log(r);
         if(r.diaDisponi != 0){
             if(r.tipoCita != 0){
+
                 a = []
                 r.diaDisponi.forEach( dia => {
                     if(r.tipoCita.find(tip => dia.tipo_atencion == tip.tipo_cita_id)){
@@ -331,6 +340,7 @@ function buscarCitasReservadas(dia,diaSelect){
                         a.push(disponi)         
                     }
                 })
+                console.log(a);
                 if(a.length > 0){
                     console.log(disponi);
                     list = ''
@@ -343,14 +353,68 @@ function buscarCitasReservadas(dia,diaSelect){
                     document.getElementById('tipocitaSelect').innerHTML = list
 
                     /* dddddddddddd */
-                    tb = '<div class="row text-center ">'
-                    r.horas.forEach((hour,index) => {
-                        tb +=`<div class="col-6 col-md-6 col-lg-4 hora-cita">
-                                <input type="radio" class="btn-check" name="horaAtenUs" id="${index}" value="${hour.id}" >
-                                <label class="btn btn-outline-success" for="${index}">${hour.hora}</label>
-                            </div>`                        
-                    });
+                    horasFinal = r.horas
+
+                    console.log(horasFinal);
+                    if (categTemp[0].cant_atenc == 1) {
+                        tb = '<div class="row text-center ">'
+                        horasFinal.forEach((hour,index) => {
+                            estado = r.citas.find( cit => cit.horas_id == hour.id) ? 'disabled' : ''
+                            tb +=`<div class="col-6 col-md-6 col-lg-4 hora-cita">
+                                    <input type="radio" ${estado} class="btn-check" name="horaAtenUs" id="${index}" value="${hour.id}" >
+                                    <label class="btn btn-outline-success" for="${index}">${hour.hora}</label>
+                                </div>`                        
+                        });
+                    } 
+                    else /* if(categTemp[0].cant_atenc == 3) */ {
+                        citas = []
+                        r.citas.forEach(cit => {
+                            if(citas.some(ct => ct.id == cit.horas_id)){
+                                const usersInt = citas.map( servInt => {
+                                    if( servInt.id == cit.horas_id ) {
+                                        servInt.cant++;
+                                        return servInt;
+                                    } 
+                                    else return servInt;
+                                })
+                                citas = [...usersInt];
+                            }else{
+                                citas.push({
+                                    id :cit.horas_id,
+                                    cant :1
+                                })
+                            }
+                        });
+                        console.log(citas);
+                        tb = '<div class="row text-center ">'
+                        horasFinal.forEach((hour,index) => {
+                            estado = citas.find(cit => cit.id == hour.id && cit.cant == categTemp[0].cant_atenc) ? 'disabled' : ''
+                            tb +=`<div class="col-6 col-md-6 col-lg-4 hora-cita">
+                                    <input type="radio" ${estado} class="btn-check" name="horaAtenUs" id="${index}" value="${hour.id}" >
+                                    <label class="btn btn-outline-success" for="${index}">${hour.hora}</label>
+                                </div>`                        
+                        });
+                    }
+                    // else{
+                    //     tb = '<div class="row text-center ">'
+                    //     horasFinal.forEach((hour,index) => {
+                    //         tb +=`<div class="col-6 col-md-6 col-lg-4 hora-cita">
+                    //                 <input type="radio" class="btn-check" name="horaAtenUs" id="${index}" value="${hour.id}" >
+                    //                 <label class="btn btn-outline-success" for="${index}">${hour.hora}</label>
+                    //             </div>`                        
+                    //     });
+                    // }
+                    tb += '</div>'
+                    
                     document.getElementById('horasDisponibles').innerHTML = tb
+                    // tb = '<div class="row text-center ">'
+                    // r.horas.forEach((hour,index) => {
+                    //     tb +=`<div class="col-6 col-md-6 col-lg-4 hora-cita">
+                    //             <input type="radio" class="btn-check" name="horaAtenUs" id="${index}" value="${hour.id}" >
+                    //             <label class="btn btn-outline-success" for="${index}">${hour.hora}</label>
+                    //         </div>`                        
+                    // });
+                    // document.getElementById('horasDisponibles').innerHTML = tb
 
                 }else{
                     alertaToastify('error aaa')
