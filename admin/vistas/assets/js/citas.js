@@ -359,7 +359,7 @@ function buscarCitasReservadas(dia,diaSelect){
                     if (categTemp[0].cant_atenc == 1) {
                         tb = '<div class="row text-center ">'
                         horasFinal.forEach((hour,index) => {
-                            estado = r.citas.find( cit => cit.horas_id == hour.id) ? 'disabled' : ''
+                            estado = r.citas ? (r.citas.find( cit => cit.horas_id == hour.id) ? 'disabled' : '') : ''
                             tb +=`<div class="col-6 col-md-6 col-lg-4 hora-cita">
                                     <input type="radio" ${estado} class="btn-check" name="horaAtenUs" id="${index}" value="${hour.id}" >
                                     <label class="btn btn-outline-success" for="${index}">${hour.hora}</label>
@@ -368,23 +368,25 @@ function buscarCitasReservadas(dia,diaSelect){
                     } 
                     else /* if(categTemp[0].cant_atenc == 3) */ {
                         citas = []
-                        r.citas.forEach(cit => {
-                            if(citas.some(ct => ct.id == cit.horas_id)){
-                                const usersInt = citas.map( servInt => {
-                                    if( servInt.id == cit.horas_id ) {
-                                        servInt.cant++;
-                                        return servInt;
-                                    } 
-                                    else return servInt;
-                                })
-                                citas = [...usersInt];
-                            }else{
-                                citas.push({
-                                    id :cit.horas_id,
-                                    cant :1
-                                })
-                            }
-                        });
+                        if (r.citas) {
+                            r.citas.forEach(cit => {
+                                if(citas.some(ct => ct.id == cit.horas_id)){
+                                    const usersInt = citas.map( servInt => {
+                                        if( servInt.id == cit.horas_id ) {
+                                            servInt.cant++;
+                                            return servInt;
+                                        } 
+                                        else return servInt;
+                                    })
+                                    citas = [...usersInt];
+                                }else{
+                                    citas.push({
+                                        id :cit.horas_id,
+                                        cant :1
+                                    })
+                                }
+                            });
+                        } 
                         console.log(citas);
                         tb = '<div class="row text-center ">'
                         horasFinal.forEach((hour,index) => {
