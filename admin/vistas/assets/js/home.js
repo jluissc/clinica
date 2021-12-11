@@ -81,9 +81,6 @@ function updateDatosExtra(){
     
 }
 
-
-
-
 /* ADMIN / COLABORADOR */
 
 function showDetailAppoint(idAppoint){

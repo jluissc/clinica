@@ -10,8 +10,7 @@
                                     </a>
                                 </div>
                                 <p>
-                                        Firmament morning sixth subdue darkness 
-                                        creeping gathered divide.
+                                    Nuestras redes sociales
                                 </p>
                                 <div class="socail_links">
                                     <ul>
@@ -43,6 +42,7 @@
                                 <ul>
                                     <li><a href="#">Terapia Física</a></li>
                                     <li><a href="#">Odontología</a></li>
+                                    <li><a href="#">Contactos</a></li>
                                     <!-- <li><a href="#">Pathology</a></li>
                                     <li><a href="#">Medicine</a></li>
                                     <li><a href="#">Dental</a></li> -->
@@ -50,7 +50,7 @@
     
                             </div>
                         </div>
-                        <div class="col-xl-2 col-md-6 col-lg-2">
+                        <!-- <div class="col-xl-2 col-md-6 col-lg-2">
                             <div class="footer_widget">
                                 <h3 class="footer_title">
                                         Useful Links
@@ -63,16 +63,16 @@
                                     <li><a href="#"> Appointment</a></li>
                                 </ul>
                             </div>
-                        </div>
+                        </div> -->
                         <div class="col-xl-3 col-md-6 col-lg-3">
                             <div class="footer_widget">
                                 <h3 class="footer_title">
                                         Contactos
                                 </h3>
                                 <p>
-                                    200, D-block, Green lane USA <br>
-                                    +10 367 467 8934 <br>
-                                    docmed@contact.com
+                                    Parque las Llantas <br>
+                                    Huayopampa <br>
+                                    
                                 </p>
                             </div>
                         </div>
