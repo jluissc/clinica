@@ -61,7 +61,6 @@
 		if (isset($_POST['idServiConf'])) {
 			$inst -> listsServicsIdd($_POST['idServiConf']);
 		}
-		
 		 
 
         

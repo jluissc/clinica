@@ -1,5 +1,5 @@
 <?php if($_SESSION['tipo']==1){ ?><!-- ADMIN -->
-    <?php 
+    <?php  
         require_once './controladores/configControlador.php';
         $inst = new configControlador();
         $datos = $inst->datosEmpresa();

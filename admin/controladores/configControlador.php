@@ -208,7 +208,7 @@
 						];
 						configModelo::insertHoraServc_m($datos2);
 					}
-					exit(json_encode(configModelo::listServics_m()));
+					exit(json_encode([configModelo::listServics_m(),configModelo::listaServGen_m()]));
 				}else{
 					exit(json_encode('error'));
 				}

@@ -7,6 +7,7 @@ servSelecTempo = 0;
  hisTrat2 = []
 
 Lservicios = [] /* listar los servicios generales activos */
+Lcategorias = [] /* listar los servicios  */
 
 idAppoint=0 /* Id Cita seleccionado */
 
@@ -87,6 +88,7 @@ function leerCondicionesAtencion(){
     })
     .then( r => r.json())
     .then( r => {
+        console.log(r);
         console.log(r.hisTrat); /* jalar de aqui su historial de un usuario */
         hisTrat = r.hisTrat
         hisTrat2 = r.hisTrat
@@ -112,48 +114,58 @@ function showHistorial(idHistorial){
 }
 function filtrarServics(listServi){
     Lservicios = []
-    console.log(listServi);
-    listServi.forEach(servicio => {
-        if(Lservicios.some( servInt => servInt.id == servicio.sg_id)){
-            const usersInt = Lservicios.map( servInt => {
-                if( servInt.id == servicio.sg_id ) {
-                    servInt.categorias.push({ 
-                        'id': servicio.s_id,  
-                        'nombre': servicio.cat,  
-                        'descripcion': servicio.descripcion,  
-                        'precio_normal': servicio.precio_normal,  
-                        'precio_venta': servicio.precio_venta,  
-                        'estado': servicio.s_est,  
-                        'tiempo': servicio.tiempo,  
-                        'consulta': servicio.consulta,  
-                        'cant_atenc': servicio.cant_atenc,  
-                    })
-                    return servInt;
-                } 
-                else return servInt;
-            })
-            Lservicios = [...usersInt];
-        }else{
-            id_cat = servicio.s_id ? servicio.s_id : 0 /* si es no existe categorias del servicio */
-            Lservicios.push({
-                'id': servicio.sg_id, 
-                'nombre': servicio.serv, 
-                'estado': servicio.sg_est,                     
-                'categorias' : [{ 
-                    'id': id_cat,  
-                    'nombre': servicio.cat,  
-                    'descripcion': servicio.descripcion,  
-                    'precio_normal': servicio.precio_normal,  
-                    'precio_venta': servicio.precio_venta,  
-                    'estado': servicio.s_est,  
-                    'tiempo': servicio.tiempo, 
-                    'consulta': servicio.consulta,   
-                    'cant_atenc': servicio.cant_atenc,  
-                }]
-            }, 
-            );      
+    listServi[0].forEach(cat => {
+        if(cat.s_est == 1){
+            Lcategorias.push(cat)
         }
     });
+    listServi[1].forEach(serv => {
+        if(serv.estado == 1){
+            Lservicios.push(serv)
+        }
+    });
+    // console.log(listServi);
+        // listServi.forEach(servicio => {
+        //     if(Lservicios.some( servInt => servInt.id == servicio.sg_id)){
+        //         const usersInt = Lservicios.map( servInt => {
+        //             if( servInt.id == servicio.sg_id ) {
+        //                 servInt.categorias.push({ 
+        //                     'id': servicio.s_id,  
+        //                     'nombre': servicio.cat,  
+        //                     'descripcion': servicio.descripcion,  
+        //                     'precio_normal': servicio.precio_normal,  
+        //                     'precio_venta': servicio.precio_venta,  
+        //                     'estado': servicio.s_est,  
+        //                     'tiempo': servicio.tiempo,  
+        //                     'consulta': servicio.consulta,  
+        //                     'cant_atenc': servicio.cant_atenc,  
+        //                 })
+        //                 return servInt;
+        //             } 
+        //             else return servInt;
+        //         })
+        //         Lservicios = [...usersInt];
+        //     }else{
+        //         id_cat = servicio.s_id ? servicio.s_id : 0 /* si es no existe categorias del servicio */
+        //         Lservicios.push({
+        //             'id': servicio.sg_id, 
+        //             'nombre': servicio.serv, 
+        //             'estado': servicio.sg_est,                     
+        //             'categorias' : [{ 
+        //                 'id': id_cat,  
+        //                 'nombre': servicio.cat,  
+        //                 'descripcion': servicio.descripcion,  
+        //                 'precio_normal': servicio.precio_normal,  
+        //                 'precio_venta': servicio.precio_venta,  
+        //                 'estado': servicio.s_est,  
+        //                 'tiempo': servicio.tiempo, 
+        //                 'consulta': servicio.consulta,   
+        //                 'cant_atenc': servicio.cant_atenc,  
+        //             }]
+        //         }, 
+        //         );      
+        //     }
+        // });
     mostrarListaServicios()
 }
 function mostrarListaServicios(){
@@ -165,25 +177,28 @@ function mostrarListaServicios(){
     selectServGe.innerHTML = listS
 }
 function cambioServicio(servSelect){
+    console.log(servSelect);
     serviciosTemp = []
     servSelecTempo = servSelect
     console.log(servSelect);
-    Lservicios.filter( serv => {
-        if(serv.id == servSelect ){
-            serv.categorias.forEach(element => {
-                serviciosTemp.push(element)
-            });
-        }
-        return serviciosTemp
-    }) 
+    // Lservicios.filter( serv => {
+    //     if(serv.id == servSelect ){
+    //         serv.categorias.forEach(element => {
+    //             serviciosTemp.push(element)
+    //         });
+    //     }
+    //     return serviciosTemp
+    // }) 
     console.log(serviciosTemp);
     if(servSelect != 0){
         li = `<label>SELECCIONE CATEGORIA: </label>
             <fieldset class="form-group">
             <select class="form-select" id="select-categ" onchange="cambioCategoria(this.value)">
                 <option value="0">SELECCIONE</option> `
-        serviciosTemp.forEach(cat => {
-            li +=`<option value="${cat.id}" >${cat.nombre}</option>`
+        Lcategorias.forEach(cat => {
+            if(cat.servicio_general_id == servSelect){
+                li +=`<option value="${cat.s_id}" >${cat.cat}</option>`
+            }
         }); 
         li +=`</select>
             </fieldset>`
@@ -239,7 +254,7 @@ function validarDni(){
                 statusCampos(true)
             }else{   
                 pacienteId = 0   
-                leerDni(dni)            
+                leerDniii(dni)            
                 statusCampos(false)   
                 alertaToastify('Paciente nuevo, rellene sus datos  ','info',1500)
             }
@@ -270,8 +285,8 @@ function historialTratamiento(){
     }
     document.getElementById('historialNew').innerHTML = div
 }
-function leerDni(dni){
-    // console.log(dni);
+function leerDniii(dni){
+    console.log(dni);
     // urlApi=`https://dniruc.apisperu.com/api/v1/dni/${dni}?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6Impsc2MuaGNvOTZAZ21haWwuY29tIn0.ysxMDCaGlMQRJen3msmMcniIx_Q-nuhjXjQ4RNkP31o`;
     urlApi=`https://dniruc.apisperu.com/api/v1/dni/${dni}?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6InBlcGJvdC5wZUBnbWFpbC5jb20ifQ.8dxeu7zAz1x7u3S29WytfSuybE9fdPg_T8-kW087Mqw`;
     fetch(urlApi)
@@ -356,47 +371,55 @@ function buscarCitasReservadas(dia,diaSelect){
                     horasFinal = r.horas
 
                     console.log(horasFinal);
-                    if (categTemp[0].cant_atenc == 1) {
-                        tb = '<div class="row text-center ">'
-                        horasFinal.forEach((hour,index) => {
-                            estado = r.citas ? (r.citas.find( cit => cit.horas_id == hour.id) ? 'disabled' : '') : ''
-                            tb +=`<div class="col-6 col-md-6 col-lg-4 hora-cita">
-                                    <input type="radio" ${estado} class="btn-check" name="horaAtenUs" id="${index}" value="${hour.id}" >
-                                    <label class="btn btn-outline-success" for="${index}">${hour.hora}</label>
-                                </div>`                        
+                    if (Lcategorias.find(cat => cat.s_id == catSelecTempo)) {
+                        Lcategorias.forEach(categ => {
+                            if(categ.s_id == catSelecTempo){
+                                if (categ.cant_atenc == 1) {
+                                    tb = '<div class="row text-center ">'
+                                    horasFinal.forEach((hour,index) => {
+                                        estado = r.citas ? (r.citas.find( cit => cit.horas_id == hour.id) ? 'disabled' : '') : ''
+                                        tb +=`<div class="col-6 col-md-6 col-lg-4 hora-cita">
+                                                <input type="radio" ${estado} class="btn-check" name="horaAtenUs" id="${index}" value="${hour.id}" >
+                                                <label class="btn btn-outline-success" for="${index}">${hour.hora}</label>
+                                            </div>`                        
+                                    });
+                                } 
+                                else /* if(categTemp[0].cant_atenc == 3) */ {
+                                    citas = []
+                                    if (r.citas) {
+                                        r.citas.forEach(cit => {
+                                            if(citas.some(ct => ct.id == cit.horas_id)){
+                                                const usersInt = citas.map( servInt => {
+                                                    if( servInt.id == cit.horas_id ) {
+                                                        servInt.cant++;
+                                                        return servInt;
+                                                    } 
+                                                    else return servInt;
+                                                })
+                                                citas = [...usersInt];
+                                            }else{
+                                                citas.push({
+                                                    id :cit.horas_id,
+                                                    cant :1
+                                                })
+                                            }
+                                        });
+                                    } 
+                                    console.log(citas);
+                                    tb = '<div class="row text-center ">'
+                                    horasFinal.forEach((hour,index) => {
+                                        estado = citas.find(cit => cit.id == hour.id && cit.cant == categ.cant_atenc) ? 'disabled' : ''
+                                        tb +=`<div class="col-6 col-md-6 col-lg-4 hora-cita">
+                                                <input type="radio" ${estado} class="btn-check" name="horaAtenUs" id="${index}" value="${hour.id}" >
+                                                <label class="btn btn-outline-success" for="${index}">${hour.hora}</label>
+                                            </div>`                        
+                                    });
+                                }
+                            }
+                            
                         });
                     } 
-                    else /* if(categTemp[0].cant_atenc == 3) */ {
-                        citas = []
-                        if (r.citas) {
-                            r.citas.forEach(cit => {
-                                if(citas.some(ct => ct.id == cit.horas_id)){
-                                    const usersInt = citas.map( servInt => {
-                                        if( servInt.id == cit.horas_id ) {
-                                            servInt.cant++;
-                                            return servInt;
-                                        } 
-                                        else return servInt;
-                                    })
-                                    citas = [...usersInt];
-                                }else{
-                                    citas.push({
-                                        id :cit.horas_id,
-                                        cant :1
-                                    })
-                                }
-                            });
-                        } 
-                        console.log(citas);
-                        tb = '<div class="row text-center ">'
-                        horasFinal.forEach((hour,index) => {
-                            estado = citas.find(cit => cit.id == hour.id && cit.cant == categTemp[0].cant_atenc) ? 'disabled' : ''
-                            tb +=`<div class="col-6 col-md-6 col-lg-4 hora-cita">
-                                    <input type="radio" ${estado} class="btn-check" name="horaAtenUs" id="${index}" value="${hour.id}" >
-                                    <label class="btn btn-outline-success" for="${index}">${hour.hora}</label>
-                                </div>`                        
-                        });
-                    }
+                    
                     // else{
                     //     tb = '<div class="row text-center ">'
                     //     horasFinal.forEach((hour,index) => {
@@ -482,6 +505,8 @@ function guardarCita(datos){
             fechaSelecionada = ''
             document.getElementById('tipocitaSelect').innerHTML = ''
             document.getElementById('horasDisponibles').innerHTML = ''
+            document.getElementById('historialNew').innerHTML = ''
+            listHist = []
             // setTimeout(() => {
             //     location.reload()
             // }, 2000);
@@ -496,7 +521,7 @@ function guardarCita(datos){
 function limpiarInpTrat(){
     inp_dni.value = ''
     inp_nombre.value = ''
-    inp_apellido
+    inp_apellido.value = ''
     inp_celular.value = ''
     inp_correo.value = ''
 }

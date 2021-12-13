@@ -4,9 +4,9 @@
         leerListaTratamientos()
         listHist =[]
         function validarDni(){
-            console.log('aau');
+            console.log('aaaaaaaaaaaaaaaau');
             dni = document.getElementById('dni').value
-            // if (dni.length == 8) {
+            if (dni.length == 8) {
                 DATOS = new FormData()
                 DATOS.append('dni', dni)
                 fetch(URL+'ajax/citaAjax.php',{
@@ -30,27 +30,29 @@
                         alertaToastify('Paciente nuevo, rellene sus datos  ','info',1500)
                     }
                 })
-            // } else {
-            //     alertaToastify('Dni incorrecto')
-            // }
+            } else {
+                alertaToastify('Dni incorrecto')
+            }
         }
 
         function leerDni(dni){
-            dni = document.getElementById('dni').value
-            if(dni.length == 8){
+            // dni = document.getElementById('dni').value
+            console.log(dni);
+            // if(dni.length == 8){
                 // document.getElementById('spinnerTemp').innerHTML = `<div class="spinner-grow text-primary" role="status">
                 //                 <span class="visually-hidden">Loading...</span>
                 //             </div>`
-                urlApi=`https://dniruc.apisperu.com/api/v1/dni/${dni}?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6Impsc2MuaGNvOTZAZ21haWwuY29tIn0.ysxMDCaGlMQRJen3msmMcniIx_Q-nuhjXjQ4RNkP31o`;
-               
+                urlApi=`https://dniruc.apisperu.com/api/v1/dni/${dni}?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6InBlcGJvdC5wZUBnbWFpbC5jb20ifQ.8dxeu7zAz1x7u3S29WytfSuybE9fdPg_T8-kW087Mqw`;
+    
                 fetch(urlApi)
                 .then(r => r.json())
                 .then(r => {
-                    if(!r.success){
-                        console.log('auiii');
-                        document.getElementById('nombre').value = ''
-                        document.getElementById('apellido').value = ''
-                    }else{
+                    console.log(r);
+                    // if(!r.success){
+                    //     console.log('auiii');
+                    //     document.getElementById('nombre').value = ''
+                    //     document.getElementById('apellido').value = ''
+                    // }else{
                         console.log(r);
                         datos = {
                             dni : r.dni,
@@ -62,13 +64,13 @@
                         }
                         // document.getElementById('spinnerTemp').innerHTML = ''
                         mandarCampos(3,datos)
-                    }
+                    // }
 
                 })
                 .catch(r => console.log(r))
-            }else{
-                console.log('mal');
-            }
+            // }else{
+            //     console.log('mal');
+            // }
             
             
         }

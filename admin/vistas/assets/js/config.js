@@ -60,11 +60,7 @@ function leerHorasAtencion(){
         filtrarUsers(r.users)
         citasAtencion = r.tipoAtencion
         diasAtencion = r.diasAtencion
-        permisos = r.permisos
-        // console.log(r.users);
-        console.log(r.permisos);
-        // listServicss = r.listServics
-        
+        permisos = r.permisos        
     })
 }
 function filtrarConfig(datos){
@@ -104,78 +100,163 @@ function filtrarConfig(datos){
     HtmlListConfig()
 }
 function listarServiciosss(listServi){
-    listServicss = []
-    listServi.forEach(servicio => {
-        if(listServicss.some( servInt => servInt.id == servicio.sg_id)){
-            const usersInt = listServicss.map( servInt => {
-                if( servInt.id == servicio.sg_id ) {
-                    servInt.categorias.push({ 
-                        'id': servicio.s_id,  
-                        'nombre': servicio.cat,  
-                        'descripcion': servicio.descripcion,  
-                        'precio_normal': servicio.precio_normal,  
-                        'precio_venta': servicio.precio_venta,  
-                        'estado': servicio.s_est,  
-                        'tiempo': servicio.tiempo,  
-                    })
-                    return servInt;
-                } 
-                else return servInt;
-            })
-            listServicss = [...usersInt];
-        }else{
-            id_cat = servicio.s_id ? servicio.s_id : 0 /* si es no existe categorias del servicio */
-            listServicss.push({
-                'id': servicio.sg_id, 
-                'nombre': servicio.serv, 
-                'estado': servicio.sg_est,                     
-                'categorias' : [{ 
-                    'id': id_cat,  
-                    'nombre': servicio.cat,  
-                    'descripcion': servicio.descripcion,  
-                    'precio_normal': servicio.precio_normal,  
-                    'precio_venta': servicio.precio_venta,  
-                    'estado': servicio.s_est,  
-                    'tiempo': servicio.tiempo,  
-                }]
-            }, 
-            );      
-        }
-        categorias.push({
-            'id': servicio.s_id,  
-            'nombre': servicio.cat,  
-            'descripcion': servicio.descripcion,  
-            'precio_normal': servicio.precio_normal,  
-            'precio_venta': servicio.precio_venta,  
-            'estado': servicio.s_est,  
-            'tiempo': servicio.tiempo,  
-        })
-
-    }); 
-    HTMLServicios()
-}
-function HTMLServicios(){
+    console.log(listServi);
     lir = '<div class="list-group">'
-    listServicss.forEach(servc => {
-        // lir+=`<a class="" style="cursor:pointer"  class="btn btn-outline-warning" data-bs-toggle="modal"
-        // data-bs-target="#xlarge"></a>`
-        lir+=`<a class="list-group-item list-group-item-action"  style="background-color: #1aefe1"> ${servc.nombre}  
-            <button class="btn btn-info" onclick="tipoModalServc(${servc.id})"><i class="fas fa-edit"></i></button>
-            <button class="btn btn-danger" onclick="alertServicio(${servc.id},1)"><i class="fas fa-trash-alt"></i></button>
-            <button class="btn btn-primary" onclick="tipoModalCateg(${servc.id},0)"><i class="fas fa-plus-square"></i></button>
-            <button class="btn btn-success" onclick="tipoModalConfig(${servc.id},false)"><i class="fas fa-plus-square"></i></button>
-            </a>`
-            servc.categorias.forEach((categoria, key) => {
-                if(categoria.id != 0){
-                    lir+=`<a class="list-group-item list-group-item-action" >${key+1} :  ${categoria.nombre}
-                    <button class="btn btn-info" onclick="tipoModalCateg(${categoria.id},1)"><i class="fas fa-edit"></i></button>
-                    <button class="btn btn-danger" onclick="alertServicio(${categoria.id},2)"><i class="fas fa-trash-alt"></i></button>
-                    </a> `
-                }
-            });
-    });
+    if (listServi[1].length > 0 && listServi[0] != false ) {       
+    
+        listServi[1].forEach(servG => {
+            lir+=`<a class="list-group-item list-group-item-action"  style="background-color: #1aefe1"> ${servG.nombre}  
+                <button class="btn btn-info" onclick="tipoModalServc(${servG.id})"><i class="fas fa-edit"></i></button>
+                <button class="btn btn-danger" onclick="alertServicio(${servG.id},1)"><i class="fas fa-trash-alt"></i></button>
+                <button class="btn btn-primary" onclick="tipoModalCateg(${servG.id},0)"><i class="fas fa-plus-square"></i></button>
+                <button class="btn btn-success" onclick="tipoModalConfig(${servG.id},false)"><i class="fas fa-plus-square"></i></button>
+                </a>`            
+                listServi[0].forEach((categoria, key) => {
+                    if (categoria.servicio_general_id == servG.id) {
+                        
+                        lir+=`<a class="list-group-item list-group-item-action" >${key+1} :  ${categoria.cat}
+                            <button class="btn btn-info" onclick="tipoModalCateg(${categoria.s_id},1)"><i class="fas fa-edit"></i></button>
+                            <button class="btn btn-danger" onclick="alertServicio(${categoria.s_id},2)"><i class="fas fa-trash-alt"></i></button>
+                            </a> `
+                    }
+                    
+                    
+                });
+        });
+        categorias = []
+        listServi[0].forEach(categoria => {
+            categorias.push({
+                'id': categoria.s_id,  
+                'nombre': categoria.cat,  
+                'descripcion': categoria.descripcion,  
+                'precio_normal': categoria.precio_normal,  
+                'precio_venta': categoria.precio_venta,  
+                'estado': categoria.s_est,  
+                'tiempo': categoria.tiempo,  
+            })
+        });
+    }
+    else if (listServi[1].length > 0){
+        listServi[1].forEach(servG => {
+            lir+=`<a class="list-group-item list-group-item-action"  style="background-color: #1aefe1"> ${servG.nombre}  
+                <button class="btn btn-info" onclick="tipoModalServc(${servG.id})"><i class="fas fa-edit"></i></button>
+                <button class="btn btn-danger" onclick="alertServicio(${servG.id},1)"><i class="fas fa-trash-alt"></i></button>
+                <button class="btn btn-primary" onclick="tipoModalCateg(${servG.id},0)"><i class="fas fa-plus-square"></i></button>
+                <button class="btn btn-success" onclick="tipoModalConfig(${servG.id},false)"><i class="fas fa-plus-square"></i></button>
+                </a>`     
+        });
+    }
+
+    else {
+        lir+=`<h4>No tienes servicios</h4>`
+    }
     lir+=`</div>`
     document.getElementById('listServcsss').innerHTML = lir
+    listServicss = listServi[1]
+    // if (listServi[1] == 'cat') {
+    //     listServicss = []
+    //     listServi[0].forEach(servicio => {
+    //         if(listServicss.some( servInt => servInt.id == servicio.sg_id)){
+    //             const usersInt = listServicss.map( servInt => {
+    //                 if( servInt.id == servicio.sg_id ) {
+    //                     servInt.categorias.push({ 
+    //                         'id': servicio.s_id,  
+    //                         'nombre': servicio.cat,  
+    //                         'descripcion': servicio.descripcion,  
+    //                         'precio_normal': servicio.precio_normal,  
+    //                         'precio_venta': servicio.precio_venta,  
+    //                         'estado': servicio.s_est,  
+    //                         'tiempo': servicio.tiempo,  
+    //                     })
+    //                     return servInt;
+    //                 } 
+    //                 else return servInt;
+    //             })
+    //             listServicss = [...usersInt];
+    //         }else{
+    //             id_cat = servicio.s_id ? servicio.s_id : 0 /* si es no existe categorias del servicio */
+    //             listServicss.push({
+    //                 'id': servicio.sg_id, 
+    //                 'nombre': servicio.serv, 
+    //                 'estado': servicio.sg_est,                     
+    //                 'categorias' : [{ 
+    //                     'id': id_cat,  
+    //                     'nombre': servicio.cat,  
+    //                     'descripcion': servicio.descripcion,  
+    //                     'precio_normal': servicio.precio_normal,  
+    //                     'precio_venta': servicio.precio_venta,  
+    //                     'estado': servicio.s_est,  
+    //                     'tiempo': servicio.tiempo,  
+    //                 }]
+    //             }, 
+    //             );      
+    //         }
+    //         console.log(listServicss);
+    //         categorias.push({
+    //             'id': servicio.s_id,  
+    //             'nombre': servicio.cat,  
+    //             'descripcion': servicio.descripcion,  
+    //             'precio_normal': servicio.precio_normal,  
+    //             'precio_venta': servicio.precio_venta,  
+    //             'estado': servicio.s_est,  
+    //             'tiempo': servicio.tiempo,  
+    //         })
+
+    //     }); 
+    //     HTMLServicios(true)    
+    // } else {
+    //     console.log('solo tiene serv genre')
+    //     listServicss = listServi[0]
+    //     HTMLServicios(false)  
+    // }
+    
+}
+function HTMLServicios(tipo){
+    console.log('ddd');
+    lir = '<div class="list-group">'
+    if (tipo) {
+        console.log('vvv');
+        listServicss.forEach(servc => {
+            lir+=`<a class="list-group-item list-group-item-action"  style="background-color: #1aefe1"> ${servc.nombre}  
+                <button class="btn btn-info" onclick="tipoModalServc(${servc.id})"><i class="fas fa-edit"></i></button>
+                <button class="btn btn-danger" onclick="alertServicio(${servc.id},1)"><i class="fas fa-trash-alt"></i></button>
+                <button class="btn btn-primary" onclick="tipoModalCateg(${servc.id},0)"><i class="fas fa-plus-square"></i></button>
+                <button class="btn btn-success" onclick="tipoModalConfig(${servc.id},false)"><i class="fas fa-plus-square"></i></button>
+                </a>`            
+                servc.categorias.forEach((categoria, key) => {
+                    console.log(categoria);
+                    if(categoria.id != 0){
+                        lir+=`<a class="list-group-item list-group-item-action" >${key+1} :  ${categoria.nombre}
+                        <button class="btn btn-info" onclick="tipoModalCateg(${categoria.id},1)"><i class="fas fa-edit"></i></button>
+                        <button class="btn btn-danger" onclick="alertServicio(${categoria.id},2)"><i class="fas fa-trash-alt"></i></button>
+                        </a> `
+                    }
+                    categorias.push({
+                        'id': categoria.s_id,  
+                        'nombre': categoria.cat,  
+                        'descripcion': categoria.descripcion,  
+                        'precio_normal': categoria.precio_normal,  
+                        'precio_venta': categoria.precio_venta,  
+                        'estado': categoria.s_est,  
+                        'tiempo': categoria.tiempo,  
+                    })
+                });
+           
+        });
+    } else {
+        listServicss.forEach(servc => {
+            lir+=`<a class="list-group-item list-group-item-action"  style="background-color: #1aefe1"> ${servc.nombre}  
+                <button class="btn btn-info" onclick="tipoModalServc(${servc.id})"><i class="fas fa-edit"></i></button>
+                <button class="btn btn-danger" onclick="alertServicio(${servc.id},1)"><i class="fas fa-trash-alt"></i></button>
+                <button class="btn btn-primary" onclick="tipoModalCateg(${servc.id},0)"><i class="fas fa-plus-square"></i></button>
+                <button class="btn btn-success" onclick="tipoModalConfig(${servc.id},false)"><i class="fas fa-plus-square"></i></button>
+                </a>` 
+        });
+    }
+    
+    lir+=`</div>`
+    document.getElementById('listServcsss').innerHTML = lir
+    
 }
 function tipoModalConfig(id,tipo){/* 0 abrir */
     servSelec = id
@@ -273,6 +354,7 @@ function datosCategoria(id){
     })
     .then( r => r.json())
     .then( r => {
+        console.log(r);
         horasSeleccionadas = r.horas
         rellenarHorasCatg()
         rellenarTipoCat(r.servics)
@@ -510,7 +592,9 @@ function deleteServicio(idServici,tipo){
     })
     .then(r => r.json())
     .then(r => {
+        console.log(r);
         servSelec = []
+        // listarServiciosss(listServi)
         listarServiciosss(r)
         tipo == 1 ? alertaToastify('Servicio eliminado','green') : alertaToastify('Categoria eliminado','green')
     } )

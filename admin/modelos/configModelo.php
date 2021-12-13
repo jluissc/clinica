@@ -49,7 +49,7 @@
 				'listConfig' => configModelo::listConfig_m(),
 				'hisTrat' => $_SESSION['tipo'] == 4 || $_SESSION['tipo'] == 2 ? configModelo::reedListHistorialAppointment_m() : 0,
 				'listaServGen' => configModelo::listaServGen_m(),
-				'listServics' => configModelo::listServics_m(),
+				'listServics' => [configModelo::listServics_m(),configModelo::listaServGen_m()],
 				'listCategs' => configModelo::listCategs_m(),
 				'diasAtencion' => configModelo::listarDiasAtencion_m(),
 				'tipoAtencion' => configModelo::listarTipoAtencion_m(),
@@ -81,22 +81,31 @@
 			return $resutl;
 		}
 		protected static function listServics_m(){
-			$sql = mainModelo::conexion()->prepare("SELECT sg.nombre as serv, s.nombre as cat, sg.estado as sg_est, s.estado as s_est, 
-				sg.id as sg_id, s.id as s_id, s.descripcion, s.precio_normal, s.precio_venta, s.tiempo, s.consulta, s.cant_atenc, s.consulta FROM servicio_general sg
-				LEFT JOIN servicios s
-				ON s.servicio_general_id = sg.id
-			 WHERE sg.elimino = 0 AND s.elimino = 0");
+			$sql = mainModelo::conexion()->prepare("SELECT s.nombre as cat, s.estado as s_est, s.id as s_id, 
+			s.descripcion, s.precio_normal, s.precio_venta, s.tiempo, s.consulta, s.cant_atenc, 
+			s.consulta, s.servicio_general_id FROM servicios s
+			 WHERE s.elimino = 0");
 			$sql -> execute();
-			$servics = $sql->fetchAll(PDO::FETCH_OBJ);
-			$sql = null;
-			return $servics;
+			if ($sql->rowCount()>0) {
+				$servics = $sql->fetchAll(PDO::FETCH_OBJ);
+				$sql = null;
+				return $servics;
+			} else {
+				$sql = null;
+				return false;
+			}
 		}
 		protected static function listaServGen_m(){
-			$sql = mainModelo::conexion()->prepare("SELECT * FROM `servicio_general` WHERE estado = 1 AND elimino = 0");
-			$sql -> execute();
-			$servics = $sql->fetchAll(PDO::FETCH_OBJ);
-			$sql = null;
-			return $servics;
+			$sql = mainModelo::conexion()->prepare("SELECT * FROM `servicio_general` WHERE elimino = 0");
+			$sql -> execute();			
+			if ($sql->rowCount()>0) {
+				$servics = $sql->fetchAll(PDO::FETCH_OBJ);
+				$sql = null;
+				return $servics;
+			} else {
+				$sql = null;
+				return false;
+			}
 		}
 		protected static function listCategs_m(){
 			$sql = mainModelo::conexion()->prepare("SELECT * FROM servicios");
@@ -147,7 +156,7 @@
 			$sql -> execute();
 			if($sql->rowCount()>0){
 				// $s = $pdo->lastInsertId();
-				exit(json_encode(configModelo::listServics_m()));
+				exit(json_encode([configModelo::listServics_m(),configModelo::listaServGen_m()]));
 			}else{
 				exit(json_encode(0));
 			}
@@ -161,7 +170,7 @@
 			$sql->bindParam(":id", $datos['id']);
 			$sql -> execute();
 			if($sql->rowCount()>0){
-				exit(json_encode(configModelo::listServics_m()));
+				exit(json_encode([configModelo::listServics_m(),configModelo::listaServGen_m()]));
 			}else{
 				exit(json_encode(0));
 			}
