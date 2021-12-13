@@ -199,8 +199,8 @@
                                     <div class="form-group">
                                         <label for="stat_cat">Estado</label>
                                         <select name="" id="stat_cat">
-                                            <option value="0">Inactivo</option>
                                             <option value="1">Activo</option>
+                                            <option value="0">Inactivo</option>
                                         </select>
                                     </div>
                                     <div class="form-group">

@@ -59,14 +59,16 @@
 		}
 		// **********************************
 		protected static function reedHistorialApoointId_m($idHistorial){
-			$sql = mainModelo::conexion()->prepare('SELECT t.id, t.fecha, h.hora, s.nombre AS servicio FROM historial_detalle hd
+			$sqlF = mainModelo::conexion()->prepare("SET GLOBAL lc_time_names = 'es_ES'");
+			$sqlF -> execute();
+			$sql = mainModelo::conexion()->prepare("SELECT t.id, DATE_FORMAT(t.fecha, '%d de %b %Y') as fecha, h.hora, s.nombre AS servicio FROM historial_detalle hd
 				INNER JOIN tratamientos t
 				ON hd.tratamientos_id = t.id
 				INNER JOIN servicios s
 				ON t.servicios_id = s.id
 				INNER JOIN horas h
 				ON t.horas_id = h.id
-				WHERE historial_id =:id ORDER BY hd.id');
+				WHERE historial_id =:id ORDER BY hd.id");
 			$sql->bindParam(":id",$idHistorial);
 			$sql -> execute();
             if($sql -> rowCount() > 0){
@@ -160,11 +162,12 @@
 
 		protected static function reedListAppointment_m(){
 			// echo $tipo;
-			
+			$sqlF = mainModelo::conexion()->prepare("SET GLOBAL lc_time_names = 'es_ES'");
+			$sqlF -> execute();
 			// $idPaciente = $tipo ? $_SESSION['id'] : '';
 			// if($_SESSION['tipo'] == 4 || $_SESSION['tipo'] == 2){
 			if($_SESSION['tipo'] == 4 ){
-				$sql = mainModelo::conexion()->prepare("SELECT p.nombre AS usuario, c.fecha, c.id AS idcita, p.apellidos, p.celular, 
+				$sql = mainModelo::conexion()->prepare("SELECT p.nombre AS usuario, DATE_FORMAT(c.fecha, '%d de %b %Y') as fecha, c.id AS idcita, p.apellidos, p.celular, 
 					p.correo, h.hora, s.precio_venta, p.dni,s.nombre as cat, sg.nombre FROM tratamientos c
 					INNER JOIN persona p
 					ON p.id = c.paciente_id
@@ -179,7 +182,7 @@
 				$sql->bindParam(":iss",$_SESSION['id']);
 			}else{
 				$sql = mainModelo::conexion()->prepare("SELECT p.nombre AS usuario, p.apellidos, 
-					p.correo, p.dni, p.celular, c.fecha, c.id AS idcita,  
+					p.correo, p.dni, p.celular, DATE_FORMAT(c.fecha, '%d de %b %Y') as fecha, c.id AS idcita,  
 					h.hora, s.precio_venta, s.nombre as cat, sg.nombre FROM tratamientos c 
 					INNER JOIN persona p
 					ON p.id = c.paciente_id

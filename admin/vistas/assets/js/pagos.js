@@ -29,6 +29,7 @@ function verPagos(idUser){
     .then( r => r.json())
     .then( r => {
         pintarListaPagos(r)
+        document.getElementById('detallePago').innerHTML = ''
     })
 }
 function pintarListaPagos(r){
@@ -147,7 +148,11 @@ function updatePayUser(datosd){
     })
     .then( r => r.json())
     .then( r => {
+        console.log(r);
         if(r!=0){
+            $('#tablepagos').DataTable().destroy()
+            listarPagos()
+            document.getElementById('detallePago').innerHTML = ''
             clickModal.hide()
             pintarListaPagos(r)
             alertaToastify('Se guardo pago', 'green')

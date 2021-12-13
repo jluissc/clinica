@@ -209,9 +209,10 @@ function cambioServicio(servSelect){
 }
 function cambioCategoria(id){
     console.log(serviciosTemp);
-    categTemp = serviciosTemp.filter( ser => ser.id == id)
-    // console.log(a);
-    if(serviciosTemp.find(serv => serv.id == id && serv.consulta == 1)){
+    // categTemp = serviciosTemp.filter( ser => ser.id == id)
+    categTemp = Lcategorias.filter( cat => cat.s_id == id)
+    console.log(categTemp);
+    if(categTemp.find(serv => serv.consulta == 1)){
         console.log('encontrado');
         inp = `<input class="form-control" placeholder="Ingrese nombre para la cita" id="nameHistNew">`
         document.getElementById('historialNew').innerHTML = inp
@@ -220,7 +221,7 @@ function cambioCategoria(id){
         histNew=false
         historialTratamiento()
     }
-    // serviciosTemp.filter()
+    // serviciosTemp.filter()++++++++
     console.log(id);
     catSelecTempo = id
 

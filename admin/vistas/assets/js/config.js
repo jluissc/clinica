@@ -655,7 +655,7 @@ function resetInputCateg(){
     inp_precO_cat.value = ''
     inp_prectiem_cat.value = ''
     inp_prectiem_cat.disabled = false
-    inp_status_cat.value = 0
+    inp_status_cat.value = 1
     horasSeleccionadas = []
     tipAtencSeleccionadas = []
     diasSeleccionadas = []
