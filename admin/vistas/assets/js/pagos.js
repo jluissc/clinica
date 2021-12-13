@@ -156,6 +156,13 @@ function updatePayUser(datosd){
             clickModal.hide()
             pintarListaPagos(r)
             alertaToastify('Se guardo pago', 'green')
+            document.getElementById('dni').value = ''
+            document.getElementById('nombre').value = ''
+            document.getElementById('apellido').value = ''
+            document.getElementById('celular').value = ''
+            document.getElementById('correo').value = ''
+            document.getElementById('concetPay').value = ''
+            document.getElementById('firstPay').value = ''
         }else alertaToastify('Error al guardar pago')
     })
 }

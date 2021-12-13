@@ -218,6 +218,7 @@ function cambioCategoria(id){
         document.getElementById('historialNew').innerHTML = inp
     } 
     else {
+        console.log('aquiiiii');
         histNew=false
         historialTratamiento()
     }
@@ -301,6 +302,7 @@ function leerDniii(dni){
             inp_nombre.value = ''
             inp_apellido.value = ''
         }  
+        listHist = []
         historialTratamiento()      
 
     })

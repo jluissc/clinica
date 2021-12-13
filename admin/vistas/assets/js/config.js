@@ -328,8 +328,21 @@ function tipoModalServc(id){/* 0 abrir */
 function tipoModalCateg(id,tipo){/* id, ----- tipo 0 es nuevo, 1 crear */
     servSelec = id
     if (tipo) { /* Editar servicio */
-        datosCategoria(id)        
+        datosCategoria(id)   
+        document.getElementById('extra_info').innerHTML = ''   
     } else {/* Crear servicio */
+        document.getElementById('extra_info').innerHTML = `<label for="consult_type">¿CONSULTA?</label>
+        <select name="" id="consult_type">
+            <option value="0">NO</option>
+            <option value="1">SI</option>
+        </select>
+        <label for="cant_Time">Cant.Atenc/Tiempo</label>
+        <select name="" id="cant_Time">
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+        </select>`   
         resetInputCateg()
         btn = `<button type="button" class="btn btn-light-secondary" data-bs-dismiss="modal">
                 <i class="bx bx-x d-block d-sm-none"></i>
@@ -490,6 +503,10 @@ function tableCategoria(tipo){/* crear, editar, una categoria de un servicio gen
     datos.append('precO_cat',inp_precO_cat.value)
     datos.append('prectiem_cat',inp_prectiem_cat.value)
     datos.append('status_cat',inp_status_cat.value)
+
+    datos.append('consult_type',tipo ? 0 : document.getElementById('consult_type').value)
+    datos.append('cant_Time',tipo ? 0 : document.getElementById('cant_Time').value)
+
     datos.append('horasSelect',JSON.stringify(horasSeleccionadas))
     datos.append('tiposSelect',JSON.stringify(tipAtencSeleccionadas))   
     datos.append('diasSelect',JSON.stringify(diasSeleccionadas))   
@@ -501,6 +518,7 @@ function tableCategoria(tipo){/* crear, editar, una categoria de un servicio gen
     })
     .then( r => r.json())
     .then( r => {
+        console.log(r);
         if(r){
             listarServiciosss(r)
             !tipo ? alertaToastify('Servicio guardado','green') : alertaToastify('Servicio editado','green')

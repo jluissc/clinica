@@ -280,14 +280,14 @@
 				$sql->bindParam(":timme",$datos['prectiemserv']);
 				$sql -> execute();
 				if ($sql->rowCount()>0) {				
-					exit(json_encode(configModelo::listServics_m()));
+					exit(json_encode([configModelo::listServics_m(),configModelo::listaServGen_m()]));
 				} else {
-					exit(json_encode(configModelo::listServics_m()));
+					exit(json_encode(0));
 				}	
 			} else {	
 				$sql = $pdo->prepare('INSERT INTO `servicios`(`nombre`, `descripcion`, `precio_normal`, `precio_venta`, 
-					`estado`, `tiempo`,`servicio_general_id`)
-				VALUES(:nombre, :descr, :precnor, :precofer, :estado, :timme, :id_serv)');
+					`estado`, `tiempo`,`servicio_general_id`,`cant_atenc`,`consulta`)
+				VALUES(:nombre, :descr, :precnor, :precofer, :estado, :timme, :id_serv, :cant, :consul)');
 				$sql->bindParam(":nombre",$datos['nameserv']);	
 				$sql->bindParam(":descr",$datos['descripserv']);	
 				$sql->bindParam(":precnor",$datos['precNserv']);
@@ -295,6 +295,8 @@
 				$sql->bindParam(":estado",$datos['estado']);
 				$sql->bindParam(":timme",$datos['prectiemserv']);
 				$sql->bindParam(":id_serv",$datos['id_serv']);
+				$sql->bindParam(":cant",$datos['cant_Time']);
+				$sql->bindParam(":consul",$datos['consult_type']);
 				$sql -> execute();
 				if ($sql->rowCount()>0) {
 					return $pdo->lastInsertId();

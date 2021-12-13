@@ -177,6 +177,8 @@
 				'prectiemserv' => $_POST['prectiem_cat'],
 				'estado' => $_POST['status_cat'],
 				'tipo' => $_POST['tipo_cat'],
+				'consult_type' => $_POST['consult_type'],
+				'cant_Time' => $_POST['cant_Time'],
 				'id_serv' => $_POST['id_serv'],
 				// 'idServicEdit' => $_POST['id_serv'],
 			];			

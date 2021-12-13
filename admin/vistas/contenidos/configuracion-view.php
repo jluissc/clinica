@@ -203,6 +203,20 @@
                                             <option value="0">Inactivo</option>
                                         </select>
                                     </div>
+                                    <div class="form-group" id="extra_info">
+                                        <label for="consult_type">¿CONSULTA?</label>
+                                        <select name="" id="consult_type">
+                                            <option value="0">NO</option>
+                                            <option value="1">SI</option>
+                                        </select>
+                                        <label for="cant_Time">Cant.Atenc/Tiempo</label>
+                                        <select name="" id="cant_Time">
+                                            <option value="1">1</option>
+                                            <option value="2">2</option>
+                                            <option value="3">3</option>
+                                            <option value="4">4</option>
+                                        </select>
+                                    </div>
                                     <div class="form-group">
                                         <label for="prectiem_cat">Tiempo de atención</label>
                                         <input type="number" class="form-control" placeholder="Tiempo de atención" id="prectiem_cat" onchange="filtrarHours()">
