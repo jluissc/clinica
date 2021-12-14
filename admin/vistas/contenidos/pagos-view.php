@@ -1,4 +1,4 @@
-<?php if($_SESSION['tipo']==1 || in_array(7, $_SESSION['permisos']) ){  // ADMIN   
+<?php if($_SESSION['tipo']==1 || in_array(1, $_SESSION['permisos']) ){  // ADMIN   
     require_once './controladores/citaControlador.php';
     $inst = new citaControlador();
 ?>

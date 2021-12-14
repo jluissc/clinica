@@ -203,7 +203,8 @@
 		}
 		protected static function reedListHistorialAppointment_m(){
 			
-			if($_SESSION['tipo'] == 4 || $_SESSION['tipo'] == 2){
+			// if($_SESSION['tipo'] == 4 || $_SESSION['tipo'] == 2){
+			if($_SESSION['tipo'] == 4 ){
 				$sql = mainModelo::conexion()->prepare("SELECT p.nombre AS usuario,p.dni, p.apellidos, p.celular, p.correo, h.code, h.nombre AS nameC, h.id AS idHis  FROM historial h
 					INNER JOIN persona p
 					ON p.id = h.persona_id
