@@ -21,7 +21,7 @@
 <body>
 
     <!--====== Main App ======-->
-    <!-- <div id="app">	 -->
+    <div id="app">	
 	
 		<?php 
 			include "./view/inc/navBar.php"; 
@@ -32,14 +32,13 @@
 			require_once "./controller/vistasCController.php"; 			
 			$IV = new vistasCController();			
 			$vistas = $IV -> obtener_vistas_C();
-			// require_once 'inc/agregar_carrito_success.php';
-			include $vistas;			
+			include $vistas;
 		?>
 	
 		<?php 
 			include "./view/inc/footer.php"; 			
 		?>
-	<!-- </div> -->
+	</div>
 	<?php 
 		include "./view/inc/scrip.php"; 
 	?>

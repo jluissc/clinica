@@ -5,11 +5,10 @@
 				<div class="row">
 					<div class="col-xl-12">
 						<div class="slider_text ">
-							<h3> <span>Health care</span> <br>
-								For Hole Family </h3>
-							<p>In healthcare sector, service excellence is the facility of <br> the hospital as
-								healthcare service provider to consistently.</p>
-							<a href="#" class="boxed-btn3">Check Our Services</a>
+							<h3> <span>Terapia Física</span> <br>
+								</h3>
+							<p>La fisioterapia, a través de sus tratamientos,  <br> genera efectos positivos mejorando las dolencias <br>  relacionadas con estados de alteración</p>
+							<a href="#" class="boxed-btn3">Mirar más...</a>
 						</div>
 					</div>
 				</div>
@@ -20,17 +19,19 @@
 				<div class="row">
 					<div class="col-xl-12">
 						<div class="slider_text ">
-							<h3> <span>Health care</span> <br>
-								For Hole Family </h3>
-							<p>In healthcare sector, service excellence is the facility of <br> the hospital as
-								healthcare service provider to consistently.</p>
-							<a href="#" class="boxed-btn3">Check Our Services</a>
+							<h3> <span>Odontología</span> <br>
+								<!-- For Hole Family --> </h3>
+							<p>una especialidad odontológica que se encarga de solucionar <br>
+								aquellos problemas primarios que afectan a la boca:  <br>
+								los dientes, las encías, el maxilar superior e inferior  <br>
+								y la articulación temporomandibular.</p>
+							<a href="#" class="boxed-btn3">Mirar más...</a>
 						</div>
 					</div>
 				</div>
 			</div>
 		</div>
-		<div class="single_slider  d-flex align-items-center slider_bg_2">
+		<!-- <div class="single_slider  d-flex align-items-center slider_bg_2">
 			<div class="container">
 				<div class="row">
 					<div class="col-xl-12">
@@ -44,7 +45,7 @@
 					</div>
 				</div>
 			</div>
-		</div>
+		</div> -->
 	</div>
 </div>
 <div class="Emergency_contact">
@@ -57,7 +58,7 @@
                             <p>Esteem spirit temper too say adieus.</p>
                         </div>
                         <div class="info_button">
-                            <a href="#" class="boxed-btn3-white">+10 378 4673 467</a>
+                            <a href=" <?php echo SERVERURL ?>terapia" class="boxed-btn3-white">Mirar más...</a>
                         </div>
                     </div>
                 </div>
@@ -68,7 +69,7 @@
                             <p>Esteem spirit temper too say adieus.</p>
                         </div>
                         <div class="info_button">
-                            <a href="#" class="boxed-btn3-white">Make an Appointment</a>
+                            <a href=" <?php echo SERVERURL ?>odontologia" class="boxed-btn3-white">Mirar más...</a>
                         </div>
                     </div>
                 </div>

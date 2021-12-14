@@ -32,7 +32,7 @@
                     <div class="row align-items-center">
                         <div class="col-xl-3 col-lg-2">
                             <div class="logo">
-                                <a href="index.html">
+                                <a href="<?php echo SERVERURL?>">
                                     logo
                                     <!-- <img src="<?php echo SERVERURL ?>view/img/logo.png" alt=""> -->
                                 </a>
@@ -42,16 +42,16 @@
                             <div class="main-menu  d-none d-lg-block">
                                 <nav>
                                     <ul id="navigation">
-                                        <li><a class="active" href="<?php echo SERVERURL?>">Inicio</a></li>
+                                        <li><a href="<?php echo SERVERURL?>" >Inicio</a></li>
                                         <li><a href="#">Servicios <i class="ti-angle-down"></i></a>
                                             <ul class="submenu">
-                                                <li><a href="blog.html">Terapia Física</a></li>
-                                                <li><a href="single-blog.html">Odontología</a></li>
+                                                <li><a href="<?php echo SERVERURL ?>terapia">Terapia Física</a></li>
+                                                <li><a href="<?php echo SERVERURL ?>odontologia">Odontología</a></li>
                                             </ul>
                                         </li>
-                                        <li><a href="Department.html">Testimonios</a></li>
-                                        <li><a href="Department.html">Nosotros</a></li>
-                                        <li><a href="contact.html">Contactos</a></li>
+                                        <!-- <li><a href="Department.html">Testimonios</a></li> -->
+                                        <li><a href="<?php echo SERVERURL ?>nosotros">Nosotros</a></li>
+                                        <li><a href="<?php echo SERVERURL ?>contactos">Contactos</a></li>
                                         <!-- <li><a href="#">pages <i class="ti-angle-down"></i></a>
                                             <ul class="submenu">
                                                 <li><a href="elements.html">elements</a></li>
