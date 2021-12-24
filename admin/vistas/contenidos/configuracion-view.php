@@ -1,12 +1,12 @@
 <?php if($_SESSION['tipo']==1){ ?><!-- ADMIN -->
     <?php  
-        require_once './controladores/configControlador.php';
-        $inst = new configControlador();
-        $datos = $inst->datosEmpresa();
+        // require_once './controladores/configControlador.php';
+        // $inst = new configControlador();
+        // $datos = $inst->datosEmpresa();
     ?>
     <section class="row">
         <div class="page-heading">
-            <h3>CONFIGURACIÓN GENERAL DE CITAS, PERMISO, EMPRESA, </h3>
+            <h3>CONFIGURACIÓN GENERAL DE SERVICIOS GENERAL Y POR CATEGORIA, PERMISOS </h3>
         </div>
         <div class="col-12 col-lg-12">
             <div class="row">
@@ -71,16 +71,13 @@
                     </div>
                 </div>
                 
-                <div class="col-6 col-lg-6 col-md-6" >
+                <!-- <div class="col-6 col-lg-6 col-md-6" >
                     <div class="card">
                         <div class="card-header">
                             <h4 class="card-title">Empresa</h4>
                         </div>
                         <div class="card-content">
                             <div class="card-body">
-                                <!--  -->
-                                
-                                <!--  -->
                                 <div class="row">
                                     <div class="col-6">
                                         <label> NOMBRE EMPRESA:</label>
@@ -119,14 +116,10 @@
                                         </div>
                                     </div>
                                 </div>
-                                <!--  -->
                             </div>
                         </div>
-                        <!-- <div class="card-footer">
-                            <input type="button" value="Editar Datos" class="btn btn-outline-success">
-                        </div> -->
                     </div>
-                </div>
+                </div> -->
                
             </div>
         </div>
@@ -363,8 +356,6 @@
             </div>
         </div>
     </div>
-
-
 
     <!-- PERMISOS USERS -->
     <div class="modal fade text-left" id="large2" tabindex="-1" role="dialog"

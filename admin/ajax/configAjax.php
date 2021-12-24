@@ -10,7 +10,7 @@
 	isset($_POST['cita_idCitaC']) || isset($_POST['permisosTemp']) || 
 	isset($_POST['user_idPerm']) || isset($_POST['idServiConf']) || 
 	isset($_POST['idServiciD']) || isset($_POST['serv_addEdit']) || 
-	isset($_POST['userUpdate']) ||  
+	isset($_POST['userUpdate']) ||  isset($_POST['empresa']) || isset($_POST['empresaUpdate']) || 
 	isset($_POST['datosCateg']) || isset($_POST['user']) ) {
 		
 		require_once '../controladores/configControlador.php';
@@ -20,8 +20,15 @@
 		if (isset($_POST['user'])) {
 			$inst -> datosUser();
 		}
+		// datos empresa
+		if (isset($_POST['empresa'])) {
+			$inst -> datosEmpresa();
+		}
 		if (isset($_POST['userUpdate'])) {
 			$inst -> updateDatos();
+		}
+		if (isset($_POST['empresaUpdate'])) {
+			$inst -> updateEmpresa();
 		}
 		// add and edit servics general
 		if (isset($_POST['serv_addEdit'])) {

@@ -30,12 +30,32 @@
 				exit(json_encode(0));
 			}			
 		}
+		protected static function updateEmpresa_m($datos){
+			$empresa = json_decode($datos);
+			// session_start(['name' => 'bot']);
+			$sql = mainModelo::conexion()->prepare("UPDATE sede SET nombre =:nombre, email=:email, 
+				telefono =:telefono, direccion =:direccion, facebook =:facebook, instagram =:instagram WHERE id =1");
+			$sql->bindParam(":nombre",$empresa->nombre_emp);
+			$sql->bindParam(":email",$empresa->correo_emp);
+			$sql->bindParam(":telefono",$empresa->cel1_emp);
+			$sql->bindParam(":direccion",$empresa->address_emp);
+			$sql->bindParam(":facebook",$empresa->face_emp);
+			$sql->bindParam(":instagram",$empresa->inst_emp);
+			$sql -> execute();
+			if ($sql->rowCount()>0) {
+				$sql = null;		
+				exit(json_encode(1));	
+			} else {
+				$sql = null;
+				exit(json_encode(0));
+			}			
+		}
 		protected static function datosEmpresa_m(){
 			$sql = mainModelo::conexion()->prepare("SELECT * FROM `sede`");
 			$sql -> execute();
 			$servics = $sql->fetch(PDO::FETCH_OBJ);
 			$sql = null;		
-			return $servics;
+			exit(json_encode($servics));	
 		}
 		protected static function listarHoraAtencion_m(){
 			session_start(['name' => 'bot']);

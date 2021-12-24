@@ -116,10 +116,14 @@ function validarDni(){
     .then( r => r.json())
     .then( r => {       
         idUserT = r.user.id
-        document.getElementById('nombre').value = r.user.nombre
-        document.getElementById('apellido').value = r.user.apellidos
-        document.getElementById('celular').value = r.user.celular
-        document.getElementById('correo').value = r.user.correo
+        document.getElementById('nombre').value = r.user.nombre        
+        document.getElementById('apellido').value = r.user.apellidos        
+        document.getElementById('celular').value = r.user.celular        
+        document.getElementById('correo').value = r.user.correo  
+        document.getElementById('nombre').disabled = true
+        document.getElementById('apellido').disabled = true
+        document.getElementById('celular').disabled = true
+        document.getElementById('correo').disabled = true
     })
 }
 function verificarPag(){

@@ -13,9 +13,13 @@
 		public function updateDatos(){
 			configModelo::updateDatos_m($_POST['userUpdate']);
 		  }	
+		public function updateEmpresa(){
+			configModelo::updateEmpresa_m($_POST['empresaUpdate']);
+		  }	
 		public function datosEmpresa(){
-			$dates = configModelo::datosEmpresa_m();
-			return $dates;
+			configModelo::datosEmpresa_m();
+			// $dates = configModelo::datosEmpresa_m();
+			// return $dates;
 		  }	
 		public function addEditServics() {
 			$datosServ = [
