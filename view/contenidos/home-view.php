@@ -76,3 +76,12 @@
             </div>
         </div>
     </div> 
+
+	<div>
+		<div class="text-center" style="">
+			
+			<h2 style="color:red;font-size: 150px;">hola angel </h2>
+		</div>
+
+		<img src="https://www.imgltda.com/wpwsimg/wp-content/uploads/2020/07/letras-y-mundo-1-300x280.png" alt="">
+	</div>

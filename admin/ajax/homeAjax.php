@@ -5,7 +5,8 @@
 	require_once '../config/app.php';
 
 	if (isset($_POST['idAppoint']) || isset($_POST['savedetaTrat'])
-	|| isset($_POST['user']) || isset($_POST['userUpdate'])) {
+	|| isset($_POST['user']) || isset($_POST['userUpdate'])
+	|| isset($_POST['id_estd'])) {
 		
 		require_once '../controladores/homeControlador.php';
 		$inst = new homeControlador();
@@ -23,6 +24,9 @@
 		}
 		if (isset($_POST['userUpdate'])) {
 			echo $inst -> updateDatosExtra();
+		}
+		if (isset($_POST['id_estd'])) {
+			echo $inst -> showInpEstad();
 		}
 
 	} else {

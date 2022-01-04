@@ -170,7 +170,7 @@
                                 <th  class="col-sm-1">Correo</th>
                                 <th  class="col-sm-2">Celular</th> 
                                 <th  class="col-sm-2">Cita Nombre</th> 
-                                <th  class="col-sm-1">Cita Codigo</th> 
+                                <!-- <th  class="col-sm-1">Cita Codigo</th>  -->
                                 <th  class="col-sm-2">Acciones</th>
                             </tr>
                         </thead>

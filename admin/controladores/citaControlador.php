@@ -146,10 +146,11 @@
 				array_push($datos,[
 					'nombre' => $nn,
 					'dni' => $appoint->dni,
-					'correo' => $appoint->correo,
+					// 'correo' => $appoint->servG.'::'.$appoint->cat,
+					'correo' => $appoint->servG,
 					'celular' => $appoint->celular,
 					'name' => $appoint->nameC,
-					'code' => $appoint->code,
+					// 'code' => $appoint->code,
 					'acciones' => $acciones,
 				]);
 			}

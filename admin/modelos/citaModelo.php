@@ -205,16 +205,34 @@
 			
 			// if($_SESSION['tipo'] == 4 || $_SESSION['tipo'] == 2){
 			if($_SESSION['tipo'] == 4 ){
-				$sql = mainModelo::conexion()->prepare("SELECT p.nombre AS usuario,p.dni, p.apellidos, p.celular, p.correo, h.code, h.nombre AS nameC, h.id AS idHis  FROM historial h
-					INNER JOIN persona p
-					ON p.id = h.persona_id
+				$sql = mainModelo::conexion()->prepare("SELECT DISTINCT p.id , p.nombre AS usuario,p.dni, p.apellidos, p.celular, p.correo, h.code, h.nombre AS nameC, h.id AS idHis , sg.nombre as servG, c.nombre as cat FROM historial h 
+				INNER JOIN persona p
+				ON p.id = h.persona_id
+				INNER JOIN tratamientos t
+				ON t.paciente_id = p.id
+				INNER JOIN servicios c
+				ON c.id = t.servicios_id
+				INNER JOIN servicio_general sg
+				ON sg.id = c.servicio_general_id
 					WHERE p.id=:iss
 					ORDER BY h.id DESC");
 				$sql->bindParam(":iss",$_SESSION['id']);
 			}else{
-				$sql = mainModelo::conexion()->prepare("SELECT p.nombre AS usuario,p.dni, p.apellidos, p.celular, p.correo, h.code, h.nombre AS nameC, h.id AS idHis FROM historial h 
+				// $sql = mainModelo::conexion()->prepare("SELECT p.nombre AS usuario,p.dni, p.apellidos, p.celular, 
+				// 	p.correo, h.code, h.nombre AS nameC, h.id AS idHis FROM historial h 
+				// 	INNER JOIN persona p
+				// 	ON p.id = h.persona_id
+				// 	ORDER BY h.id DESC");
+				$sql = mainModelo::conexion()->prepare("SELECT DISTINCT p.id , p.nombre AS usuario,p.dni, p.apellidos, p.celular, 
+					p.correo, h.code, h.nombre AS nameC, h.id AS idHis, sg.nombre as servG, c.nombre as cat FROM historial h 
 					INNER JOIN persona p
 					ON p.id = h.persona_id
+					INNER JOIN tratamientos t
+					ON t.paciente_id = p.id
+					INNER JOIN servicios c
+					ON c.id = t.servicios_id
+					INNER JOIN servicio_general sg
+					ON sg.id = c.servicio_general_id
 					ORDER BY h.id DESC");
 			}
 			$sql -> execute();
@@ -222,6 +240,14 @@
 			$sql = null;
 			return $resutl;
 		}
+		// jjhjhj 
+		// jjkjkj 
+		// jkj 
+		// kjk 
+		// kjkj 
+		// kj  kjk
+		// kjkkj jhjhjh hjhjhjhj hjhj 
+		 
 
 		protected static function verificarFecha_m($fecha){
 			$sql = mainModelo::conexion()->prepare('SELECT id, fecha, horas_id FROM citas WHERE fecha = "'.$fecha.'"');

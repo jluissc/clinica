@@ -75,6 +75,10 @@
       $datos = json_decode($_POST['userUpdate']);
       homeModelo::updateDatosExtra_m($datos);
     }	
+    public function showInpEstad(){
+      // $datos = json_decode($_POST['userUpdate']);
+      homeModelo::showInpEstad_m($_POST['id_estd']);
+    }	
     public function datosUserExtra(){
       homeModelo::datosUserExtra_m();
     }	

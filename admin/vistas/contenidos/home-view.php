@@ -76,6 +76,10 @@
                                         <?php 
                                             echo 'S/. '.  ($datos['pay'] ? $datos['pay'] : 0);
                                         ?>
+                                        <br>
+                                        <a href="#" onclick="showEstadEntr()">
+                                            Ver estadistica
+                                        </a>
                                     </h6>
                                 </div>
                             </div>
@@ -229,8 +233,41 @@
             </div>
         </div>
     </div>
+    <div class="modal fade text-left" id="modalEstadEntrada" tabindex="-1" role="dialog"
+        aria-labelledby="myModalLabel17" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl"
+            role="document">
+            <div class="modal-content" >
+                <div class="modal-header">
+                    <h4 class="modal-title" id="myModalLabel17">Crear Usuario y permisos</h4>
+                    <button type="button" class="close" data-bs-dismiss="modal"
+                        aria-label="Close">
+                        <i data-feather="x"></i>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-12 col-lg-12 col-md-12">
+                                                
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer" id="btns_pagos">
+                    <button type="button" class="btn btn-light-secondary"
+                        data-bs-dismiss="modal">
+                        <i class="bx bx-x d-block d-sm-none"></i>
+                        <span class="d-none d-sm-block">Cancelar</span>
+                    </button>
+                    <button type="button" class="btn btn-primary ml-1 "  onclick="updateDatosExtra()">
+                        <i class="bx bx-check d-block d-sm-none"></i>
+                        <span class="d-none d-sm-block">Guardar</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
     <div class="modal fade text-left" id="UserExtra" tabindex="-1" role="dialog"
-    aria-labelledby="myModalLabel17" aria-hidden="true">
+        aria-labelledby="myModalLabel17" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg"
             role="document">
             <div class="modal-content" >

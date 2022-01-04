@@ -71,7 +71,7 @@ function leerListaHistorial(){
             {"data": "correo"},
             {"data": "celular"},
             {"data": "name"},
-            {"data": "code"},
+            // {"data": "code"},
             {"data": "acciones"},
         ],
         "language": {
@@ -88,11 +88,8 @@ function leerCondicionesAtencion(){
     })
     .then( r => r.json())
     .then( r => {
-        console.log(r);
-        console.log(r.hisTrat); /* jalar de aqui su historial de un usuario */
         hisTrat = r.hisTrat
         hisTrat2 = r.hisTrat
-        console.log(r.tipoUser);
         tipoUsuario = r.tipoUser
         
         idUser = r.idUser
@@ -124,52 +121,9 @@ function filtrarServics(listServi){
             Lservicios.push(serv)
         }
     });
-    // console.log(listServi);
-        // listServi.forEach(servicio => {
-        //     if(Lservicios.some( servInt => servInt.id == servicio.sg_id)){
-        //         const usersInt = Lservicios.map( servInt => {
-        //             if( servInt.id == servicio.sg_id ) {
-        //                 servInt.categorias.push({ 
-        //                     'id': servicio.s_id,  
-        //                     'nombre': servicio.cat,  
-        //                     'descripcion': servicio.descripcion,  
-        //                     'precio_normal': servicio.precio_normal,  
-        //                     'precio_venta': servicio.precio_venta,  
-        //                     'estado': servicio.s_est,  
-        //                     'tiempo': servicio.tiempo,  
-        //                     'consulta': servicio.consulta,  
-        //                     'cant_atenc': servicio.cant_atenc,  
-        //                 })
-        //                 return servInt;
-        //             } 
-        //             else return servInt;
-        //         })
-        //         Lservicios = [...usersInt];
-        //     }else{
-        //         id_cat = servicio.s_id ? servicio.s_id : 0 /* si es no existe categorias del servicio */
-        //         Lservicios.push({
-        //             'id': servicio.sg_id, 
-        //             'nombre': servicio.serv, 
-        //             'estado': servicio.sg_est,                     
-        //             'categorias' : [{ 
-        //                 'id': id_cat,  
-        //                 'nombre': servicio.cat,  
-        //                 'descripcion': servicio.descripcion,  
-        //                 'precio_normal': servicio.precio_normal,  
-        //                 'precio_venta': servicio.precio_venta,  
-        //                 'estado': servicio.s_est,  
-        //                 'tiempo': servicio.tiempo, 
-        //                 'consulta': servicio.consulta,   
-        //                 'cant_atenc': servicio.cant_atenc,  
-        //             }]
-        //         }, 
-        //         );      
-        //     }
-        // });
     mostrarListaServicios()
 }
 function mostrarListaServicios(){
-    console.log(Lservicios);
     listS = '<option value="0" >SELECCIONE</option>'
     Lservicios.forEach(servic => {
         listS +=`<option value="${servic.id}" >${servic.nombre}</option>`
@@ -177,19 +131,8 @@ function mostrarListaServicios(){
     selectServGe.innerHTML = listS
 }
 function cambioServicio(servSelect){
-    console.log(servSelect);
     serviciosTemp = []
     servSelecTempo = servSelect
-    console.log(servSelect);
-    // Lservicios.filter( serv => {
-    //     if(serv.id == servSelect ){
-    //         serv.categorias.forEach(element => {
-    //             serviciosTemp.push(element)
-    //         });
-    //     }
-    //     return serviciosTemp
-    // }) 
-    console.log(serviciosTemp);
     if(servSelect != 0){
         li = `<label>SELECCIONE CATEGORIA: </label>
             <fieldset class="form-group">
@@ -208,22 +151,15 @@ function cambioServicio(servSelect){
     }
 }
 function cambioCategoria(id){
-    console.log(serviciosTemp);
-    // categTemp = serviciosTemp.filter( ser => ser.id == id)
     categTemp = Lcategorias.filter( cat => cat.s_id == id)
-    console.log(categTemp);
     if(categTemp.find(serv => serv.consulta == 1)){
-        console.log('encontrado');
         inp = `<input class="form-control" placeholder="Ingrese nombre para la cita" id="nameHistNew">`
         document.getElementById('historialNew').innerHTML = inp
     } 
     else {
-        console.log('aquiiiii');
         histNew=false
         historialTratamiento()
     }
-    // serviciosTemp.filter()++++++++
-    console.log(id);
     catSelecTempo = id
 
 }
@@ -246,7 +182,6 @@ function validarDni(){
         .then( r => r.json())
         .then( r => {        
             if(r != 0){
-                console.log(r);
                 inp_nombre.value = r.user.nombre
                 inp_apellido.value = r.user.apellidos
                 inp_celular.value = r.user.celular
@@ -265,7 +200,6 @@ function validarDni(){
     } else alertaToastify('Dni incompleto')
 }
 function historialTratamiento(){
-    console.log(tipoUsuario);
     if(tipoUsuario == 4){
         div ='Escoge su codigo si continuara un tratamiento<div class="container btn-group"  aria-label="Basic radio toggle button group">'
             hisTrat2.forEach(hist => {
@@ -288,7 +222,7 @@ function historialTratamiento(){
     document.getElementById('historialNew').innerHTML = div
 }
 function leerDniii(dni){
-    console.log(dni);
+    // console.log(dni);
     // urlApi=`https://dniruc.apisperu.com/api/v1/dni/${dni}?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6Impsc2MuaGNvOTZAZ21haWwuY29tIn0.ysxMDCaGlMQRJen3msmMcniIx_Q-nuhjXjQ4RNkP31o`;
     urlApi=`https://dniruc.apisperu.com/api/v1/dni/${dni}?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6InBlcGJvdC5wZUBnbWFpbC5jb20ifQ.8dxeu7zAz1x7u3S29WytfSuybE9fdPg_T8-kW087Mqw`;
     fetch(urlApi)
@@ -331,10 +265,6 @@ function verificarFecha(dia, mes, anio){
     
 }
 function buscarCitasReservadas(dia,diaSelect){
-    console.log(dia);
-    console.log(diaSelect);
-    console.log(catSelecTempo);
-    console.log(servSelecTempo);
     DATOS = new FormData()
     DATOS.append('fechaCita', dia)
     DATOS.append('diaSelectsss', diaSelect)
@@ -347,33 +277,24 @@ function buscarCitasReservadas(dia,diaSelect){
     })
     .then( r => r.json())
     .then( r => {   
-        console.log(r);
         if(r.diaDisponi != 0){
             if(r.tipoCita != 0){
-
                 a = []
-                r.diaDisponi.forEach( dia => {
-                    if(r.tipoCita.find(tip => dia.tipo_atencion == tip.tipo_cita_id)){
-                        disponi = r.tipoCita.filter(tip => dia.tipo_atencion == tip.tipo_cita_id)
-                        a.push(disponi)         
-                    }
-                })
-                console.log(a);
-                if(a.length > 0){
-                    console.log(disponi);
+                disponi = []
+                r.tipoCita.forEach(type => {
+                    if(r.diaDisponi.find(dia => dia.tipo_atencion == type.tipo_cita_id)) disponi.push(type)
+                });
+                if(disponi.length > 0){
                     list = ''
-                    LcitasAtencion.forEach((tipo,index) => {
-                        if(disponi.find(type => type.tipo_cita_id == tipo.id)){
+                    LcitasAtencion.forEach((tipo,index) => {                        
+                        if(disponi.find(type => type.tipo_cita_id == tipo.id)){   
                             list +=`<input type="radio" class="btn-check" name="tipoCitaUs" id="${tipo.nombre}" value="${tipo.id}">
                             <label class="btn btn-outline-success" for="${tipo.nombre}">${tipo.nombre}</label>`
                         }
                     });
+                    
                     document.getElementById('tipocitaSelect').innerHTML = list
-
-                    /* dddddddddddd */
-                    horasFinal = r.horas
-
-                    console.log(horasFinal);
+                    horasFinal = r.horas                    
                     if (Lcategorias.find(cat => cat.s_id == catSelecTempo)) {
                         Lcategorias.forEach(categ => {
                             if(categ.s_id == catSelecTempo){
@@ -407,8 +328,7 @@ function buscarCitasReservadas(dia,diaSelect){
                                                 })
                                             }
                                         });
-                                    } 
-                                    console.log(citas);
+                                    }                                     
                                     tb = '<div class="row text-center ">'
                                     horasFinal.forEach((hour,index) => {
                                         estado = citas.find(cit => cit.id == hour.id && cit.cant == categ.cant_atenc) ? 'disabled' : ''
@@ -418,35 +338,13 @@ function buscarCitasReservadas(dia,diaSelect){
                                             </div>`                        
                                     });
                                 }
-                            }
-                            
+                            }                            
                         });
                     } 
-                    
-                    // else{
-                    //     tb = '<div class="row text-center ">'
-                    //     horasFinal.forEach((hour,index) => {
-                    //         tb +=`<div class="col-6 col-md-6 col-lg-4 hora-cita">
-                    //                 <input type="radio" class="btn-check" name="horaAtenUs" id="${index}" value="${hour.id}" >
-                    //                 <label class="btn btn-outline-success" for="${index}">${hour.hora}</label>
-                    //             </div>`                        
-                    //     });
-                    // }
                     tb += '</div>'
                     
                     document.getElementById('horasDisponibles').innerHTML = tb
-                    // tb = '<div class="row text-center ">'
-                    // r.horas.forEach((hour,index) => {
-                    //     tb +=`<div class="col-6 col-md-6 col-lg-4 hora-cita">
-                    //             <input type="radio" class="btn-check" name="horaAtenUs" id="${index}" value="${hour.id}" >
-                    //             <label class="btn btn-outline-success" for="${index}">${hour.hora}</label>
-                    //         </div>`                        
-                    // });
-                    // document.getElementById('horasDisponibles').innerHTML = tb
-
-                }else{
-                    alertaToastify('error aaa')
-                }
+                }else alertaToastify('error aaa')
             }else alertaToastify('Dia no disponibles, escoge otro dia por favor')
         }else alertaToastify('Dia no disponibles, escoge otro dia por favor')
         
@@ -457,7 +355,6 @@ function validarCita(){
     tipoAtSelecTemp = document.querySelector('input[name="tipoCitaUs"]:checked')
     horaAtSelecTemp = document.querySelector('input[name="horaAtenUs"]:checked')
     nameHistNew = document.getElementById('nameHistNew')
-    // usuario = tipoUsuario == 2 || tipoUsuario == 4 ? idUser : {
     usuario = tipoUsuario == 4 ? idUser : {
             dni : parseInt(inp_dni.value),
             nombre : inp_nombre.value,
@@ -466,27 +363,25 @@ function validarCita(){
             correo : inp_correo.value,
         }
     if(servSelecTempo){        
-        if(catSelecTempo){        
-            // if(histSelecTempo){        
-                if(fechaSelecionada != ''){        
-                    if(tipoAtSelecTemp) {
-                        if(horaAtSelecTemp) {
-                            datos = {
-                                histSelec : histSelecTempo ? histSelecTempo.value : nameHistNew.value,
-                                histSelecE : histSelecTempo ? 'old' : 'new',
-                                catSelec : catSelecTempo,
-                                userSelec : pacienteId ? pacienteId : usuario,
-                                userSelecE : pacienteId ? 'old' : (tipoUsuario == 4 ? 'old' : 'new'),
-                                tipoAtSelec : tipoAtSelecTemp ? tipoAtSelecTemp.value : 0,
-                                horaAtSelec : horaAtSelecTemp ? horaAtSelecTemp.value : 0,
-                                fechaSelec : fechaSelecionada,
-                            }
-                            guardarCita(datos)
-                            // console.log(datos); 
-                        } else  alertaToastify('Escoge la hora de atención')
-                    } else alertaToastify('Escoge el tipo de atención')
-                } else alertaToastify('Escoge un día habil')
-            // } else alertaToastify('Escoge un historial anterior')
+        if(catSelecTempo){             
+            if(fechaSelecionada != ''){        
+                if(tipoAtSelecTemp) {
+                    if(horaAtSelecTemp) {
+                        datos = {
+                            histSelec : histSelecTempo ? histSelecTempo.value : nameHistNew.value,
+                            histSelecE : histSelecTempo ? 'old' : 'new',
+                            catSelec : catSelecTempo,
+                            userSelec : pacienteId ? pacienteId : usuario,
+                            userSelecE : pacienteId ? 'old' : (tipoUsuario == 4 ? 'old' : 'new'),
+                            tipoAtSelec : tipoAtSelecTemp ? tipoAtSelecTemp.value : 0,
+                            horaAtSelec : horaAtSelecTemp ? horaAtSelecTemp.value : 0,
+                            fechaSelec : fechaSelecionada,
+                        }
+                        guardarCita(datos)
+                        // console.log(datos); 
+                    } else  alertaToastify('Escoge la hora de atención')
+                } else alertaToastify('Escoge el tipo de atención')
+            } else alertaToastify('Escoge un día habil')
         }else alertaToastify('Escoge la categoria')
     }else alertaToastify('Escoge el servicio')
 }
@@ -499,20 +394,15 @@ function guardarCita(datos){
     })
     .then( r => r.json())
     .then( r => {  
-        console.log(r);
         if(r == 1){
             alertaToastify('Se grabo tu reserva','green',1500) 
-            usuario = tipoUsuario == 2 || tipoUsuario == 4 ? 'ok' : limpiarInpTrat()
-            
+            usuario = tipoUsuario == 2 || tipoUsuario == 4 ? 'ok' : limpiarInpTrat()            
             selectServGe.value = 0
             fechaSelecionada = ''
             document.getElementById('tipocitaSelect').innerHTML = ''
             document.getElementById('horasDisponibles').innerHTML = ''
             document.getElementById('historialNew').innerHTML = ''
             listHist = []
-            // setTimeout(() => {
-            //     location.reload()
-            // }, 2000);
             $('#tbl_tratam').DataTable().destroy()
             leerListaTratamientos()
             $('#table2').DataTable().destroy()
@@ -575,9 +465,6 @@ function validarTRansfern(idAppointPay){
     .then( result => {
         if(result == 1){
             alertaToastify('Se verifico transferencia', 'green')
-            // setTimeout(() => {
-            //     location.reload()
-            // }, 2000);
             $('#tbl_tratam').DataTable().destroy()
             leerListaTratamientos()
         }else{
@@ -586,8 +473,7 @@ function validarTRansfern(idAppointPay){
     })
 }
 function payDirect(idAppointPay){
-    document.getElementById(`pagoDirecto_${idAppointPay}`).checked = false
-    
+    document.getElementById(`pagoDirecto_${idAppointPay}`).checked = false   
 
     Swal.fire({
         title: 'Ingrese el monto de pago S/. ',
@@ -616,22 +502,15 @@ function payDirect(idAppointPay){
                     alertaToastify('Se guardo el pago', 'green',2000)
                     Swal.fire({
                         title: `Se guardo el pago`,
-                        // imageUrl: result.value.avatar_url
-                        })
-                        
-                    // setTimeout(() => {
-                    //     location.reload()
-                    // }, 1000);
+                    })
                     $('#tbl_tratam').DataTable().destroy()
                     leerListaTratamientos()
                 }else{
-
+                    console.log('mira aqui!!!');
                 }
             })
         }
     })
-    
-    
 }
 function mandarDatosPago(){
     numb_pay = document.getElementById('numbTrans').value
@@ -653,9 +532,6 @@ function mandarDatosPago(){
                 .then(result => {
                     if(result){
                         alertaToastify('Se mando tus datos de transferencia','green')
-                        // setTimeout(() => {
-                        //     location.reload()
-                        // }, 1500);
                         $('#tbl_tratam').DataTable().destroy()
                         leerListaTratamientos()
                     }

@@ -80,6 +80,27 @@
 			}
 				
 		}
+		protected static function showInpEstad_m($id){
+			$sql = mainModelo::conexion()->prepare("SELECT DATE(tp.fecha) as fecha, SUM(tp.total) as total, cat.nombre, 
+				cat.id  FROM tratamiento_pagos tp
+				INNER JOIN tratamientos t 
+				ON t.id = tp.tratamientos_id
+				INNER JOIN servicios cat
+				ON cat.id = t.servicios_id
+				
+				WHERE cat.servicio_general_id = :id
+				GROUP BY DATE(tp.fecha), cat.nombre");
+            // $sql->bindParameters(':fecha',$fechaActual);
+            $sql->bindParam(":id",$id);
+			$sql -> execute();
+			if($sql->rowCount() > 0){
+				$datos = $sql->fetchAll(PDO::FETCH_OBJ);
+				exit(json_encode($datos));
+			}else{
+				exit(json_encode(0));
+			}
+				
+		}
 
 		protected static function readAppointmentNexts_m(){
 			$idPaciente = $_SESSION['id'];
