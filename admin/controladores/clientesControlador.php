@@ -44,20 +44,27 @@
 		}
 
 		public function insertAppoint(){
-			$datos= [
-
-				'dni_appoint' => $_POST['dni_appoint'],
-				'name_appoint' => $_POST['name_appoint'],
-				'last_appoint' => $_POST['last_appoint'],
-				'celphone_appoint' => $_POST['celphone_appoint'],
-				'email_appoint' => $_POST['email_appoint'],
-				'addres_appoint' => $_POST['addres_appoint'],
-				'idAppoint' => intval($_POST['idAppoint']),
-				'pass' => mainModelo::encryption($_POST['dni_appoint']),
-				'tipo' => 4,
-				'estado' => 1,
-			];
-			clienteModelo::insertAppoint_m($datos);
+			$name_appoint = mainModelo::limpiar_cadena($_POST['name_appoint']);
+			$last_appoint = mainModelo::limpiar_cadena($_POST['last_appoint']);
+			$email_appoint = mainModelo::limpiar_cadena($_POST['email_appoint']);
+			if(strlen($name_appoint)>0){
+				if(strlen($last_appoint)>0){
+					$datos= [
+						'dni_appoint' => $_POST['dni_appoint'],
+						'name_appoint' => $name_appoint,
+						'last_appoint' => $last_appoint,
+						'celphone_appoint' => $_POST['celphone_appoint'],
+						'email_appoint' => $email_appoint,
+						'addres_appoint' => $_POST['addres_appoint'],
+						'idAppoint' => intval($_POST['idAppoint']),
+						'pass' => mainModelo::encryption($_POST['dni_appoint']),
+						'tipo' => 4,
+						'estado' => 1,
+					];
+					clienteModelo::insertAppoint_m($datos);
+				}else exit(json_encode([0,'Apellidos incorrecto']));
+			}else exit(json_encode([0,'Nombre incorrecto']));
+			
 			// exit(json_encode($idCustomer));
 		}
 	}

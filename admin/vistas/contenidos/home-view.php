@@ -77,9 +77,9 @@
                                             echo 'S/. '.  ($datos['pay'] ? $datos['pay'] : 0);
                                         ?>
                                         <br>
-                                        <a href="#" onclick="showEstadEntr()">
+                                        <!-- <a href="#" onclick="showEstadEntr()">
                                             Ver estadistica
-                                        </a>
+                                        </a> -->
                                     </h6>
                                 </div>
                             </div>

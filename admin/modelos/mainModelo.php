@@ -71,6 +71,7 @@
 			$cadena = str_ireplace("--","",$cadena);
 			$cadena = str_ireplace(">","",$cadena);
 			$cadena = str_ireplace("<","",$cadena);
+			$cadena = str_ireplace("/","",$cadena);
 			$cadena = str_ireplace("[","",$cadena);
 			$cadena = str_ireplace("]","",$cadena);
 			$cadena = str_ireplace("^","",$cadena);

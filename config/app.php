@@ -1,6 +1,6 @@
 <?php 
 
-	// const SERVERURL = "http://localhost:8080/clinica/";
+	// const SERVERURL = "https://feriadeperu.com/";
 	const SERVERURL = "http://127.0.0.1:84/clinica/";
 	const COMPANY = "CLINICA RHABILITACION";
 	const MONEDA = "S/.";

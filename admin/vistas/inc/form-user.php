@@ -23,7 +23,7 @@
         <div class="col-6">
             <label> CELULAR:</label>
             <div class="form-group">
-                <input type="text" placeholder="Celular" class="form-control" id="celular" >
+                <input type="number" placeholder="Celular" class="form-control" id="celular" min="7"  max="12">
             </div>
         </div>
         <div class="col-6">

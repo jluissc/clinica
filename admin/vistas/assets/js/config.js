@@ -100,24 +100,22 @@ function filtrarConfig(datos){
     HtmlListConfig()
 }
 function listarServiciosss(listServi){
-    console.log(listServi);
     lir = '<div class="list-group">'
-    if (listServi[1].length > 0 && listServi[0] != false ) {       
-    
+    if (listServi[1].length > 0 && listServi[0] != false ) { 
         listServi[1].forEach(servG => {
-            lir+=`<a class="list-group-item list-group-item-action"  style="background-color: #1aefe1"> ${servG.nombre}  
-                <button class="btn btn-info" onclick="tipoModalServc(${servG.id})"><i class="fas fa-edit"></i></button>
-                <button class="btn btn-danger" onclick="alertServicio(${servG.id},1)"><i class="fas fa-trash-alt"></i></button>
-                <button class="btn btn-primary" onclick="tipoModalCateg(${servG.id},0)"><i class="fas fa-plus-square"></i></button>
-                <button class="btn btn-success" onclick="tipoModalConfig(${servG.id},false)"><i class="fas fa-plus-square"></i></button>
-                </a>`            
+            lir+=`<li class="list-group-item list-group-item-action"  style="background-color: #1aefe1"> ${servG.nombre}  
+                    <button class="btn btn-info" onclick="tipoModalServc(${servG.id})"><i class="fas fa-edit"></i></button>
+                    <button class="btn btn-danger" onclick="alertServicio(${servG.id},1)"><i class="fas fa-trash-alt"></i></button>
+                    <button class="btn btn-primary" onclick="tipoModalCateg(${servG.id},0)"><i class="fas fa-plus-square"></i></button>
+                    <button class="btn btn-success" onclick="tipoModalConfig(${servG.id},false)" title="Agregar Configuracion general "style="float: right"><i class="fas fa-plus-square"></i></button>
+                </li>`            
                 listServi[0].forEach((categoria, key) => {
                     if (categoria.servicio_general_id == servG.id) {
                         
-                        lir+=`<a class="list-group-item list-group-item-action" >${key+1} :  ${categoria.cat}
+                        lir+=`<li class="list-group-item list-group-item-action" >${key+1} :  ${categoria.cat}
                             <button class="btn btn-info" onclick="tipoModalCateg(${categoria.s_id},1)"><i class="fas fa-edit"></i></button>
                             <button class="btn btn-danger" onclick="alertServicio(${categoria.s_id},2)"><i class="fas fa-trash-alt"></i></button>
-                            </a> `
+                            </li> `
                     }
                     
                     
@@ -138,12 +136,13 @@ function listarServiciosss(listServi){
     }
     else if (listServi[1].length > 0){
         listServi[1].forEach(servG => {
-            lir+=`<a class="list-group-item list-group-item-action"  style="background-color: #1aefe1"> ${servG.nombre}  
+            lir+=`<li class="list-group-item list-group-item-action"  style="background-color: #1aefe1"> ${servG.nombre}  
                 <button class="btn btn-info" onclick="tipoModalServc(${servG.id})"><i class="fas fa-edit"></i></button>
                 <button class="btn btn-danger" onclick="alertServicio(${servG.id},1)"><i class="fas fa-trash-alt"></i></button>
                 <button class="btn btn-primary" onclick="tipoModalCateg(${servG.id},0)"><i class="fas fa-plus-square"></i></button>
-                <button class="btn btn-success" onclick="tipoModalConfig(${servG.id},false)"><i class="fas fa-plus-square"></i></button>
-                </a>`     
+                <button class="btn btn-success" onclick="tipoModalConfig(${servG.id},false)" title="Agregar Configuracion general" style="float: right"><i class="fas fa-plus-square"></i></button>
+                
+                </li>`     
         });
     }
 
@@ -153,69 +152,11 @@ function listarServiciosss(listServi){
     lir+=`</div>`
     document.getElementById('listServcsss').innerHTML = lir
     listServicss = listServi[1]
-    // if (listServi[1] == 'cat') {
-    //     listServicss = []
-    //     listServi[0].forEach(servicio => {
-    //         if(listServicss.some( servInt => servInt.id == servicio.sg_id)){
-    //             const usersInt = listServicss.map( servInt => {
-    //                 if( servInt.id == servicio.sg_id ) {
-    //                     servInt.categorias.push({ 
-    //                         'id': servicio.s_id,  
-    //                         'nombre': servicio.cat,  
-    //                         'descripcion': servicio.descripcion,  
-    //                         'precio_normal': servicio.precio_normal,  
-    //                         'precio_venta': servicio.precio_venta,  
-    //                         'estado': servicio.s_est,  
-    //                         'tiempo': servicio.tiempo,  
-    //                     })
-    //                     return servInt;
-    //                 } 
-    //                 else return servInt;
-    //             })
-    //             listServicss = [...usersInt];
-    //         }else{
-    //             id_cat = servicio.s_id ? servicio.s_id : 0 /* si es no existe categorias del servicio */
-    //             listServicss.push({
-    //                 'id': servicio.sg_id, 
-    //                 'nombre': servicio.serv, 
-    //                 'estado': servicio.sg_est,                     
-    //                 'categorias' : [{ 
-    //                     'id': id_cat,  
-    //                     'nombre': servicio.cat,  
-    //                     'descripcion': servicio.descripcion,  
-    //                     'precio_normal': servicio.precio_normal,  
-    //                     'precio_venta': servicio.precio_venta,  
-    //                     'estado': servicio.s_est,  
-    //                     'tiempo': servicio.tiempo,  
-    //                 }]
-    //             }, 
-    //             );      
-    //         }
-    //         console.log(listServicss);
-    //         categorias.push({
-    //             'id': servicio.s_id,  
-    //             'nombre': servicio.cat,  
-    //             'descripcion': servicio.descripcion,  
-    //             'precio_normal': servicio.precio_normal,  
-    //             'precio_venta': servicio.precio_venta,  
-    //             'estado': servicio.s_est,  
-    //             'tiempo': servicio.tiempo,  
-    //         })
-
-    //     }); 
-    //     HTMLServicios(true)    
-    // } else {
-    //     console.log('solo tiene serv genre')
-    //     listServicss = listServi[0]
-    //     HTMLServicios(false)  
-    // }
     
 }
 function HTMLServicios(tipo){
-    console.log('ddd');
     lir = '<div class="list-group">'
     if (tipo) {
-        console.log('vvv');
         listServicss.forEach(servc => {
             lir+=`<a class="list-group-item list-group-item-action"  style="background-color: #1aefe1"> ${servc.nombre}  
                 <button class="btn btn-info" onclick="tipoModalServc(${servc.id})"><i class="fas fa-edit"></i></button>
@@ -367,7 +308,6 @@ function datosCategoria(id){
     })
     .then( r => r.json())
     .then( r => {
-        console.log(r);
         horasSeleccionadas = r.horas
         rellenarHorasCatg()
         rellenarTipoCat(r.servics)
@@ -445,18 +385,12 @@ function listarDias(tipo = '', id = 'listDiasDisp'){
 function updateAtencion(idTipo){
     if(tipAtencSeleccionadas.find(tipo => tipo.id == idTipo)){
         tipAtencSeleccionadas = tipAtencSeleccionadas.filter(tipo => tipo.id != idTipo)
-    }else{
-        tipAtencSeleccionadas.push({id:idTipo})        
-    }
-    console.log(tipAtencSeleccionadas);
+    }else tipAtencSeleccionadas.push({id:idTipo})        
 }
 function updateDia(idDia){
     if(diasSeleccionadas.find(day => day.id == idDia)){
         diasSeleccionadas = diasSeleccionadas.filter(day => day.id != idDia)
-    }else{
-        diasSeleccionadas.push({id:idDia})        
-    }
-    console.log(diasSeleccionadas);
+    }else diasSeleccionadas.push({id:idDia})        
 }
 function validCateg(tipo){
     if(inp_name_cat.value != ''){
@@ -476,11 +410,8 @@ function validCateg(tipo){
     }else alertaToastify('Completar nombre')
 }
 function validServc(tipo){
-    if(inp_name.value != ''){
-        tableServicio(tipo)
-    }else{
-        alertaToastify('Completar nombre')
-    }
+    if(inp_name.value != '') tableServicio(tipo)        
+    else alertaToastify('Completar nombre')
 }
 function validConfigD(tipo){
     if(inp_nameConf.value != ''){
@@ -524,9 +455,7 @@ function tableCategoria(tipo){/* crear, editar, una categoria de un servicio gen
             !tipo ? alertaToastify('Servicio guardado','green') : alertaToastify('Servicio editado','green')
             resetInputCateg()
             categModal.hide()
-        }else{
-            alertaToastify('No se pudo guardar')            
-        }
+        }else alertaToastify('No se pudo guardar')            
     })
 }
 function tableServicio(tipo){/* crear, editar  un servicio general */
@@ -546,9 +475,7 @@ function tableServicio(tipo){/* crear, editar  un servicio general */
             inp_name.value = ''
             inp_status.value = 0
             servicGenrModal.hide()
-        }else{
-            alertaToastify('No se pudo guardar')            
-        }
+        }else alertaToastify('No se pudo guardar')            
     })
 }
 function tableConfigDias(tipo){/* crear, editar, eliminar un servicio general */
@@ -576,9 +503,7 @@ function tableConfigDias(tipo){/* crear, editar, eliminar un servicio general */
             // inp_name.value = ''
             // inp_status.value = 0
             configDiasModal.hide()
-        }else{
-            alertaToastify('No se pudo guardar')            
-        }
+        }else alertaToastify('No se pudo guardar')            
     })
 }
 function alertServicio(idServici, tipo ){/* id , tipo(1 servicio, 2 categoria) */
@@ -595,9 +520,7 @@ function alertServicio(idServici, tipo ){/* id , tipo(1 servicio, 2 categoria) *
     }).then((result) => {
         if (result.isConfirmed) {
             deleteServicio(idServici,tipo)
-        }else{
-            alertaToastify('Se cancelo la eliminación','#12d3dc',2000)
-        }
+        }else alertaToastify('Se cancelo la eliminación','#12d3dc',2000)
     })
 }
 function deleteServicio(idServici,tipo){
@@ -680,7 +603,6 @@ function resetInputCateg(){
     htmlULHorasDisp.innerHTML = ''
 } 
 function HtmlListConfig(){
-    console.log(listConfig);
     li = `<div class="list-group"> `
     listConfig.forEach((confId,i) => {
         li+=`<a class="list-group-item list-group-item-action" style="cursor:pointer"  >
@@ -690,7 +612,6 @@ function HtmlListConfig(){
     document.getElementById('listarConfig').innerHTML = li    
 }
 function filtrarUsers(users){
-    console.log(users);
     users.forEach(user => {
         if(users_permisos.some( userInt => userInt.persona_id == user.persona_id)){
             const usersInt = users_permisos.map( userInt => {
@@ -719,7 +640,6 @@ function filtrarUsers(users){
             );
         }
     }); 
-    console.log(users_permisos);
     mostrarListaColaboradores()
 }
 function mostrarListaColaboradores(){

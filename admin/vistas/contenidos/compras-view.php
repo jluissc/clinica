@@ -51,11 +51,13 @@
                     </div> <br><br>
                     <div class="form-group">
                         <div class="col-12">
+                            <label for="prec_com">Precio</label>
                             <input type="number" id="prec_com" class="form-control font-bold" placeholder="Precio" autocomplete="false">
                         </div>   
-                    </div><br><br>
+                    </div>
                     <div class="form-group">
                         <div class="col-12">
+                            <label for="prec_com">Cantidad  </label>
                             <input type="number" id="cant_com" class="form-control font-bold" placeholder="Cantidad" autocomplete="false">
                         </div>
                     </div>

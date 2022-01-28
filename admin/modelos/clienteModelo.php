@@ -61,13 +61,12 @@
 			$sql->bindParam(":direccion",$datos['addres_appoint']);
 			
 			$sql -> execute();	
-            // $sql->bindParam(":id_usu",$datos['id_usu']);
 			if($sql->rowCount()== 1){
 				$sql = null;
-				exit(json_encode(1));				
+				exit(json_encode([1,'Datos guardados']));				
 			}else{
 				$sql = null;
-				exit(json_encode(0));
+				exit(json_encode([0,'Error BD']));
 			}				
 		}
 		

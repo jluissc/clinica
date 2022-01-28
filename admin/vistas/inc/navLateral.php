@@ -16,8 +16,8 @@
     </li> 
     <?php } ?>
     <?php if($_SESSION['tipo'] == 1 || in_array(6, $_SESSION['permisos'])){ ?>
-    <li class="sidebar-item <?php echo $_GET['ruta'] == 'clientes' ? 'active' : '' ?> ">
-        <a href="<?php echo SERVERURL ?>clientes" class='sidebar-link'>
+    <li class="sidebar-item <?php echo $_GET['ruta'] == 'paciente' ? 'active' : '' ?> ">
+        <a href="<?php echo SERVERURL ?>paciente" class='sidebar-link'>
         <i class="fas fa-users"></i>
             <span>Pacientes</span>
         </a>
