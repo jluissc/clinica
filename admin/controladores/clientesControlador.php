@@ -11,15 +11,23 @@
 		
 		// public function reedListCustomers() {
 		public function listsCustomers() {
+			session_start(['name' => 'bot']);
 			$listCustomers = clienteModelo::reedListCustomers_m();
 			$datos =[];
 			foreach ($listCustomers as $customer) {
 				// <button class="btn btn-outline-primary" onclick="showDetailCustomer('.$customer->id.')">Detalles</button>				
 				$nombre = $customer->nombre.' '.$customer->apellidos;
 				$correo = $customer->correo;
-				$acciones = '<button class="btn btn-outline-info" onclick="showCustomer('.$customer->id.',2)" data-bs-toggle="modal"
+				if ($_SESSION['tipo'] != 5) {
+					$acciones = '<button class="btn btn-outline-info" onclick="showCustomer('.$customer->id.',2)" data-bs-toggle="modal"
 						data-bs-target="#info">Editar</button>
 					<button class="btn btn-outline-danger" onclick="deleteCustomer('.$customer->id.')">Eliminar</button>';
+				} else {
+					$acciones = '<button class="btn btn-outline-info" onclick="modoView()" data-bs-toggle="modal">Editar</button>
+					<button class="btn btn-outline-danger" onclick="modoView()">Eliminar</button>';
+				}
+				
+				
 				array_push($datos,[
 					'nombre' => $nombre,
 					'dni' => $customer->dni,

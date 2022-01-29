@@ -1,4 +1,4 @@
-<?php if($_SESSION['tipo']==1){ ?><!-- ADMIN -->
+<?php if($_SESSION['tipo']==1 || $_SESSION['tipo'] == 5){ ?><!-- ADMIN -->
     <?php  
         // require_once './controladores/configControlador.php';
         // $inst = new configControlador();
@@ -147,9 +147,11 @@
                         </select>
                     </div>
                 </div>
+                
                 <div class="modal-footer" id="btn_serv">
-                    
+                
                 </div>
+                
             </div>
         </div>
     </div>

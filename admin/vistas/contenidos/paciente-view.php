@@ -1,5 +1,5 @@
 <?php 
-    if($_SESSION['tipo']==1 || in_array(3, $_SESSION['permisos']) ){
+    if($_SESSION['tipo']==1 ||  $_SESSION['tipo']== 5 || in_array(3, $_SESSION['permisos']) ){
         require_once './controladores/clientesControlador.php';
         $inst = new clienteControlador();
 ?>
@@ -24,11 +24,8 @@
                             <th>Acciones</th>
                         </tr>
                     </thead>
-                    <tbody >
+                    <tbody >                        
                         
-                        <?php 
-                            // echo $inst->reedListCustomers();
-                        ?>
                         
                     </tbody>
                 </table>
@@ -54,14 +51,25 @@
                         ?>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-light-secondary" data-bs-dismiss="modal">
-                            <i class="bx bx-x d-block d-sm-none"></i>
-                            <span class="d-none d-sm-block">Cancelar</span>
-                        </button>
-                        <button type="button" class="btn btn-info ml-1" id="btnsss">
-                            <i class="bx bx-check d-block d-sm-none"></i>
-                            <span class="d-none d-sm-block" id="btn_titulo">Editar</span>
-                        </button>
+                        <?php if($_SESSION['tipo'] != 5 ){?>
+                            <button type="button" class="btn btn-light-secondary" data-bs-dismiss="modal">
+                                <i class="bx bx-x d-block d-sm-none"></i>
+                                <span class="d-none d-sm-block">Cancelar</span>
+                            </button>
+                            <button type="button" class="btn btn-info ml-1" id="btnsss">
+                                <i class="bx bx-check d-block d-sm-none"></i>
+                                <span class="d-none d-sm-block" id="btn_titulo">Editar</span>
+                            </button>
+                        <?php }else{?>
+                            <button type="button" class="btn btn-light-secondary" data-bs-dismiss="modal">
+                                <i class="bx bx-x d-block d-sm-none"></i>
+                                <span class="d-none d-sm-block">Cancelar</span>
+                            </button>
+                            <button type="button" class="btn btn-info ml-1" id="btnsss">
+                                <i class="bx bx-check d-block d-sm-none"></i>
+                                <span class="d-none d-sm-block" onclick="modoView()">Editar</span>
+                            </button>
+                        <?php }?>
                     </div>
                 </div>
             </div>
@@ -72,7 +80,7 @@
     <script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
     <script src="<?php echo SERVERURL ?>vistas/assets/js/clientes.js"></script>
 
-<?php 
+<?php  
     }else{
         echo '<h2>UPS!!!... PARECE QUE NO HAY NADA QUE MOSTRAR</h2>';
     }

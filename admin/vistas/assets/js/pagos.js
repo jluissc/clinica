@@ -91,8 +91,14 @@ function pintarDetallePagos(datos){
         </li>`
     });
     li += `<h4>TOTAL: S/. ${monto} <br></h4>`
-    li += `agregar un pago mas
+    if (tipoUsuario != 5) {
+        li += `<label><h6>Agregar un pago mas</h6></label>
         <input type="button" value="+ Agregar Pago" class="btn btn-outline-success" onclick="payUser()">`
+    } else {
+        li += `<label><h6>Agregar un pago mas</h6></label>
+        <input type="button" value="+ Agregar Pago" class="btn btn-outline-success" onclick="modoView()">`
+    }
+    
     document.getElementById('detallePago').innerHTML = li
 }
 

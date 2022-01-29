@@ -1,4 +1,4 @@
-<?php if($_SESSION['tipo']==1 || in_array(2, $_SESSION['permisos']) ){  // ADMIN   
+<?php if($_SESSION['tipo']==1 || $_SESSION['tipo']==5 || in_array(2, $_SESSION['permisos']) ){  // ADMIN   
     require_once './controladores/citaControlador.php';
     $inst = new citaControlador();
 ?>
@@ -63,15 +63,27 @@
                     </div>
                 </div>
                 <div class="modal-footer" id="btn_compras">
-                    <button type="button" class="btn btn-light-secondary"
-                        data-bs-dismiss="modal">
-                        <i class="bx bx-x d-block d-sm-none"></i>
-                        <span class="d-none d-sm-block">Cancelar</span>
-                    </button>
-                    <button type="button" class="btn btn-primary ml-1 "  onclick="verificarComp()">
-                        <i class="bx bx-check d-block d-sm-none"></i>
-                        <span class="d-none d-sm-block">Guardar</span>
-                    </button>
+                    <?php if($_SESSION['tipo'] != 5){?>
+                        <button type="button" class="btn btn-light-secondary"
+                            data-bs-dismiss="modal">
+                            <i class="bx bx-x d-block d-sm-none"></i>
+                            <span class="d-none d-sm-block">Cancelar</span>
+                        </button>
+                        <button type="button" class="btn btn-primary ml-1 "  onclick="verificarComp()">
+                            <i class="bx bx-check d-block d-sm-none"></i>
+                            <span class="d-none d-sm-block">Guardar</span>
+                        </button>
+                <?php }else{ ?>
+                        <button type="button" class="btn btn-light-secondary"
+                            data-bs-dismiss="modal">
+                            <i class="bx bx-x d-block d-sm-none"></i>
+                            <span class="d-none d-sm-block">Cancelar</span>
+                        </button>
+                        <button type="button" class="btn btn-primary ml-1 "  onclick="modoView()">
+                            <i class="bx bx-check d-block d-sm-none"></i>
+                            <span class="d-none d-sm-block">Guardar</span>
+                        </button>
+                <?php } ?>
                 </div>
             </div>
         </div>

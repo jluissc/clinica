@@ -254,14 +254,26 @@ function tipoModalServc(id){/* 0 abrir */
                 inp_status.value = servi.estado
             }
         });
-        btn = `<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+        if(tipoUsuario != 5){
+            btn = `<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
             <button type="button" class="btn btn-primary" onclick="validServc(1)">Editar</button>`
+        }else{
+            btn = `<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+            <button type="button" class="btn btn-primary" onclick="modoView()">Editar</button>`
+        }
+        
         document.getElementById('btn_serv').innerHTML = btn 
     } else {/* Crear servicio */
         inp_name.value = ''
         inp_status.value = 0
-        btn = `<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+        if(tipoUsuario != 5){
+            btn = `<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
             <button type="button" class="btn btn-primary" onclick="validServc(0)">Guardar</button>`
+        }else{
+            btn = `<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+            <button type="button" class="btn btn-primary" onclick="modoView()">Editar</button>`
+        }
+        
         document.getElementById('btn_serv').innerHTML = btn       
     }
     servicGenrModal.show()
@@ -285,7 +297,8 @@ function tipoModalCateg(id,tipo){/* id, ----- tipo 0 es nuevo, 1 crear */
             <option value="4">4</option>
         </select>`   
         resetInputCateg()
-        btn = `<button type="button" class="btn btn-light-secondary" data-bs-dismiss="modal">
+        if(tipoUsuario != 5){
+            btn = `<button type="button" class="btn btn-light-secondary" data-bs-dismiss="modal">
                 <i class="bx bx-x d-block d-sm-none"></i>
                 <span class="d-none d-sm-block">Cancelar</span>
             </button>
@@ -293,6 +306,16 @@ function tipoModalCateg(id,tipo){/* id, ----- tipo 0 es nuevo, 1 crear */
                 <i class="bx bx-check d-block d-sm-none"></i>
                 <span class="d-none d-sm-block">Guardar</span>
             </button>`
+        }else{
+            btn = `<button type="button" class="btn btn-light-secondary" data-bs-dismiss="modal">
+                <i class="bx bx-x d-block d-sm-none"></i>
+                <span class="d-none d-sm-block">Cancelar</span>
+            </button>
+            <button type="button" class="btn btn-primary ml-1 "  onclick="modoView()">
+                <i class="bx bx-check d-block d-sm-none"></i>
+                <span class="d-none d-sm-block">Guardar</span>
+            </button>`
+        }
         btn_categ.innerHTML = btn 
         listarTipoAtencion(0)
         listarDias(0)
@@ -329,8 +352,14 @@ function datosCategoria(id){
                 inp_prectiem_cat.disabled = true
             }
         });
-        btn = `<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+        if(tipoUsuario != 5){
+            btn = `<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
             <button type="button" class="btn btn-primary" onclick="validCateg(1)">Editar</button>`
+        }else{
+            btn = `<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+            <button type="button" class="btn btn-primary" onclick="modoView()">Editar</button>`
+        }
+        
         btn_categ.innerHTML = btn 
     })
 }
@@ -414,17 +443,21 @@ function validServc(tipo){
     else alertaToastify('Completar nombre')
 }
 function validConfigD(tipo){
-    if(inp_nameConf.value != ''){
-        if(inp_horaInicio.value != ''){
-            if(inp_horaFin.value != ''){
-                if(tipAtencSeleccionadas.length > 0){
-                    if(diasSeleccionadas.length > 0){
-                        tableConfigDias(tipo)
-                    }else alertaToastify('Completar dias de atención')
-                }else alertaToastify('Completar tipo de atención')
-            }else alertaToastify('Fin')
-        }else alertaToastify('Inicio') 
-    }else alertaToastify('Nombre ')
+    if (tipoUsuario != 5) {
+        if(inp_nameConf.value != ''){
+            if(inp_horaInicio.value != ''){
+                if(inp_horaFin.value != ''){
+                    if(tipAtencSeleccionadas.length > 0){
+                        if(diasSeleccionadas.length > 0){
+                            tableConfigDias(tipo)
+                        }else alertaToastify('Completar dias de atención')
+                    }else alertaToastify('Completar tipo de atención')
+                }else alertaToastify('Fin')
+            }else alertaToastify('Inicio') 
+        }else alertaToastify('Nombre ')
+    } else {
+        modoView();
+    }
 }
 function tableCategoria(tipo){/* crear, editar, una categoria de un servicio general */
     datos = new FormData()
@@ -507,21 +540,25 @@ function tableConfigDias(tipo){/* crear, editar, eliminar un servicio general */
     })
 }
 function alertServicio(idServici, tipo ){/* id , tipo(1 servicio, 2 categoria) */
-    message = tipo == 1 ? 'el servicio' : 'la categoria'
-    Swal.fire({
-        title: '¿Seguro de eliminar?',
-        text: "Se eliminará definitivamente "+message,
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Si, eliminar!',
-        cancelButtonText: 'Cancelar'
-    }).then((result) => {
-        if (result.isConfirmed) {
-            deleteServicio(idServici,tipo)
-        }else alertaToastify('Se cancelo la eliminación','#12d3dc',2000)
-    })
+    if(tipoUsuario != 5){
+        message = tipo == 1 ? 'el servicio' : 'la categoria'
+        Swal.fire({
+            title: '¿Seguro de eliminar?',
+            text: "Se eliminará definitivamente "+message,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Si, eliminar!',
+            cancelButtonText: 'Cancelar'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                deleteServicio(idServici,tipo)
+            }else alertaToastify('Se cancelo la eliminación','#12d3dc',2000)
+        })
+    }else{
+        modoView()
+    }
 }
 function deleteServicio(idServici,tipo){
     datos = new FormData()
@@ -671,18 +708,22 @@ function listaPermiso(user_id){
     document.getElementById('permisosUser').innerHTML = div
 }
 function updatePermisUser(idInput, user_id){
-    DATOS = new FormData()
-    DATOS.append('tipoPerm', idInput)
-    DATOS.append('user_idPerm', user_id)
-    fetch(URL+'ajax/configAjax.php',{
-        method : 'post',
-        body : DATOS
-    })
-    .then( r => r.json())
-    .then( r => {
-        users_permisos = []
-        leerHorasAtencion()
-    })
+    if(tipoUsuario != 5){
+        DATOS = new FormData()
+        DATOS.append('tipoPerm', idInput)
+        DATOS.append('user_idPerm', user_id)
+        fetch(URL+'ajax/configAjax.php',{
+            method : 'post',
+            body : DATOS
+        })
+        .then( r => r.json())
+        .then( r => {
+            users_permisos = []
+            leerHorasAtencion()
+        })
+    }else{
+        modoView();
+    }
 }
 function validarDni(){
     dni = document.getElementById('dni').value
@@ -719,223 +760,38 @@ function selectPermis(id){
     console.log(permisosTempo);
 }
 function saveUsuario(){    
-    datos = new FormData()
-    // datos.append('custom',JSON.stringify(pacienteId))
-    datos.append('id_cust',pacienteId.id)
-    datos.append('permisosTemp',JSON.stringify(permisosTempo))
-    fetch(URL+'ajax/configAjax.php',{
-        method : 'POST',
-        body : datos
-    })
-    .then( r => r.json())
-    .then( r => {
-        console.log(r);
-        if(r){
-            alertaToastify('Se guardo usuario','green',1500)
-            document.getElementById('dni').value = ''
-            document.getElementById('nombre').value = ''
-            document.getElementById('apellido').value = ''
-            document.getElementById('celular').value = ''
-            document.getElementById('correo').value = ''
-            permisosTempo.forEach(element => {
-                document.getElementById(`permi_${element.id}`).checked = false
-            });
-            permisosTempo = []
-            filtrarUsers(r)
-            setTimeout(() => {
-                myModallarge2.hide()
-            }, 1500);
-
-        }else alertaToastify('problem+')
-    })
-    .catch(e => alertaToastify('Probablemente tu dni ya existe en nuestros datos','red',1500))    
+    if(tipoUsuario != 5){
+        datos = new FormData()
+        // datos.append('custom',JSON.stringify(pacienteId))
+        datos.append('id_cust',pacienteId.id)
+        datos.append('permisosTemp',JSON.stringify(permisosTempo))
+        fetch(URL+'ajax/configAjax.php',{
+            method : 'POST',
+            body : datos
+        })
+        .then( r => r.json())
+        .then( r => {
+            console.log(r);
+            if(r){
+                alertaToastify('Se guardo usuario','green',1500)
+                document.getElementById('dni').value = ''
+                document.getElementById('nombre').value = ''
+                document.getElementById('apellido').value = ''
+                document.getElementById('celular').value = ''
+                document.getElementById('correo').value = ''
+                permisosTempo.forEach(element => {
+                    document.getElementById(`permi_${element.id}`).checked = false
+                });
+                permisosTempo = []
+                filtrarUsers(r)
+                setTimeout(() => {
+                    myModallarge2.hide()
+                }, 1500);
+    
+            }else alertaToastify('problem+')
+        })
+        .catch(e => alertaToastify('Probablemente tu dni ya existe en nuestros datos','red',1500)) 
+    }   else{
+        modoView();
+    }
 }
-
-
-/* ************** */
-/* ************** */
-/* ************** */
-/* ************** */
-/* END THE SCRIPT CONFIGURACION */
-/* ************** */
-/* ************** */
-/* ************** */
-
-
-
-// function quitarHoraConf(id, hora){
-//     if(horasQuitar.find(hour => hour.id == id)){
-//         horasQuitar = horasQuitar.filter(hour => hour.id != id)
-//     }else{
-//         horasQuitar.push({'id':id,'hora':hora})        
-//     }
-//     console.log(horasQuitar);
-// }
-
-// function updateTipoCita(id){
-
-//     if(updateTipCita.find(cita=>cita.tipo_cita_id == id)) {
-//         // if(updateTipCita.find(cita=>cita.id != 0)){
-//             const citaUp = updateTipCita.map( cit => {
-//                 if( cit.id != 0 ) {
-//                     // let cantidad = parseInt(curso.cantidad);
-//                     // cantidad++
-//                     cit.estado = 0;
-//                     return cit;
-//                } 
-                
-//             })
-//             updateTipCita = [...citaUp];
-//         // }else{
-//         //     updateTipCita = updateTipCita.filter(cita => cita.tipo_cita_id != id)
-//         // }
-        
-//         // updateTipCita = updateTipCita.filter(cita => cita.tipo_cita_id != id)
-//     }
-//     else {
-//         updateTipCita.push({'tipo_cita_id' : id, 'servicios_id' : idServicEdit, 'id' : 0, 'estado' :0 })
-//     }
-//     console.log(updateTipCita);
-// }
-// function verConfig(id,tipo){
-//     if(tipo == 1){
-//         mostrarDias()
-//         mostrarCrudCitas()
-//         document.getElementById('showBTNConfig').innerHTML = '<input type="button" class="btn btn-success" value="Guardar Config" onclick="validarConfig()">'
-//     }else if(tipo == 2){
-//         mostrarDias(id)
-//         mostrarCrudCitas(id)
-//         document.getElementById('showBTNConfig').innerHTML = ''
-//     }
-// }
-// function updateDia(id, idInp){
-//     if(diasSelected.find(dia=>dia.diaId == id)) diasSelected = diasSelected.filter(dia => dia.diaId != id)
-//     else diasSelected.push({'diaId' : id })
-// }
-// function updateCita(id, idInp){
-//     if(citasSelected.find(cita=>cita.citaId == id)) citasSelected = citasSelected.filter(cita => cita.citaId != id)
-//     else citasSelected.push({'citaId' : id })
-//     console.log(citasSelected);
-// }
-// function validarConfig(){
-//     if(diasSelected.length>0 ){
-//         if(citasSelected.length>0) guardarConfig()
-//         else alertaToastify('Seleccione al menos 1 tipo de cita')
-//     }
-//     else alertaToastify('Seleccione al menos 1 dia')
-// }
-
-// function mostrarDias(id=0){
-//     diasConfir =[]
-//     div = ''
-//     if(id == 0){
-//         diasAtencion.forEach((dia,index) => {
-//             // estado = cita.estado == 1 ? 'checked' : '' 
-//             div +=`<li class="list-group-item">
-//             <input class="form-check-input me-1"  type="checkbox" id="diaId_${index}" onchange="updateDia(${dia.id},this.id)" aria-label="...">
-//             ${dia.nombre}
-//             </li>`
-//         });
-//     }else{
-//         listConfig.forEach(conff => {
-//             if(conff.id == id){
-//                 conff.lista.forEach(day => {
-//                     if(diasConfir.find(dii => dii.id == day.dias)){
-//                         /* no hacer nada */
-//                     }else{
-//                         diasConfir.push({
-//                             'id' : day.dias
-//                         })
-//                     }
-//                 });
-//                 /* MOSTRAR LAS HORAS */
-//                 a = document.getElementById('horaInicio')
-//                 a.value = conff.horainicio
-//                 a.disabled = true
-//                 b = document.getElementById('horaFin')
-//                 b.value = conff.horafin
-//                 b.disabled = true
-//                 /* MOSTRAR LAS HORAS */
-
-//             }
-//         });
-//         diasAtencion.forEach((dia,index) => {
-//             estado = diasConfir.find(di => di.id == dia.id) ? 'checked' : '' 
-//             div +=`<li class="list-group-item">
-//             <input class="form-check-input me-1" ${estado} disabled type="checkbox" id="diaId_${index}" onchange="updateDia(${dia.id},this.id)" aria-label="...">
-//             ${dia.nombre}
-//             </li>`
-//         });
-//     }
-//     document.getElementById('listarDiasA').innerHTML = div
-        
-// }
-// function mostrarCrudCitas(id=0,idSelect='listaCitaCrud'){    
-//     tipoConfir =[]
-//     div = ''
-//     if(id == 0){
-//         citasAtencion.forEach((cita,index) => {
-//             div +=`<li class="list-group-item">
-//                     <input class="form-check-input me-1" type="checkbox" id="citaId_${index}" onchange="updateCita(${cita.id},this.id)" aria-label="...">
-//                     ${cita.nombre}
-//                 </li>`
-//             });
-//         console.log('auuuuu');
-//     }else{
-//         console.log('auiii');
-//         listConfig.forEach(conff => {
-//             if(conff.id == id){
-//                 conff.lista.forEach(type => {
-//                     if(tipoConfir.find(typ => typ.id == type.tipo)){
-//                         /* no hacer nada */
-//                     }else{
-//                         tipoConfir.push({
-//                             'id' : type.tipo
-//                         })
-//                     }
-//                 });
-//             }
-//         });
-//         citasAtencion.forEach((cita,index) => {
-//             estado = tipoConfir.find(di => di.id == cita.id) ? 'checked' : '' 
-//             div +=`<li class="list-group-item">
-//                     <input class="form-check-input me-1" ${estado} disabled type="checkbox" id="citaId_${index}" onchange="updateCita(${cita.id},this.id)" aria-label="...">
-//                     ${cita.nombre}
-//                 </li>`
-//         });
-//     }
-
-
-//     document.getElementById(idSelect).innerHTML = div
-//     // document.getElementById('listaCitaCrudT').innerHTML = div
-
-// }
-// function mostrarTipoC(id=0){
-//     document.getElementById('nameserv').value = ''
-//     document.getElementById('descripserv').value = ''
-//     document.getElementById('precNserv').value = ''
-//     document.getElementById('precOserv').value = ''
-//     document.getElementById('prectiemserv').value = ''
-//     document.getElementById('prectiemserv').disabled = false
-//     div = ''
-//     citasAtencion.forEach((cita,index) => {
-//         div +=`<li class="list-group-item">
-//                 <input class="form-check-input me-1" type="checkbox" id="citaId_${index}" onchange="updateCita(${cita.id},this.id)">
-//                 ${cita.nombre}
-//             </li>`
-//     });
-//     document.getElementById('listaCitaCrudT').innerHTML = div
-//     document.getElementById('listHoursDisp').innerHTML = ''
-//     document.getElementById('btnEstadoServicio').innerHTML = `<button type="button" class="btn btn-primary ml-1 "  onclick="saveServicio(0)">
-//             <i class="bx bx-check d-block d-sm-none"></i>
-//             <span class="d-none d-sm-block">Guardar</span>
-//         </button>`
-// }
-
-
-
-
-// /* ******************************************** */
-
-
-

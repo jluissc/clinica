@@ -65,7 +65,7 @@
                         </div>
                     </div>
                 </div>
-                <?php if(in_array(1, $_SESSION['permisos'])){ ?>
+                <?php if(in_array(1, $_SESSION['permisos']) || $_SESSION['tipo']==5){ ?>
                 <div class="col-6 col-lg-3 col-md-6">
                     <div class="card">
                         <div class="card-body px-3 py-4-5">
@@ -92,7 +92,7 @@
                     </div>
                 </div>
                 <?php } ?>
-                <?php if(in_array(2, $_SESSION['permisos'])){ ?>    
+                <?php if(in_array(2, $_SESSION['permisos']) || $_SESSION['tipo']==5){ ?>    
                 <div class="col-6 col-lg-3 col-md-6">
                     <div class="card">
                         <div class="card-body px-3 py-4-5">

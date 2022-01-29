@@ -24,7 +24,7 @@ fechaSelecionada = ''
 serviciosTemp = []
 categTemp = []
 histNew = true
-tipoUsuario = 0
+// tipoUsuario = 0 se movio a uno general scrip.php
 idUser = 0
 
 leerCondicionesAtencion()
@@ -90,7 +90,7 @@ function leerCondicionesAtencion(){
     .then( r => {
         hisTrat = r.hisTrat
         hisTrat2 = r.hisTrat
-        tipoUsuario = r.tipoUser
+        tipoUsuario2 = r.tipoUser
         
         idUser = r.idUser
         LcitasAtencion = r.tipoAtencion /* listar tipo de atencion  */
@@ -200,7 +200,7 @@ function validarDni(){
     } else alertaToastify('Dni incompleto')
 }
 function historialTratamiento(){
-    if(tipoUsuario == 4){
+    if(tipoUsuario2 == 4){
         div ='Escoge su codigo si continuara un tratamiento<div class="container btn-group"  aria-label="Basic radio toggle button group">'
             hisTrat2.forEach(hist => {
                 div +=`<input type="radio" class="btn-check" id="hist_${hist.idHis}" value="${hist.idHis}" name="listHHHH">
@@ -351,39 +351,41 @@ function buscarCitasReservadas(dia,diaSelect){
     })
 }
 function validarCita(){   
-    histSelecTempo = document.querySelector('input[name="listHHHH"]:checked')
-    tipoAtSelecTemp = document.querySelector('input[name="tipoCitaUs"]:checked')
-    horaAtSelecTemp = document.querySelector('input[name="horaAtenUs"]:checked')
-    nameHistNew = document.getElementById('nameHistNew')
-    usuario = tipoUsuario == 4 ? idUser : {
-            dni : parseInt(inp_dni.value),
-            nombre : inp_nombre.value,
-            apellido : inp_apellido.value,
-            celular : inp_celular.value,
-            correo : inp_correo.value,
-        }
-    if(servSelecTempo){        
-        if(catSelecTempo){             
-            if(fechaSelecionada != ''){        
-                if(tipoAtSelecTemp) {
-                    if(horaAtSelecTemp) {
-                        datos = {
-                            histSelec : histSelecTempo ? histSelecTempo.value : nameHistNew.value,
-                            histSelecE : histSelecTempo ? 'old' : 'new',
-                            catSelec : catSelecTempo,
-                            userSelec : pacienteId ? pacienteId : usuario,
-                            userSelecE : pacienteId ? 'old' : (tipoUsuario == 4 ? 'old' : 'new'),
-                            tipoAtSelec : tipoAtSelecTemp ? tipoAtSelecTemp.value : 0,
-                            horaAtSelec : horaAtSelecTemp ? horaAtSelecTemp.value : 0,
-                            fechaSelec : fechaSelecionada,
-                        }
-                        guardarCita(datos)
-                        // console.log(datos); 
-                    } else  alertaToastify('Escoge la hora de atención')
-                } else alertaToastify('Escoge el tipo de atención')
-            } else alertaToastify('Escoge un día habil')
-        }else alertaToastify('Escoge la categoria')
-    }else alertaToastify('Escoge el servicio')
+    if (tipoUsuario != 5) {
+        histSelecTempo = document.querySelector('input[name="listHHHH"]:checked')
+        tipoAtSelecTemp = document.querySelector('input[name="tipoCitaUs"]:checked')
+        horaAtSelecTemp = document.querySelector('input[name="horaAtenUs"]:checked')
+        nameHistNew = document.getElementById('nameHistNew')
+        usuario = tipoUsuario2 == 4 ? idUser : {
+                dni : parseInt(inp_dni.value),
+                nombre : inp_nombre.value,
+                apellido : inp_apellido.value,
+                celular : inp_celular.value,
+                correo : inp_correo.value,
+            }
+        if(servSelecTempo){        
+            if(catSelecTempo){             
+                if(fechaSelecionada != ''){        
+                    if(tipoAtSelecTemp) {
+                        if(horaAtSelecTemp) {
+                            datos = {
+                                histSelec : histSelecTempo ? histSelecTempo.value : nameHistNew.value,
+                                histSelecE : histSelecTempo ? 'old' : 'new',
+                                catSelec : catSelecTempo,
+                                userSelec : pacienteId ? pacienteId : usuario,
+                                userSelecE : pacienteId ? 'old' : (tipoUsuario2 == 4 ? 'old' : 'new'),
+                                tipoAtSelec : tipoAtSelecTemp ? tipoAtSelecTemp.value : 0,
+                                horaAtSelec : horaAtSelecTemp ? horaAtSelecTemp.value : 0,
+                                fechaSelec : fechaSelecionada,
+                            }
+                            guardarCita(datos)
+                            // console.log(datos); 
+                        } else  alertaToastify('Escoge la hora de atención')
+                    } else alertaToastify('Escoge el tipo de atención')
+                } else alertaToastify('Escoge un día habil')
+            }else alertaToastify('Escoge la categoria')
+        }else alertaToastify('Escoge el servicio')
+    } else modoView();
 }
 function guardarCita(datos){
     console.log(datos);
@@ -397,7 +399,7 @@ function guardarCita(datos){
     .then( r => {  
         if(r == 1){
             alertaToastify('Se grabo tu reserva','green',1500) 
-            usuario = tipoUsuario == 2 || tipoUsuario == 4 ? 'ok' : limpiarInpTrat()            
+            usuario = tipoUsuario2 == 2 || tipoUsuario2 == 4 ? 'ok' : limpiarInpTrat()            
             selectServGe.value = 0
             fechaSelecionada = ''
             document.getElementById('tipocitaSelect').innerHTML = ''

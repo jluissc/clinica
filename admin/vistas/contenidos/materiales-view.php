@@ -1,5 +1,5 @@
 <?php 
-    if($_SESSION['tipo']==1 || in_array(5, $_SESSION['permisos']) ){
+    if($_SESSION['tipo']==1 || $_SESSION['tipo'] == 5 || in_array(5, $_SESSION['permisos']) ){
         require_once './controladores/clientesControlador.php';
         $inst = new clienteControlador();
 ?>
@@ -57,9 +57,23 @@
                         </div>
                     </div>
                 </div>
-                <div class="modal-footer" id="btn_materiales">
-                    <!-- BTN OPTIONS -->
-                </div>
+                <?php if($_SESSION['tipo'] != 5) {?>
+                    <div class="modal-footer" id="btn_materiales">
+                        <!-- BTN OPTIONS -->
+                    </div>
+                <?php }else{ ?>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-light-secondary"
+                            data-bs-dismiss="modal">
+                            <i class="bx bx-x d-block d-sm-none"></i>
+                            <span class="d-none d-sm-block">Cancelar</span>
+                        </button>
+                        <button type="button" class="btn btn-primary ml-1 "  onclick="modoView()">
+                            <i class="bx bx-check d-block d-sm-none"></i>
+                            <span class="d-none d-sm-block">Guardar</span>
+                        </button>
+                    </div>
+                <?php }?>
             </div>
         </div>
     </div>

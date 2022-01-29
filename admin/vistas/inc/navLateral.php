@@ -7,7 +7,7 @@
             <span>Home</span>
         </a>
     </li>                       
-    <?php if($_SESSION['tipo'] == 1 || $_SESSION['tipo'] == 2 || $_SESSION['tipo'] == 4 || in_array(3, $_SESSION['permisos'])){ ?>
+    <?php if($_SESSION['tipo'] == 1 || $_SESSION['tipo'] == 2 || $_SESSION['tipo'] == 4 ||  $_SESSION['tipo'] == 5 || in_array(3, $_SESSION['permisos'])){ ?>
     <li class="sidebar-item <?php echo $_GET['ruta'] == 'citas' ? 'active' : '' ?> ">
         <a href="<?php echo SERVERURL ?>citas" class='sidebar-link'>
         <i class="fas fa-calendar-check"></i>
@@ -15,7 +15,7 @@
         </a>
     </li> 
     <?php } ?>
-    <?php if($_SESSION['tipo'] == 1 || in_array(6, $_SESSION['permisos'])){ ?>
+    <?php if($_SESSION['tipo'] == 1 || $_SESSION['tipo'] == 5 || in_array(6, $_SESSION['permisos'])){ ?>
     <li class="sidebar-item <?php echo $_GET['ruta'] == 'paciente' ? 'active' : '' ?> ">
         <a href="<?php echo SERVERURL ?>paciente" class='sidebar-link'>
         <i class="fas fa-users"></i>
@@ -23,7 +23,7 @@
         </a>
     </li> 
     <?php } ?>
-    <?php if($_SESSION['tipo'] == 1 || in_array(2, $_SESSION['permisos'])){ ?>
+    <?php if($_SESSION['tipo'] == 1 || $_SESSION['tipo'] == 5 || in_array(2, $_SESSION['permisos'])){ ?>
     <li class="sidebar-item <?php echo $_GET['ruta'] == 'compras' ? 'active' : '' ?> ">
         <a href="<?php echo SERVERURL ?>compras" class='sidebar-link'>
         <i class="fas fa-shopping-cart"></i>
@@ -32,7 +32,7 @@
     </li> 
     <?php } ?>
     
-    <?php if($_SESSION['tipo'] == 1 || in_array(5, $_SESSION['permisos'])){ ?>
+    <?php if($_SESSION['tipo'] == 1 || $_SESSION['tipo'] == 5 || in_array(5, $_SESSION['permisos'])){ ?>
     <li class="sidebar-item <?php echo $_GET['ruta'] == 'materiales' ? 'active' : '' ?> ">
         <a href="<?php echo SERVERURL ?>materiales" class='sidebar-link'>
         <i class="fas fa-drafting-compass"></i>
@@ -40,7 +40,7 @@
         </a>
     </li> 
     <?php } ?>
-    <?php if($_SESSION['tipo'] == 1 || in_array(1, $_SESSION['permisos'])){ ?>
+    <?php if($_SESSION['tipo'] == 1 || $_SESSION['tipo'] == 5 || in_array(1, $_SESSION['permisos'])){ ?>
     <li class="sidebar-item <?php echo $_GET['ruta'] == 'pagos' ? 'active' : '' ?> ">
         <a href="<?php echo SERVERURL ?>pagos" class='sidebar-link'>
         <i class="fas fa-file-invoice-dollar"></i>
@@ -48,7 +48,7 @@
         </a>
     </li> 
     <?php } ?>
-    <?php if($_SESSION['tipo'] == 1){ ?>
+    <?php if($_SESSION['tipo'] == 1 || $_SESSION['tipo'] == 5){ ?>
     <li class="sidebar-item <?php echo $_GET['ruta'] == 'configuracion' ? 'active' : '' ?> ">
         <a href="<?php echo SERVERURL ?>configuracion" class='sidebar-link'>
         <i class="fas fa-cog"></i>

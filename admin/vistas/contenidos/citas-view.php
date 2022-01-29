@@ -59,7 +59,7 @@
                 <div class="row">
                     <div class="col-12 col-md-6 col-lg-4" >
                         <?php 
-                            if($_SESSION['tipo'] == 1 || in_array(3, $_SESSION['permisos']) ){
+                            if($_SESSION['tipo'] == 1 || $_SESSION['tipo'] == 5 || in_array(3, $_SESSION['permisos']) ){
                                 include "./vistas/inc/form-user.php"; 
                             }
                         ?>

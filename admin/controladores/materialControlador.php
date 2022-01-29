@@ -22,13 +22,21 @@
         }
 
         public function listarMater(){
+            session_start(['name' => 'bot']);
             $datosMat = materialModelo::listaMateriales();
             $datos =[];
 			foreach ($datosMat as $mat) {
-                $btn = '<button class="btn btn-outline-danger" onclick="deleteMat('.$mat->id.')">
-                            Eliminar</button>
+                if ($_SESSION['tipo'] != 5) {
+                    $btn = '<button class="btn btn-outline-danger" onclick="deleteMat('.$mat->id.')">
+                        Eliminar</button>
                         <button class="btn btn-outline-info"  onclick="cambModalMat(1,'.$mat->id.')">
-                            Editar</button>';				
+                            Editar</button>';	
+                } else {
+                    $btn = '<button class="btn btn-outline-danger" onclick="modoView()">
+                        Eliminar</button>
+                        <button class="btn btn-outline-info"  onclick="modoView()">
+                            Editar</button>';	
+				}               			
 				array_push($datos,[
 					'nombre' => $mat->nombre,
 					'descr' => $mat->descripcion,
