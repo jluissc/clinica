@@ -21,34 +21,32 @@
         <!-- LISTAR CITAS -->
         <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
             <section class="section">
-                <div class="card">
-
-                
-                <div class="card-header">
-                    <h4>Lista de citas</h4>
-                </div>
-                <div class="card-body">
-                    <table class="table table-striped" id="tbl_tratam" style="width: 100%;"  >
-                        <thead>
-                            <tr>
-                                <th>Nombres</th>
-                                <th>Dni</th>
-                                <!-- <th>Correo</th> -->
-                                <th>Celular</th> 
-                                <th>Servicio</th> 
-                                <th>Fecha</th>
-                                <th>Hora</th>
-                                <th>Monto</th>
-                                <th>Total</th>
-                                <th>Estado Pago</th>
-                                <th>Acciones</th>
-                            </tr>
-                        </thead>
-                        <tbody id="listAppointment" >                           
-                            
-                        </tbody>
-                    </table>
-                </div>
+                <div class="card">                
+                    <div class="card-header">
+                        <h4>Lista de citas</h4>
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-striped" id="tbl_tratam" style="width: 100%;"  >
+                            <thead>
+                                <tr>
+                                    <th>Nombres</th>
+                                    <th>Dni</th>
+                                    <!-- <th>Correo</th> -->
+                                    <th>Celular</th> 
+                                    <th>Servicio</th> 
+                                    <th>Fecha</th>
+                                    <th>Hora</th>
+                                    <th>Monto</th>
+                                    <th>Total</th>
+                                    <th>Estado Pago</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody id="listAppointment" >                           
+                                
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </section>                            
 
@@ -105,14 +103,6 @@
                                         </div>
                                         <div class="calendar-days"></div>
                                     </div>
-                                    <!-- <div class="calendar-footer">
-                                        <div class="toggle">
-                                            <span>Dark Mode</span>
-                                            <div class="dark-mode-switch">
-                                                <div class="dark-mode-switch-ident"></div>
-                                            </div>
-                                        </div>
-                                    </div> -->
                                     <div class="month-list"></div>
                                 </div>
                             </div>

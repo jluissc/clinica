@@ -95,10 +95,16 @@
 			$acciones = '';
 			foreach ($listAppointm as $appoint) {
 				$user = $appoint->usuario.' '.$appoint->apellidos;
-				$pagoDirecto = '<div class="form-check form-switch">
+				if (in_array(7, $_SESSION['permisos']) || $tipo == 1) {
+					$pagoDirecto = '<div class="form-check form-switch">
 					<input class="form-check-input" type="checkbox" id="pagoDirecto_'.$appoint->idcita.'" onchange="payDirect('.$appoint->idcita.')">
-					<label class="form-check-label" for="pagoDirecto_'.$appoint->idcita.'">Pagó directo?</label>
+					<label class="form-check-label" for="pagoDirecto_'.$appoint->idcita.'">¿Pago directo?</label>
 					</div>' ; 
+				} else {
+					$pagoDirecto = '<label class="form-check-label" for="pagoDirecto"><h6>Falta pago</h6></label>' ; 
+				}
+				
+				
 				$result = citaModelo::statusPayAppoint($appoint->idcita);
 				$montopago = $result[0] ? $result[1]->total : 0.0;
 				$pago = $result[0] ? ($result[1]->tipo_pago_id == 1 ? ($result[1]->estado ? 'Pago Tarjeta/Aceptado' : 'Pago Tarjeta/No Aceptado'): ($result[1]->tipo_pago_id == 2 ? ($result[1]->estado ? 'Transferencia/Aceptado' : 'Transferencia/No Aceptado') : ($result[1]->estado ? 'Pago Directo/Aceptado' : 'Pago Directo/No Aceptado'))) : 'Falta Pagar';
@@ -110,15 +116,19 @@
 								($result[1]->estado ? 
 									'Pago Transferencia Activo' :
 									'<button class="btn btn-outline-info" data-bs-toggle="modal" data-bs-target="#info" onclick="validarTransf('.$appoint->idcita.')"> Validar Transf.</button>') : 
-								'Pago Directo') ) : 
+								'<label class="form-check-label" for="pagoDirecto"><h6>Pago Directo</h6></label>') ) : 
 						$pagoDirecto) : 
 					($result[0] ? 
 						($result[1]->tipo_pago_id == 2 ? 
 							($result[1]->estado ? 
 								'Aceptado' : 
 								'Falta Verificar'): 
-							'Pagado' ) : 
-						'<button class="btn btn-outline-primary" onclick="payAppoint('.$appoint->idcita.')">Pagar Tarjeta</button><button class="btn btn-outline-info" data-bs-toggle="modal" data-bs-target="#info" onclick="datosTransf('.$appoint->idcita.',true)"> Mandar Transf.</button>');
+							'<label class="form-check-label" for="pagoDirecto"><h6>Pagado</h6></label>' ) : 
+							( $tipo == 4 ? 
+								'<button class="btn btn-outline-primary" onclick="payAppoint('.$appoint->idcita.')">Pagar Tarjeta</button>
+								<button class="btn btn-outline-info" data-bs-toggle="modal" data-bs-target="#info" onclick="datosTransf('.$appoint->idcita.',true)"> Mandar Transf.</button>': 
+								$pagoDirecto ))
+							;
 				array_push($datos,[
 					'nombre' => $user,
 					'dni' => $appoint->dni,

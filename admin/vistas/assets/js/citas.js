@@ -386,6 +386,7 @@ function validarCita(){
     }else alertaToastify('Escoge el servicio')
 }
 function guardarCita(datos){
+    console.log(datos);
     dat = new FormData()
     dat.append('guardCitaUs',JSON.stringify(datos))
     fetch(URL+'ajax/citaAjax.php',{

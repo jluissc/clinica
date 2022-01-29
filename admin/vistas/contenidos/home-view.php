@@ -13,10 +13,11 @@
 ?>
 <section class="row">
         <?php 
-            // echo $instH ->encryption('percy') 
+            // echo $instH ->encryption('15152626')  ;
+            // echo 'aaa'.$instH ->decryption('R0V3cVY3R1R2R1pBandiUXZUNllBZz09')  ;
         ?>  
     <div class="col-12 col-lg-12">
-        <?php if($_SESSION['tipo']==1 || $_SESSION['tipo']==2 ){ ?><!-- ADMIN o CAJERO -->
+        <?php if($_SESSION['tipo']==1 || $_SESSION['tipo']==2 || $_SESSION['tipo']== 5 ){ ?><!-- ADMIN o CAJERO -->
             <?php 
                 $datos = $instH->dateQuantity();
             ?>            
@@ -331,53 +332,54 @@
             </div>
         </div>
     </div>
-</section>
-<!-- MODAL DETALLES CITA -->
-<div class="modal fade text-left" id="large3" tabindex="-1" role="dialog"
-    aria-labelledby="myModalLabel17" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg"
-        role="document">
-        <div class="modal-content" >
-            <div class="modal-header">
-                <h4 class="modal-title" id="myModalLabel17">Crear Usuario y permisos</h4>
-                <button type="button" class="close" data-bs-dismiss="modal"
-                    aria-label="Close">
-                    <i data-feather="x"></i>
-                </button>
-            </div>
-            <div class="modal-body">
-                <div class="row">
-                        <div class="col-12 col-lg-12 col-md-12">
-                            <div class="card">
-                                <div class="form-group">
-                                    <label for="descripDet">Detalle de la cita/tratamientos</label>
-                                    <textarea type="text" class="form-control" placeholder="Detalle de la cita/tratamientos" id="descripDet" rows="4"></textarea>
-                                </div>
-                                <div class="form-group">
-                                    <label for="recetDet">Recetas / Tratamientos</label>
-                                    <textarea type="number" class="form-control" placeholder="Recetas / Tratamientos" id="recetDet" rows="4"></textarea>
-                                </div>
-                                <div class="form-group">
-                                    <label for="otroDet">Otros detalles</label>
-                                    <input type="text" class="form-control" placeholder="Otros detalles" id="otroDet">
+    <!-- MODAL DETALLES CITA -->
+    <div class="modal fade text-left" id="large3" tabindex="-1" role="dialog"
+        aria-labelledby="myModalLabel17" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg"
+            role="document">
+            <div class="modal-content" >
+                <div class="modal-header">
+                    <h4 class="modal-title" id="myModalLabel17">Crear Usuario y permisos</h4>
+                    <button type="button" class="close" data-bs-dismiss="modal"
+                        aria-label="Close">
+                        <i data-feather="x"></i>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                            <div class="col-12 col-lg-12 col-md-12">
+                                <div class="card">
+                                    <div class="form-group">
+                                        <label for="descripDet">Detalle de la cita/tratamientos</label>
+                                        <textarea type="text" class="form-control" placeholder="Detalle de la cita/tratamientos" id="descripDet" rows="4"></textarea>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="recetDet">Recetas / Tratamientos</label>
+                                        <textarea type="number" class="form-control" placeholder="Recetas / Tratamientos" id="recetDet" rows="4"></textarea>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="otroDet">Otros detalles</label>
+                                        <input type="text" class="form-control" placeholder="Otros detalles" id="otroDet">
+                                    </div>
                                 </div>
                             </div>
-                        </div>
+                    </div>
                 </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-light-secondary"
-                    data-bs-dismiss="modal">
-                    <i class="bx bx-x d-block d-sm-none"></i>
-                    <span class="d-none d-sm-block">Cancelar</span>
-                </button>
-                <button type="button" class="btn btn-primary ml-1 "  onclick="saveDetalle()">
-                    <i class="bx bx-check d-block d-sm-none"></i>
-                    <span class="d-none d-sm-block">Guardar</span>
-                </button>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-light-secondary"
+                        data-bs-dismiss="modal">
+                        <i class="bx bx-x d-block d-sm-none"></i>
+                        <span class="d-none d-sm-block">Cancelar</span>
+                    </button>
+                    <button type="button" class="btn btn-primary ml-1 "  onclick="saveDetalle()">
+                        <i class="bx bx-check d-block d-sm-none"></i>
+                        <span class="d-none d-sm-block">Guardar</span>
+                    </button>
+                </div>
             </div>
         </div>
     </div>
-</div>
+</section>
+
 <script src="<?php echo SERVERURL ?>vistas/assets/js/home.js"></script>
  

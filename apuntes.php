@@ -6,3 +6,8 @@
 // $sql->bindParam(':id',$id);
 
 
+// ***********error de permisos user***********
+// ***********error de permisos user***********
+// ***********error de permisos user***********
+// ***********error de permisos user***********
+// ***********error de permisos user***********
