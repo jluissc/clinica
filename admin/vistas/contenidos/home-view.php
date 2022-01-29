@@ -8,15 +8,19 @@
  -->
 <?php 
     require_once './controladores/homeControlador.php';
-    $inst = new homeControlador();
+    $instH = new homeControlador();
+    // $calve = $inst->encryption('adadads'); 
 ?>
-<section class="row">    
+<section class="row">
+        <?php 
+            // echo $instH ->encryption('percy') 
+        ?>  
     <div class="col-12 col-lg-12">
         <?php if($_SESSION['tipo']==1 || $_SESSION['tipo']==2 ){ ?><!-- ADMIN o CAJERO -->
             <?php 
-                $datos = $inst->dateQuantity();
+                $datos = $instH->dateQuantity();
             ?>            
-            <h2>Resumen empresa</h2>
+            <h2>Resumen empresa  </h2>
             <div class="row">
                 <div class="col-6 col-lg-3 col-md-6">
                     <div class="card">
@@ -116,7 +120,7 @@
         <?php if(in_array(3, $_SESSION['permisos'])){ ?><!-- PERMISO DE CITAS -->
             <h3>Citas del dia</h3>
             <div class="row">
-                <?php  echo $inst -> readAppointmentToday()?>
+                <?php  echo $instH -> readAppointmentToday()?>
             </div>    
         <?php } ?>
         
@@ -193,7 +197,7 @@
             </section>
             <h3>Citas proximas</h3>
             <div class="row">
-                <?php  echo $inst -> readAppointmentNexts()?>
+                <?php  echo $instH -> readAppointmentNexts()?>
             </div>  
         <?php } ?>
         

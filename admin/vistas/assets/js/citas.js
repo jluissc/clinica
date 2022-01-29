@@ -487,9 +487,10 @@ function payDirect(idAppointPay){
         showLoaderOnConfirm: true,
     }).then((result) => {
         if (result.isConfirmed) {
-            document.getElementById(`pagoDirecto_${idAppointPay}`).disabled = true
-            document.getElementById(`pagoDirecto_${idAppointPay}`).checked = true
-            datos = new FormData()
+            if (result.value > 0) {
+                document.getElementById(`pagoDirecto_${idAppointPay}`).disabled = true
+                document.getElementById(`pagoDirecto_${idAppointPay}`).checked = true
+                datos = new FormData()
             datos.append('idPayDirect',idAppointPay)
             datos.append('montoPayDirect',parseInt(result.value))
             fetch(URL+'ajax/citaAjax.php',{
@@ -509,6 +510,7 @@ function payDirect(idAppointPay){
                     console.log('mira aqui!!!');
                 }
             })
+            } else  alertaToastify('Debe ser un pago mayor a 0 soles')
         }
     })
 }
