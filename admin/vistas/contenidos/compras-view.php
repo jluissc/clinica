@@ -12,7 +12,7 @@
             </div>
             <div class="card-body">
                 <div class="card-body">
-                    <table class="table table-striped" id="tableCompras" with="100%">
+                    <table class="table table-striped table-bordered dt-responsive nowrap" id="tableCompras" with="100%">
                         <thead>
                             <tr>
                                 <th>Material</th>
@@ -66,22 +66,18 @@
                     <?php if($_SESSION['tipo'] != 5){?>
                         <button type="button" class="btn btn-light-secondary"
                             data-bs-dismiss="modal">
-                            <i class="bx bx-x d-block d-sm-none"></i>
-                            <span class="d-none d-sm-block">Cancelar</span>
+                            <span class="">Cancelar</span>
                         </button>
                         <button type="button" class="btn btn-primary ml-1 "  onclick="verificarComp()">
-                            <i class="bx bx-check d-block d-sm-none"></i>
-                            <span class="d-none d-sm-block">Guardar</span>
+                            <span class="">Guardar</span>
                         </button>
                 <?php }else{ ?>
                         <button type="button" class="btn btn-light-secondary"
                             data-bs-dismiss="modal">
-                            <i class="bx bx-x d-block d-sm-none"></i>
-                            <span class="d-none d-sm-block">Cancelar</span>
+                            <span class="">Cancelar</span>
                         </button>
                         <button type="button" class="btn btn-primary ml-1 "  onclick="modoView()">
-                            <i class="bx bx-check d-block d-sm-none"></i>
-                            <span class="d-none d-sm-block">Guardar</span>
+                            <span class="">Guardar</span>
                         </button>
                 <?php } ?>
                 </div>
@@ -95,7 +91,8 @@
 <script src="<?php echo SERVERURL ?>vistas/assets/js/pages/form-element-select.js"></script>
 
 <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
-<script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/v/bs4/dt-1.10.20/datatables.min.js"></script>
+    <script src="https://cdn.datatables.net/responsive/2.2.3/js/dataTables.responsive.min.js"></script>
 <script src="<?php echo SERVERURL ?>vistas/assets/js/compras.js"></script>
 
 <?php } else{ echo '<h2>Upps!!!.. nada que mostrar</h2>'; }?>

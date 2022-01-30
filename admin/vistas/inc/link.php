@@ -14,6 +14,7 @@
 <!-- <link rel="stylesheet" href="<?php echo SERVERURL ?>vistas/assets/vendors/simple-datatables/style.css"> -->
 
 <link rel="stylesheet" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.min.css">
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/responsive/2.2.3/css/responsive.dataTables.min.css">
 <link rel="stylesheet" href="<?php echo SERVERURL ?>vistas/assets/vendors/toastify/toastify.css">
 <link rel="stylesheet" href="<?php echo SERVERURL ?>vistas/assets/css/pages/error.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-1ycn6IcaQQ40/MKBW2W4Rhis/DbILU74C1vSrLJxCq57o941Ym01SwNsOMqvEBFlcgUa6xLiPY/NS5R+E6ztJQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />

@@ -26,7 +26,7 @@ if (isset($_POST['usuario_log']) && isset($_POST['clave_log'])) {
 				<div class="auth-logo">
 					<a><img src="<?php echo SERVERURL ?>vistas/assets/images/logo/logo.png" alt="Logo"></a>
 				</div>
-				<h1 class="auth-title">Iniciar Session</h1>
+				<h1 class="auth-title">Iniciar Sesión</h1>
 				<p class="auth-subtitle mb-5">Ingrese para poder ver sus citas o reservarlas</p>
 	
 				<form action="" method="POST" autocomplete="off" >
@@ -47,13 +47,13 @@ if (isset($_POST['usuario_log']) && isset($_POST['clave_log'])) {
 					<div class="form-check form-check-lg d-flex align-items-end">
 						<input class="form-check-input me-2" type="checkbox" value="" id="flexCheckDefault">
 						<label class="form-check-label text-gray-600" for="flexCheckDefault">
-							Recuerdamelo
+							Recuérdamelo 
 						</label>
 					</div>
 					<button type="submit" class="btn btn-block btn-dark">Iniciar</button>
 				</form>
 				<div class="text-center mt-5 text-lg fs-4">
-					<p class="text-gray-600">Regresar a pagina principal <a href="../home" class="font-bold">click aqui</a>.</p>
+					<p class="text-gray-600">Regresar a pagina principal <a href="../home" class="font-bold">click aquí</a>.</p>
 					<p><!-- <a class="font-bold" href="auth-forgot-password.html">Forgot password?</a>. --></p>
 				</div>
 			</div>

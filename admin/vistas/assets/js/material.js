@@ -33,21 +33,17 @@ function cambModalMat(estado, id){
         newMaterial = id
         searchMaterial(id)
         opt = `<button type="button" class="btn btn-light-secondary" data-bs-dismiss="modal">
-                <i class="bx bx-x d-block d-sm-none"></i>
-                <span class="d-none d-sm-block">Cancelar</span>
+                <span class="">Cancelar</span>
             </button>
             <button type="button" class="btn btn-info ml-1" id="btnsss" onclick="verificarMater()">
-                <i class="bx bx-check d-block d-sm-none"></i>
-                <span class="d-none d-sm-block">Editar</span>
+                <span class="">Editar</span>
             </button>`
     }else{
         opt = `<button type="button" class="btn btn-light-secondary" data-bs-dismiss="modal">
-                <i class="bx bx-x d-block d-sm-none"></i>
-                <span class="d-none d-sm-block">Cancelar</span>
+                <span class="">Cancelar</span>
             </button>
             <button type="button" class="btn btn-info ml-1" id="btnsss" onclick="verificarMater()">
-                <i class="bx bx-check d-block d-sm-none"></i>
-                <span class="d-none d-sm-block">Guardar</span>
+                <span class="">Guardar</span>
             </button>`
     }
     btn_materiales.innerHTML=opt

@@ -4,14 +4,14 @@
         // $inst = new configControlador();
         // $datos = $inst->datosEmpresa();
     ?>
-    <section class="row">
+    <!-- <section class="row"> -->
         <div class="page-heading">
             <h3>CONFIGURACIÓN GENERAL DE SERVICIOS GENERAL Y POR CATEGORIA, PERMISOS </h3>
         </div>
-        <div class="col-12 col-lg-12">
+        <!-- <div class="col-12 col-lg-12"> -->
             <div class="row">
                 <!-- Editar permisos de usuarios -->
-                <div class="col-6 col-lg-6 col-md-6" >
+                <div class="col-12 col-lg-6 col-md-6" >
                     <div class="card">
                         <div class="card-header">
                             <h4>Servicios</h4> <a class="" style="cursor:pointer" 
@@ -26,7 +26,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-6 col-lg-6 col-md-6" >
+                <div class="col-12 col-lg-6 col-md-6" >
                     <div class="card">
                         <div class="card-header">
                             <h4 class="card-title">Lista de Configuraciones</h4>
@@ -41,9 +41,8 @@
                             </div>
                         </div>
                     </div>
-                </div>
-                
-                <div class="col-6 col-lg-6 col-md-6" >
+                </div>                
+                <div class="col-12 col-lg-6 col-md-6" >
                     <div class="card">
                         <div class="card-header">
                             <h4>Permisos Colaboradores</h4> <a class="" style="cursor:pointer"  data-bs-toggle="modal" data-bs-target="#large2">Crear usuario</a>
@@ -122,8 +121,8 @@
                 </div> -->
                
             </div>
-        </div>
-    </section>
+        <!-- </div> -->
+    <!-- </section> -->
 
     <!-- crear servicio general -->
     <!-- modal-dialog modal-dialog-centered -->

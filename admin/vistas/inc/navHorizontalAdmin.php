@@ -81,37 +81,37 @@
                     <div class="col-12 col-lg-12 col-md-12">
                         <div class="container">
                             <div class="row">
-                                <div class="col-6">
+                                <div class="col-12 col-sm-6">
                                     <label> NOMBRE EMPRESA:</label>
                                     <div class="form-group">
                                         <input type="text" placeholder="Nombre" class="form-control" id="nombre_emp" >
                                     </div>
                                 </div>
-                                <div class="col-6">
+                                <div class="col-12 col-sm-6">
                                     <label>DIRECCIÓN: </label>
                                     <div class="form-group">
                                         <input type="text" placeholder="Dirección" class="form-control" id="address_emp">
                                     </div>
                                 </div>
-                                <div class="col-6">
+                                <div class="col-12 col-sm-6">
                                     <label> CELULAR 1:</label>
                                     <div class="form-group">
                                         <input type="text" placeholder="Celular" class="form-control" id="cel1_emp">
                                     </div>
                                 </div>
-                                <div class="col-6">
+                                <div class="col-12 col-sm-6">
                                     <label> CORREO:</label>
                                     <div class="form-group">
                                         <input type="text" placeholder="Correo institucional" class="form-control" id="correo_emp">
                                     </div>
                                 </div>
-                                <div class="col-6">
+                                <div class="col-12 col-sm-6">
                                     <label>FACEBOOK:</label>
                                     <div class="form-group">
                                         <input type="text" placeholder="Link" class="form-control" id="face_emp" >
                                     </div>
                                 </div>
-                                <div class="col-6">
+                                <div class="col-12 col-sm-6">
                                     <label>INSTAGRAM:</label>
                                     <div class="form-group">
                                         <input type="text" placeholder="Link" class="form-control" id="inst_emp" >
@@ -142,53 +142,38 @@
         role="document">
         <div class="modal-content" >
             <div class="modal-header">
-                <h4 class="modal-title" id="myModalLabel17">Crear Usuario y permisos</h4>
+                <h4 class="modal-title" id="myModalLabel17">Datos de usuario</h4>
                 <button type="button" class="close" data-bs-dismiss="modal"
                     aria-label="Close">
                     <i data-feather="x"></i>
                 </button>
             </div>
             <div class="modal-body">
-                <div class="row">
-                    <div class="col-12 col-lg-12 col-md-12">
-                        <div class="container">
-                            <div class="row">
-                                <div class="col-12">
-                                    <label>DNI: </label>
-                                    <div class="form-group">
-                                        <input type="number" placeholder="DNI" 
-                                        class="form-control" id="dni_cc" onchange="validarDni()" max="8">
-                                    </div>
-                                </div>
+                <div class="container">
+                    <div class="row">
+                        <div class="col-112 col-sm-6 form-group">
+                            <label>DNI: </label>
+                            <input type="number" placeholder="DNI" class="form-control" id="dni_cc" onchange="validarDni()" max="8">
+                        </div>
 
-                                <div class="col-6">
-                                    <label> NOMBRES:</label>
-                                    <div class="form-group">
-                                        <input type="text" placeholder="Nombres" class="form-control" id="nombre_c" >
-                                    </div>
-                                </div>
-                                <div class="col-6">
-                                    <label>APELLIDOS: </label>
-                                    <div class="form-group">
-                                        <input type="text" placeholder="Apellidos" class="form-control" id="apellido_c" >
-                                    </div>
-                                </div>
-                                <div class="col-6">
-                                    <label> CELULAR:</label>
-                                    <div class="form-group">
-                                        <input type="text" placeholder="Celular" class="form-control" id="celular_c" >
-                                    </div>
-                                </div>
-                                <div class="col-6">
-                                    <label>CORREO: </label>
-                                    <div class="form-group">
-                                        <input type="email" placeholder="Correo" class="form-control" id="correo_c" required>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>                          
+                        <div class="col-12 col-sm-6 form-group">
+                            <label> NOMBRES:</label>
+                            <input type="text" placeholder="Nombres" class="form-control" id="nombre_c" >
+                        </div>
+                        <div class="col-12 col-sm-6 form-group">
+                            <label>APELLIDOS: </label>
+                            <input type="text" placeholder="Apellidos" class="form-control" id="apellido_c" >
+                        </div>
+                        <div class="col-12 col-sm-6 form-group">
+                            <label> CELULAR:</label>
+                            <input type="text" placeholder="Celular" class="form-control" id="celular_c" >
+                        </div>
+                        <div class="col-12 col-sm-6 form-group">
+                            <label>CORREO: </label>
+                            <input type="email" placeholder="Correo" class="form-control" id="correo_c" required>
+                        </div>
                     </div>
-                </div>
+                </div> 
             </div>
             <div class="modal-footer" id="btns_pagos">
                 <button type="button" class="btn btn-light-secondary"

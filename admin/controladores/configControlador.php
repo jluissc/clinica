@@ -60,18 +60,19 @@
 		public function listNotifications() {
 			$listsToday = configModelo::listNotifications_m();
 
-			$listHTML = '<li>
+			$listHTML = '<li >
 				<h6 class="dropdown-header" > <a href="'.SERVERURL.'citas">Citas de hoy</a></h6>
 			</li>';
 			if ($listsToday[0]) {
 				foreach ($listsToday[0] as $list) {
-					$listHTML .= '<li>
-						<p class="text-center">'.$list->serv.' ::: '.$list->cat .'</p>
-						<p class="text-center">'.$list->nombre.' ::: '.$list->namC .'</p>
-						<a class="dropdown-item">'.$list->fecha.' <span class="badge bg-info text-dark"><i class="far fa-clock"></i> </span> '.$list->hora.'  </a> </li><hr>';
+					$listHTML .= '<li class="list-group-item  align-items-center">
+					<span style="font-size: 12px;"> '.$list->serv.' ::: '.$list->cat .'</span>
+					<span style="font-size: 12px;"> '.$list->nombre.' ::: '.$list->namC .'</span>
+					<span class="badge bg-warning badge-pill badge-round ml-1">'.$list->fecha.' :: '.$list->hora.'</span>
+				</li>';
 				}
 			} else {
-				$listHTML .= '<li><strong>No hay cita hoy, por el momento</strong></li> <hr>';
+				$listHTML .= '<li class="dropdown-header text-center"><strong>No hay cita hoy, por el momento</strong></li> <hr>';
 			}
 			$listHTML .= '<li>
 				<h6 class="dropdown-header" > <a href="'.SERVERURL.'citas">Citas de proximos dias</a></h6>
@@ -79,13 +80,14 @@
 			if(count($listsToday[1])>0){
 
 				foreach ($listsToday[1] as $list) {
-					$listHTML .= '<li>
-						<p class="text-center">'.$list->serv.' ::: '.$list->cat .'</p>
-						<p class="text-center">'.$list->nombre.' ::: '.$list->namC .'</p>
-						<a class="dropdown-item">'.$list->fecha.' <span class="badge bg-info text-dark"><i class="far fa-clock"></i> </span> '.$list->hora.'  </a> </li><hr>';
+					$listHTML .= '<li class="list-group-item  align-items-center">
+							<span style="font-size: 12px;"> '.$list->serv.' ::: '.$list->cat .'</span>
+							<span style="font-size: 12px;"> '.$list->nombre.' ::: '.$list->namC .'</span>
+							<span class="badge bg-warning badge-pill badge-round ml-1">'.$list->fecha.' :: '.$list->hora.'</span>
+						</li>';
 				}
 			} else {
-				$listHTML .= '<li><strong>No hay cita proximas, por el momento</strong></li> <hr>';
+				$listHTML .= '<li class="dropdown-header text-center"><strong>No hay cita proximas, por el momento</strong></li> <hr>';
 			}
 			return $listHTML;
 		}
